@@ -248,9 +248,124 @@
             align-items: center;
             justify-content: center;
         }
+
+        /* --- NEW: Custom Magnetic Cursor --- */
+        #custom-cursor { display: none; }
+        @media (pointer: fine) {
+            body { cursor: none !important; }
+            #custom-cursor {
+                display: block;
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 16px;
+                height: 16px;
+                border: 2px solid white;
+                background-color: transparent;
+                pointer-events: none;
+                z-index: 10000;
+                mix-blend-mode: difference;
+                transform: translate(-50%, -50%);
+                transition: width 0.2s, height 0.2s, background-color 0.2s;
+            }
+            #custom-cursor.cursor-hover {
+                width: 48px;
+                height: 48px;
+                background-color: rgba(255, 255, 255, 0.1);
+            }
+            /* Hide cursor over iframes or explicitly normal elements */
+            .grab-scroll { cursor: none !important; }
+        }
+
+        /* --- NEW: Boot-Up Preloader --- */
+        #preloader {
+            position: fixed;
+            inset: 0;
+            background-color: #000;
+            color: #0f0; /* Hacker Terminal Green */
+            font-family: monospace;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 0.4s ease-out;
+        }
+        .preloader-hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+        .flash-screen {
+            animation: flash 0.15s ease-out;
+        }
+        @keyframes flash {
+            0% { background-color: #fff; }
+            100% { background-color: #000; }
+        }
+
+        /* --- NEW: Raw Data Project Toggles --- */
+        .raw-data-overlay {
+            position: absolute;
+            inset: 0;
+            background-color: #000;
+            color: #0f0;
+            padding: 1.25rem;
+            font-family: monospace;
+            font-size: 0.7rem;
+            line-height: 1.4;
+            overflow-y: auto;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            text-align: left;
+            box-shadow: inset 0 0 20px rgba(0,255,0,0.1);
+        }
+        .raw-data-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .data-toggle-btn {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            z-index: 20;
+            background: #000;
+            color: #fff;
+            border: 1px solid #333;
+            padding: 0.25rem 0.5rem;
+            font-family: monospace;
+            font-size: 0.75rem;
+            opacity: 0;
+        }
+        .group:hover .data-toggle-btn, .data-toggle-btn.active {
+            opacity: 1;
+        }
+        .data-toggle-btn:hover {
+            background: #fff;
+            color: #000;
+        }
+        /* Make scrollbar look like terminal */
+        .raw-data-overlay::-webkit-scrollbar { width: 6px; }
+        .raw-data-overlay::-webkit-scrollbar-thumb { background: #0f0; }
     </style>
 </head>
 <body class="bg-white text-black overflow-x-hidden">
+
+    <!-- NEW: Custom Cursor -->
+    <div id="custom-cursor"></div>
+
+    <!-- NEW: Boot-Up Preloader -->
+    <div id="preloader">
+        <div class="max-w-xl w-full px-6 flex flex-col gap-4">
+            <div id="terminal-text" class="text-xs md:text-sm leading-relaxed min-h-[100px] whitespace-pre-wrap"></div>
+            <div class="flex items-center gap-4 text-sm font-bold">
+                <span>[</span>
+                <span id="progress-bar" class="tracking-[0.2em] w-48 text-left"></span>
+                <span>]</span>
+                <span id="progress-pct" class="w-12 text-right">0%</span>
+            </div>
+        </div>
+    </div>
 
     <!-- NEW: Top Scroll Progress Bar -->
     <div id="scroll-progress-bar" class="fixed top-0 left-0 h-1 bg-black z-[100] w-0 custom-transition"></div>
@@ -537,8 +652,26 @@
                 
                 <!-- Project 1 -->
                 <div class="project-card relative w-[85vw] md:w-[604px] shrink-0 snap-center border-2 border-black bg-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] flex flex-col custom-transition hover:-translate-y-1 overflow-hidden">
-                    <div class="aspect-video object-cover w-full border-b-2 border-black bg-gray-100 overflow-hidden">
+                    <div class="aspect-video relative object-cover w-full border-b-2 border-black bg-gray-100 overflow-hidden group">
                         <img src="https://picsum.photos/seed/proj1/800/600" alt="Project Banner" class="w-full h-full object-cover custom-transition hover:scale-105">
+                        
+                        <!-- NEW: Raw Data Toggle -->
+                        <button class="data-toggle-btn custom-transition">&lt; / &gt;</button>
+                        <div class="raw-data-overlay hide-scrollbar">
+<pre><code>import pandas as pd
+from sklearn.ensemble import RandomForestClassifier
+
+# Loading telemetry data pipeline
+df = pd.read_csv('s3://data-lake/telemetry_stream.csv')
+features = df.drop('churn', axis=1)
+
+# Training Predictive Model
+model = RandomForestClassifier(n_estimators=150, max_depth=12)
+model.fit(features, df['churn'])
+
+print("Validation Accuracy: 89.4%")
+print("Pipeline Execution: Success")</code></pre>
+                        </div>
                     </div>
                     <div class="p-6 flex flex-col gap-3 flex-grow">
                         <p class="text-sm text-gray-400 uppercase tracking-widest font-bold">Machine Learning</p>
@@ -566,8 +699,30 @@
 
                 <!-- Project 2 -->
                 <div class="project-card relative w-[85vw] md:w-[604px] shrink-0 snap-center border-2 border-black bg-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] flex flex-col custom-transition hover:-translate-y-1 overflow-hidden">
-                    <div class="aspect-video object-cover w-full border-b-2 border-black bg-gray-100 overflow-hidden">
+                    <div class="aspect-video relative object-cover w-full border-b-2 border-black bg-gray-100 overflow-hidden group">
                         <img src="https://picsum.photos/seed/proj2/800/600" alt="Project Banner" class="w-full h-full object-cover custom-transition hover:scale-105">
+                        
+                        <!-- NEW: Raw Data Toggle -->
+                        <button class="data-toggle-btn custom-transition">&lt; / &gt;</button>
+                        <div class="raw-data-overlay hide-scrollbar">
+<pre><code>WITH RegionalBottleneck AS (
+    SELECT 
+        region_id,
+        AVG(transit_time) as avg_transit,
+        PERCENTILE_CONT(0.9) WITHIN GROUP (ORDER BY transit_time) 
+            as p90_transit
+    FROM logistics.shipments
+    WHERE status = 'DELIVERED'
+    GROUP BY region_id
+)
+SELECT 
+    r.region_name,
+    b.avg_transit,
+    (b.p90_transit - b.avg_transit) as variance_delay
+FROM RegionalBottleneck b
+JOIN reference.regions r ON b.region_id = r.id
+ORDER BY variance_delay DESC;</code></pre>
+                        </div>
                     </div>
                     <div class="p-6 flex flex-col gap-3 flex-grow">
                         <p class="text-sm text-gray-400 uppercase tracking-widest font-bold">Visualization</p>
@@ -594,8 +749,28 @@
 
                 <!-- Project 3 -->
                 <div class="project-card relative w-[85vw] md:w-[604px] shrink-0 snap-center border-2 border-black bg-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] flex flex-col custom-transition hover:-translate-y-1 overflow-hidden">
-                    <div class="aspect-video object-cover w-full border-b-2 border-black bg-gray-100 overflow-hidden">
+                    <div class="aspect-video relative object-cover w-full border-b-2 border-black bg-gray-100 overflow-hidden group">
                         <img src="https://picsum.photos/seed/proj3/800/600" alt="Project Banner" class="w-full h-full object-cover custom-transition hover:scale-105">
+                        
+                        <!-- NEW: Raw Data Toggle -->
+                        <button class="data-toggle-btn custom-transition">&lt; / &gt;</button>
+                        <div class="raw-data-overlay hide-scrollbar">
+<pre><code>{
+  "analysis_id": "req_88492a",
+  "timestamp": "2026-03-26T11:42Z",
+  "document_count": 14502,
+  "vader_results": {
+    "compound_score": -0.642,
+    "sentiment": "NEGATIVE",
+    "key_phrases": [
+      {"token": "battery life", "freq": 842, "weight": -0.8},
+      {"token": "screen glare", "freq": 310, "weight": -0.4}
+    ]
+  },
+  "action_flag": true,
+  "routing": "product_team_queue"
+}</code></pre>
+                        </div>
                     </div>
                     <div class="p-6 flex flex-col gap-3 flex-grow">
                         <p class="text-sm text-gray-400 uppercase tracking-widest font-bold">Natural Language</p>
@@ -622,8 +797,28 @@
 
                 <!-- Project 4 -->
                 <div class="project-card relative w-[85vw] md:w-[604px] shrink-0 snap-center border-2 border-black bg-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] flex flex-col custom-transition hover:-translate-y-1 overflow-hidden">
-                    <div class="aspect-video object-cover w-full border-b-2 border-black bg-gray-100 overflow-hidden">
+                    <div class="aspect-video relative object-cover w-full border-b-2 border-black bg-gray-100 overflow-hidden group">
                         <img src="https://picsum.photos/seed/proj4/800/600" alt="Project Banner" class="w-full h-full object-cover custom-transition hover:scale-105">
+                        
+                        <!-- NEW: Raw Data Toggle -->
+                        <button class="data-toggle-btn custom-transition">&lt; / &gt;</button>
+                        <div class="raw-data-overlay hide-scrollbar">
+<pre><code>import scipy.stats as stats
+import numpy as np
+
+def calculate_power(n, effect_size, alpha=0.05):
+    """Automated power analysis for experiment"""
+    z_alpha = stats.norm.ppf(1 - alpha/2)
+    standard_error = np.sqrt(2 / n)
+    z_beta = (effect_size / standard_error) - z_alpha
+    power = stats.norm.cdf(z_beta)
+    return power
+
+# Testing variant significance
+required_n = 15000 # per variant
+print(f"Statistical Power: {calculate_power(required_n, 0.02)}")
+# OUT: Statistical Power: 0.814 (Valid)</code></pre>
+                        </div>
                     </div>
                     <div class="p-6 flex flex-col gap-3 flex-grow">
                         <p class="text-sm text-gray-400 uppercase tracking-widest font-bold">Optimization</p>
@@ -651,8 +846,30 @@
 
                 <!-- Project 5 -->
                 <div class="project-card relative w-[85vw] md:w-[604px] shrink-0 snap-center border-2 border-black bg-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] flex flex-col custom-transition hover:-translate-y-1 overflow-hidden">
-                    <div class="aspect-video object-cover w-full border-b-2 border-black bg-gray-100 overflow-hidden">
+                    <div class="aspect-video relative object-cover w-full border-b-2 border-black bg-gray-100 overflow-hidden group">
                         <img src="https://picsum.photos/seed/proj5/800/600" alt="Project Banner" class="w-full h-full object-cover custom-transition hover:scale-105">
+                        
+                        <!-- NEW: Raw Data Toggle -->
+                        <button class="data-toggle-btn custom-transition">&lt; / &gt;</button>
+                        <div class="raw-data-overlay hide-scrollbar">
+<pre><code>from pyspark.sql import SparkSession
+from pyspark.sql.functions import window, col
+
+spark = SparkSession.builder.appName("IoTSensor").getOrCreate()
+
+# Real-time stream processing
+stream_df = spark.readStream.format("kafka") \
+    .option("subscribe", "manufacturing_sensors") \
+    .load()
+
+# Aggregate temperature over 5m tumbling windows
+anomalies = stream_df \
+    .groupBy(window(col("timestamp"), "5 minutes")) \
+    .agg({"temperature": "avg"}) \
+    .filter(col("avg(temperature)") > 110.0)
+
+anomalies.writeStream.format("console").start()</code></pre>
+                        </div>
                     </div>
                     <div class="p-6 flex flex-col gap-3 flex-grow">
                         <p class="text-sm text-gray-400 uppercase tracking-widest font-bold">Big Data</p>
@@ -680,8 +897,33 @@
 
                 <!-- Project 6 -->
                 <div class="project-card relative w-[85vw] md:w-[604px] shrink-0 snap-center border-2 border-black bg-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] flex flex-col custom-transition hover:-translate-y-1 overflow-hidden">
-                    <div class="aspect-video object-cover w-full border-b-2 border-black bg-gray-100 overflow-hidden">
+                    <div class="aspect-video relative object-cover w-full border-b-2 border-black bg-gray-100 overflow-hidden group">
                         <img src="https://picsum.photos/seed/proj6/800/600" alt="Project Banner" class="w-full h-full object-cover custom-transition hover:scale-105">
+                        
+                        <!-- NEW: Raw Data Toggle -->
+                        <button class="data-toggle-btn custom-transition">&lt; / &gt;</button>
+                        <div class="raw-data-overlay hide-scrollbar">
+<pre><code>import numpy as np
+
+# Monte Carlo Simulation Engine
+iterations = 10000
+days = 252 # trading days
+
+# Historical parameters
+mu, sigma = 0.08, 0.15 
+initial_portfolio = 1000000
+
+# Generating random walk matrix
+daily_returns = np.random.normal(
+    mu/days, 
+    sigma/np.sqrt(days), 
+    (days, iterations)
+)
+price_paths = initial_portfolio * np.cumprod(1 + daily_returns, axis=0)
+
+var_95 = np.percentile(price_paths[-1], 5)
+print(f"95% Value at Risk: ${initial_portfolio - var_95:,.2f}")</code></pre>
+                        </div>
                     </div>
                     <div class="p-6 flex flex-col gap-3 flex-grow">
                         <p class="text-sm text-gray-400 uppercase tracking-widest font-bold">Finance</p>
@@ -1640,6 +1882,90 @@
                     clearTimeout(flipTimeout); // Stop the 5-second auto-timer
                 });
             }
+
+            // --- NEW: Boot-Up Preloader Logic ---
+            const preloader = document.getElementById('preloader');
+            const terminalText = document.getElementById('terminal-text');
+            const progressBarElem = document.getElementById('progress-bar');
+            const progressPct = document.getElementById('progress-pct');
+            
+            // Lock scrolling temporarily
+            document.body.style.overflow = 'hidden'; 
+            
+            const bootSequence = [
+                "> Initializing architectural grid...",
+                "> Establishing database secure connections...",
+                "> Fetching live telemetry streams...",
+                "> Parsing spatial UI geometries...",
+                "> Compiling neural weights [SUCCESS]"
+            ];
+            
+            let bootIndex = 0;
+            let progress = 0;
+
+            const bootInterval = setInterval(() => {
+                // Add text lines
+                if (bootIndex < bootSequence.length) {
+                    terminalText.innerText += bootSequence[bootIndex] + "\n";
+                    bootIndex++;
+                }
+                
+                // Advance progress randomly
+                progress += Math.floor(Math.random() * 20) + 10;
+                if (progress > 100) progress = 100;
+                
+                progressPct.innerText = progress + "%";
+                const bars = Math.floor(progress / 10);
+                progressBarElem.innerText = "█".repeat(bars) + "_".repeat(10 - bars);
+                
+                // Finish boot
+                if (progress === 100) {
+                    clearInterval(bootInterval);
+                    setTimeout(() => {
+                        preloader.classList.add('flash-screen'); // Flash white
+                        setTimeout(() => {
+                            preloader.classList.add('preloader-hidden');
+                            document.body.style.overflow = 'auto'; // Unlock scrolling
+                        }, 150);
+                    }, 400); // Tiny pause at 100% for impact
+                }
+            }, 180);
+
+            // --- NEW: Custom Magnetic Cursor Logic ---
+            const cursor = document.getElementById('custom-cursor');
+            if (cursor && window.matchMedia("(pointer: fine)").matches) {
+                document.addEventListener('mousemove', (e) => {
+                    cursor.style.left = e.clientX + 'px';
+                    cursor.style.top = e.clientY + 'px';
+                });
+
+                // Add magnetic hover expansion to clickable elements
+                const hoverElements = document.querySelectorAll('a, button, input, textarea, .border-box, .project-card, .data-toggle-btn');
+                hoverElements.forEach(el => {
+                    el.addEventListener('mouseenter', () => cursor.classList.add('cursor-hover'));
+                    el.addEventListener('mouseleave', () => cursor.classList.remove('cursor-hover'));
+                });
+            }
+
+            // --- NEW: Raw Data Project Toggles Logic ---
+            const dataToggles = document.querySelectorAll('.data-toggle-btn');
+            dataToggles.forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.stopPropagation(); // Prevent grabbing/sliding when clicking button
+                    const overlay = btn.nextElementSibling;
+                    const isActive = overlay.classList.contains('active');
+                    
+                    if (isActive) {
+                        overlay.classList.remove('active');
+                        btn.innerText = '< / >';
+                        btn.classList.remove('active');
+                    } else {
+                        overlay.classList.add('active');
+                        btn.innerText = '[ X ]';
+                        btn.classList.add('active');
+                    }
+                });
+            });
         });
     </script>
 </body>
