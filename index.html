@@ -5,6 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Portfolio - Data Analyst</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Add Chart.js for the Live Data visualization -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
         
@@ -162,6 +166,22 @@
             background-size: 32px 32px;
             background-position: center top;
         }
+
+        /* 4. Night Mode Filter Trick */
+        html {
+            background-color: #ffffff; /* Explicitly set to ensure clean inversion */
+            transition: filter 0.5s ease-in-out, background-color 0.5s ease-in-out;
+        }
+
+        html.dark-mode {
+            filter: invert(1) hue-rotate(180deg);
+        }
+
+        /* Re-invert images so they retain their normal color */
+        html.dark-mode img {
+            filter: invert(1) hue-rotate(180deg);
+            opacity: 0.85; /* Slight dimming of images for better eye comfort in dark mode */
+        }
     </style>
 </head>
 <body class="bg-white text-black overflow-x-hidden">
@@ -183,12 +203,29 @@
                     <a href="#certifications" class="nav-link custom-transition text-gray-600 hover:text-black">Certifications</a>
                     <a href="#articles" class="nav-link custom-transition text-gray-600 hover:text-black">Articles</a>
                     <a href="#contact" class="nav-link custom-transition text-gray-600 hover:text-black">Contact</a>
+                    
+                    <!-- Desktop Theme Toggle -->
+                    <button class="theme-toggle custom-transition flex items-center justify-center w-8 h-8 border-2 border-black hover:bg-black hover:text-white group">
+                        <!-- Moon Icon (Default/Light Mode) -->
+                        <svg class="icon-moon w-4 h-4 block group-hover:text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+                        <!-- Sun Icon (Dark Mode) -->
+                        <svg class="icon-sun w-4 h-4 hidden group-hover:text-white" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+                    </button>
                 </div>
 
-                <!-- Mobile Hamburger Button -->
-                <button id="mobile-menu-btn" class="md:hidden text-black focus:outline-none custom-transition hover:text-gray-600">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
-                </button>
+                <!-- Mobile Action Buttons -->
+                <div class="md:hidden flex items-center gap-4">
+                    <!-- Mobile Theme Toggle -->
+                    <button class="theme-toggle custom-transition flex items-center justify-center w-8 h-8 border-2 border-black hover:bg-black hover:text-white group">
+                        <svg class="icon-moon w-4 h-4 block group-hover:text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+                        <svg class="icon-sun w-4 h-4 hidden group-hover:text-white" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+                    </button>
+
+                    <!-- Mobile Hamburger Button -->
+                    <button id="mobile-menu-btn" class="text-black focus:outline-none custom-transition hover:text-gray-600">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+                    </button>
+                </div>
             </div>
         </div>
 
@@ -222,8 +259,33 @@
                     </div>
                 </div>
                 <div class="flex justify-center md:justify-end">
-                    <div class="border-box w-full max-w-md aspect-[4/3] bg-gray-100 custom-transition">
-                        <img src="assets/home/hero_image.png" alt="Profile" class="w-full h-full object-cover">
+                    <div class="border-box w-full max-w-md aspect-[4/3] bg-gray-100 custom-transition p-4 flex flex-col items-start justify-center cursor-crosshair relative group">
+                        <!-- Abstract badge overlay -->
+                        <div class="absolute top-4 left-4 border border-black px-2 py-1 text-[10px] font-bold uppercase tracking-widest bg-white z-10 shadow-[2px_2px_0px_black]">
+                            Live Interaction
+                        </div>
+                        
+                        <!-- Replaced static image with interactive canvas -->
+                        <div class="w-full h-full relative z-0 pt-8 flex-grow">
+                            <!-- Inner relative container for strict positioning -->
+                            <div class="relative w-full h-full">
+                                <canvas id="heroChart"></canvas>
+                                
+                                <!-- Dynamic Current Month Marker -->
+                                <div id="current-month-marker" class="absolute hidden flex-col items-center justify-center pointer-events-none z-10 transform -translate-x-1/2 -translate-y-1/2">
+                                    <!-- Tooltip Label -->
+                                    <div class="bg-black text-white text-[10px] font-bold px-3 py-1 mb-1 shadow-[2px_2px_0px_rgba(0,0,0,0.3)] whitespace-nowrap relative transform -translate-y-1">
+                                        I am here
+                                        <!-- Down arrow triangle -->
+                                        <div class="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-[4px] border-r-[4px] border-t-[4px] border-l-transparent border-r-transparent border-t-black"></div>
+                                    </div>
+                                    <!-- Circular Profile Image -->
+                                    <div class="w-8 h-8 rounded-full border-2 border-black overflow-hidden bg-white shadow-[2px_2px_0px_rgba(0,0,0,1)]">
+                                        <img src="assets/home/hero_image.png" alt="Me" class="w-full h-full object-cover">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -1151,6 +1213,136 @@
             setupLayers('.see-more-btn', '.close-project-btn', '.project-details');
             setupLayers('.see-cert-btn', '.close-cert-btn', '.cert-details');
             setupLayers('.see-gist-btn', '.close-article-btn', '.article-details');
+
+            // --- Dark Mode / Inverted Theme Logic ---
+            const htmlElement = document.documentElement;
+            const themeToggles = document.querySelectorAll('.theme-toggle');
+            
+            // Check local storage or system preference
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+            
+            if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
+                htmlElement.classList.add('dark-mode');
+                updateThemeIcons(true);
+            }
+
+            themeToggles.forEach(toggle => {
+                toggle.addEventListener('click', () => {
+                    htmlElement.classList.toggle('dark-mode');
+                    const isDark = htmlElement.classList.contains('dark-mode');
+                    localStorage.setItem('theme', isDark ? 'dark' : 'light');
+                    updateThemeIcons(isDark);
+                });
+            });
+
+            function updateThemeIcons(isDark) {
+                const moons = document.querySelectorAll('.icon-moon');
+                const suns = document.querySelectorAll('.icon-sun');
+                if (isDark) {
+                    moons.forEach(moon => { moon.classList.remove('block'); moon.classList.add('hidden'); });
+                    suns.forEach(sun => { sun.classList.remove('hidden'); sun.classList.add('block'); });
+                } else {
+                    moons.forEach(moon => { moon.classList.remove('hidden'); moon.classList.add('block'); });
+                    suns.forEach(sun => { sun.classList.remove('block'); sun.classList.add('hidden'); });
+                }
+            }
+
+            // --- Hero Section Interactive Chart (Live Data) ---
+            const ctx = document.getElementById('heroChart');
+            if (ctx) {
+                // Simulated data points showing an upward "optimization" trend
+                const dataPoints = [45, 52, 48, 61, 59, 75, 71, 85, 82, 98, 95, 110];
+                const labels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+                // Automatically get the current month index (0 = Jan, 11 = Dec)
+                const currentMonthIndex = new Date().getMonth();
+
+                // Custom plugin to move the HTML marker based on the current month's chart coordinates
+                const monthTrackerPlugin = {
+                    id: 'monthTracker',
+                    afterDraw: (chart) => {
+                        const meta = chart.getDatasetMeta(0);
+                        const marker = document.getElementById('current-month-marker');
+                        
+                        // Check if the current month's data point exists
+                        if (meta.data[currentMonthIndex] && marker) {
+                            const point = meta.data[currentMonthIndex];
+                            
+                            // Unhide the marker once we have coordinates
+                            marker.classList.remove('hidden');
+                            marker.classList.add('flex');
+                            
+                            // Pin the marker precisely on the X and Y coordinates
+                            marker.style.left = point.x + 'px';
+                            marker.style.top = point.y + 'px';
+                        }
+                    }
+                };
+
+                new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: 'Optimization Metric',
+                            data: dataPoints,
+                            borderColor: '#000000', // Solid black line
+                            backgroundColor: 'rgba(0, 0, 0, 0.03)', // Very subtle gray fill under the line
+                            borderWidth: 2,
+                            pointBackgroundColor: '#ffffff',
+                            pointBorderColor: '#000000',
+                            pointBorderWidth: 2,
+                            pointRadius: 4,
+                            pointHoverRadius: 7,
+                            pointHoverBackgroundColor: '#000000',
+                            fill: true,
+                            tension: 0.2 // Slight curve for a mathematical feel
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        animation: {
+                            duration: 2500,
+                            easing: 'easeOutQuart'
+                        },
+                        interaction: {
+                            mode: 'index',
+                            intersect: false,
+                        },
+                        plugins: {
+                            legend: {
+                                display: false // Hidden for minimalist look
+                            },
+                            tooltip: {
+                                backgroundColor: '#000000',
+                                titleFont: { family: 'Inter', size: 11 },
+                                bodyFont: { family: 'Inter', size: 13, weight: 'bold' },
+                                padding: 10,
+                                cornerRadius: 0, // Brutalist sharp edges
+                                displayColors: false,
+                                callbacks: {
+                                    label: function(context) {
+                                        return 'Efficiency: ' + context.parsed.y + '%';
+                                    }
+                                }
+                            }
+                        },
+                        scales: {
+                            x: {
+                                grid: { display: false },
+                                ticks: { font: { family: 'Inter', size: 10, weight: 'bold' }, color: '#9ca3af' }
+                            },
+                            y: {
+                                grid: { color: '#f3f4f6', drawBorder: false },
+                                ticks: { display: false } // Hide Y axis numbers to keep it looking like an abstract graphic
+                            }
+                        }
+                    },
+                    plugins: [monthTrackerPlugin] // Register our custom tracking plugin
+                });
+            }
 
             // --- Contact Form Logic (Formspree) ---
             const contactForm = document.getElementById('contact-form');
