@@ -17,18 +17,18 @@
             scroll-behavior: smooth;
         }
 
-        /* 1. Crucial UX Fix: Scroll Margin for Fixed Header */
+        /* Crucial UX Fix: Scroll Margin for Fixed Header */
         section {
             scroll-margin-top: 110px; /* Accounts for dock height + offset */
         }
 
-        /* 2. Aesthetic Polish: Brutalist Text Highlight */
+        /* Aesthetic Polish: Brutalist Text Highlight */
         ::selection {
             background-color: #000;
             color: #fff;
         }
 
-        /* 3. Aesthetic Polish: Custom Sharp Scrollbar */
+        /* Aesthetic Polish: Custom Sharp Scrollbar */
         ::-webkit-scrollbar {
             width: 14px;
         }
@@ -167,9 +167,9 @@
             background-position: center top;
         }
 
-        /* 4. Night Mode Filter Trick */
+        /* Night Mode Filter Trick */
         html {
-            background-color: #ffffff; /* Explicitly set to ensure clean inversion */
+            background-color: #ffffff;
             transition: filter 0.5s ease-in-out, background-color 0.5s ease-in-out;
         }
 
@@ -177,23 +177,22 @@
             filter: invert(1) hue-rotate(180deg);
         }
 
-        /* Re-invert images so they retain their normal color */
         html.dark-mode img {
             filter: invert(1) hue-rotate(180deg);
-            opacity: 0.85; /* Slight dimming of images for better eye comfort in dark mode */
+            opacity: 0.85;
         }
 
-        /* --- NEW: Marquee Animation --- */
+        /* Marquee Animation */
         .marquee-content {
             display: inline-block;
             animation: marquee 25s linear infinite;
         }
         @keyframes marquee {
             0% { transform: translateX(0); }
-            100% { transform: translateX(-50%); } /* Shifts exactly half its width to loop */
+            100% { transform: translateX(-50%); } 
         }
 
-        /* --- NEW: Scroll Reveal Classes --- */
+        /* Scroll Reveal Classes */
         .reveal {
             opacity: 0;
             transform: translateY(40px);
@@ -204,21 +203,20 @@
             transform: translateY(0);
         }
 
-        /* --- NEW: Grab & Drag Classes --- */
+        /* Grab & Drag Classes */
         .grab-scroll {
             cursor: grab;
-            scroll-behavior: smooth; /* <-- THIS LINE MAKES ARROW CLICKS GLIDE SMOOTHLY */
+            scroll-behavior: smooth;
         }
         .grab-scroll:active {
             cursor: grabbing;
         }
         .no-snap {
-            /* Disable snap and smooth scroll during drag to make it instant and responsive */
             scroll-snap-type: none !important;
             scroll-behavior: auto !important;
         }
 
-        /* --- NEW: 3D Flip Form Classes --- */
+        /* 3D Flip Form Classes */
         .flip-container {
             perspective: 1000px;
             width: 100%;
@@ -249,7 +247,7 @@
             justify-content: center;
         }
 
-        /* --- NEW: Boot-Up Preloader --- */
+        /* Boot-Up Preloader */
         #preloader {
             position: fixed;
             inset: 0;
@@ -275,7 +273,7 @@
             100% { background-color: #000; }
         }
 
-        /* --- NEW: Raw Data Project Toggles --- */
+        /* Raw Data Project Toggles */
         .raw-data-overlay {
             position: absolute;
             inset: 0;
@@ -316,14 +314,13 @@
             background: #fff;
             color: #000;
         }
-        /* Make scrollbar look like terminal */
         .raw-data-overlay::-webkit-scrollbar { width: 6px; }
         .raw-data-overlay::-webkit-scrollbar-thumb { background: #0f0; }
     </style>
 </head>
 <body class="bg-white text-black overflow-x-hidden">
 
-    <!-- NEW: Boot-Up Preloader -->
+    <!-- Boot-Up Preloader -->
     <div id="preloader">
         <div class="max-w-xl w-full px-6 flex justify-center items-center">
             <div class="flex items-center gap-4 text-lg md:text-xl font-bold">
@@ -335,7 +332,7 @@
         </div>
     </div>
 
-    <!-- NEW: Top Scroll Progress Bar -->
+    <!-- Top Scroll Progress Bar -->
     <div id="scroll-progress-bar" class="fixed top-0 left-0 h-1 bg-black z-[100] w-0 custom-transition"></div>
 
     <!-- Navigation Bar -->
@@ -343,44 +340,45 @@
         <div class="w-full md:w-auto px-6 md:px-10">
             <div class="flex justify-between md:justify-center items-center h-16 md:h-14">
                 
-                <!-- Mobile Logo / Initials (Visible only on mobile for balance) -->
+                <!-- Mobile Logo -->
                 <div class="md:hidden font-bold text-lg tracking-widest uppercase flex items-center gap-3">
                     EA. <span class="font-mono text-[10px] border border-black px-1">L: <span id="mobile-scroll-pct">0</span>%</span>
                 </div>
 
                 <!-- Desktop Menu -->
                 <div class="hidden md:flex items-center space-x-8 text-sm font-medium">
-                    <a href="#home" class="nav-link custom-transition text-gray-600 hover:text-black active-nav">Home</a>
-                    <a href="#about" class="nav-link custom-transition text-gray-600 hover:text-black">About</a>
-                    <a href="#work" class="nav-link custom-transition text-gray-600 hover:text-black">Work</a>
-                    <a href="#projects" class="nav-link custom-transition text-gray-600 hover:text-black">Projects</a>
-                    <a href="#certifications" class="nav-link custom-transition text-gray-600 hover:text-black">Certifications</a>
-                    <a href="#articles" class="nav-link custom-transition text-gray-600 hover:text-black">Articles</a>
-                    <a href="#contact" class="nav-link custom-transition text-gray-600 hover:text-black">Contact</a>
+                    <a href="#home" class="nav-link custom-transition text-gray-600 hover:text-black active-nav" data-section="home">Home</a>
+                    <a href="#about" class="nav-link custom-transition text-gray-600 hover:text-black" data-section="about">About</a>
+                    <a href="#work" class="nav-link custom-transition text-gray-600 hover:text-black" data-section="work">Work</a>
+                    <a href="#projects" class="nav-link custom-transition text-gray-600 hover:text-black" data-section="projects">Projects</a>
+                    <a href="#certifications" class="nav-link custom-transition text-gray-600 hover:text-black" data-section="certifications">Certifications</a>
+                    <a href="#articles" class="nav-link custom-transition text-gray-600 hover:text-black" data-section="articles">Articles</a>
+                    <a href="#contact" class="nav-link custom-transition text-gray-600 hover:text-black" data-section="contact">Contact</a>
                     
-                    <!-- NEW: Desktop Scroll Progress Badge -->
+                    <!-- Desktop Scroll Progress Badge -->
                     <div class="font-mono text-[10px] font-bold tracking-widest border border-black px-2 py-1 bg-gray-50 flex items-center w-24 justify-center">
                         LOAD: <span id="desktop-scroll-pct" class="ml-1 w-6 text-right">0</span>%
                     </div>
 
+                    <!-- NEW: Live Telemetry Indicator (Desktop Only) -->
+                    <div class="hidden lg:flex items-center gap-2 border border-black px-2 py-1 bg-white cursor-help" title="Local session telemetry active">
+                        <div class="w-2 h-2 bg-red-500 rounded-full animate-pulse"></div>
+                        <span class="text-[10px] font-mono font-bold uppercase tracking-widest text-black">Telemetry: Live</span>
+                    </div>
+
                     <!-- Desktop Theme Toggle -->
                     <button class="theme-toggle custom-transition flex items-center justify-center w-8 h-8 border-2 border-black hover:bg-black hover:text-white group">
-                        <!-- Moon Icon (Default/Light Mode) -->
                         <svg class="icon-moon w-4 h-4 block group-hover:text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
-                        <!-- Sun Icon (Dark Mode) -->
                         <svg class="icon-sun w-4 h-4 hidden group-hover:text-white" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
                     </button>
                 </div>
 
                 <!-- Mobile Action Buttons -->
                 <div class="md:hidden flex items-center gap-4">
-                    <!-- Mobile Theme Toggle -->
                     <button class="theme-toggle custom-transition flex items-center justify-center w-8 h-8 border-2 border-black hover:bg-black hover:text-white group">
                         <svg class="icon-moon w-4 h-4 block group-hover:text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
-                        <svg class="icon-sun w-4 h-4 hidden group-hover:text-white" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+                        <svg class="icon-sun w-4 h-4 hidden group-hover:text-white" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"></circle></svg>
                     </button>
-
-                    <!-- Mobile Hamburger Button -->
                     <button id="mobile-menu-btn" class="text-black focus:outline-none custom-transition hover:text-gray-600">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
                     </button>
@@ -390,13 +388,13 @@
 
         <!-- Mobile Dropdown Menu -->
         <div id="mobile-menu" class="hidden absolute top-16 left-0 w-full bg-white border-b border-gray-200 shadow-xl flex-col z-40 md:hidden origin-top">
-            <a href="#home" class="mobile-link block w-full text-center text-sm font-bold uppercase tracking-wider text-gray-600 hover:text-black py-4 border-b border-green-200 last:border-0 active-nav">Home</a>
-            <a href="#about" class="mobile-link block w-full text-center text-sm font-bold uppercase tracking-wider text-gray-600 hover:text-black py-4 border-b border-green-200 last:border-0">About</a>
-            <a href="#work" class="mobile-link block w-full text-center text-sm font-bold uppercase tracking-wider text-gray-600 hover:text-black py-4 border-b border-green-200 last:border-0">Work</a>
-            <a href="#projects" class="mobile-link block w-full text-center text-sm font-bold uppercase tracking-wider text-gray-600 hover:text-black py-4 border-b border-green-200 last:border-0">Projects</a>
-            <a href="#certifications" class="mobile-link block w-full text-center text-sm font-bold uppercase tracking-wider text-gray-600 hover:text-black py-4 border-b border-green-200 last:border-0">Certifications</a>
-            <a href="#articles" class="mobile-link block w-full text-center text-sm font-bold uppercase tracking-wider text-gray-600 hover:text-black py-4 border-b border-green-200 last:border-0">Articles</a>
-            <a href="#contact" class="mobile-link block w-full text-center text-sm font-bold uppercase tracking-wider text-gray-600 hover:text-black py-4 border-b border-green-200 last:border-0">Contact</a>
+            <a href="#home" class="mobile-link block w-full text-center text-sm font-bold uppercase tracking-wider text-gray-600 hover:text-black py-4 border-b border-gray-200 last:border-0 active-nav">Home</a>
+            <a href="#about" class="mobile-link block w-full text-center text-sm font-bold uppercase tracking-wider text-gray-600 hover:text-black py-4 border-b border-gray-200 last:border-0">About</a>
+            <a href="#work" class="mobile-link block w-full text-center text-sm font-bold uppercase tracking-wider text-gray-600 hover:text-black py-4 border-b border-gray-200 last:border-0">Work</a>
+            <a href="#projects" class="mobile-link block w-full text-center text-sm font-bold uppercase tracking-wider text-gray-600 hover:text-black py-4 border-b border-gray-200 last:border-0">Projects</a>
+            <a href="#certifications" class="mobile-link block w-full text-center text-sm font-bold uppercase tracking-wider text-gray-600 hover:text-black py-4 border-b border-gray-200 last:border-0">Certifications</a>
+            <a href="#articles" class="mobile-link block w-full text-center text-sm font-bold uppercase tracking-wider text-gray-600 hover:text-black py-4 border-b border-gray-200 last:border-0">Articles</a>
+            <a href="#contact" class="mobile-link block w-full text-center text-sm font-bold uppercase tracking-wider text-gray-600 hover:text-black py-4 border-b border-gray-200 last:border-0">Contact</a>
         </div>
     </nav>
 
@@ -407,10 +405,10 @@
                 <div class="flex flex-col gap-6 max-w-lg">
                     <div>
                         <h1 class="text-5xl font-bold tracking-tight uppercase break-words text-black">Eyasin Arafath</h1>
-                        <h2 class="text-lg font-bold text-gray-400 mt-2 uppercase tracking-widest">Data Analyst</h2>
+                        <h2 class="text-lg font-bold text-gray-400 mt-2 uppercase tracking-widest">Business Intelligence Analyst</h2>
                     </div>
                     <p class="text-base text-gray-600 max-w-2xl leading-relaxed mt-2">
-                        I transform complex datasets into actionable business intelligence. Specialized in predictive modeling, SQL optimization, and interactive dashboarding.
+                        Economics graduate combining quantitative training with practical skills in data analysis, CRM systems, and performance tracking. Passionate about identifying anomalies and helping businesses reduce lead loss through evidence-based decision-making.
                     </p>
                     <div class="flex flex-wrap gap-4 mt-2">
                         <button class="bg-black text-white px-6 py-3 font-medium shadow-[4px_4px_0px_black] custom-transition hover:-translate-y-1 hover:shadow-[4px_6px_0px_black]">View Case Studies</button>
@@ -419,26 +417,17 @@
                 </div>
                 <div class="flex justify-center md:justify-end">
                     <div class="border-box w-full max-w-md aspect-[4/3] bg-gray-100 custom-transition p-4 flex flex-col items-start justify-center cursor-crosshair relative group">
-                        <!-- Abstract badge overlay -->
                         <div class="absolute top-4 left-4 border border-black px-2 py-1 text-[10px] font-bold uppercase tracking-widest bg-white z-10 shadow-[2px_2px_0px_black]">
                             Live Interaction
                         </div>
-                        
-                        <!-- Replaced static image with interactive canvas -->
                         <div class="w-full h-full relative z-0 pt-8 flex-grow">
-                            <!-- Inner relative container for strict positioning -->
                             <div class="relative w-full h-full">
                                 <canvas id="heroChart"></canvas>
-                                
-                                <!-- Dynamic Current Month Marker -->
                                 <div id="current-month-marker" class="absolute hidden flex-col items-center justify-center pointer-events-none z-10 transform -translate-x-1/2 -translate-y-1/2">
-                                    <!-- Tooltip Label -->
                                     <div class="bg-black text-white text-[10px] font-bold px-3 py-1 mb-1 shadow-[2px_2px_0px_rgba(0,0,0,0.3)] whitespace-nowrap relative transform -translate-y-1">
                                         I am here
-                                        <!-- Down arrow triangle -->
                                         <div class="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-[4px] border-r-[4px] border-t-[4px] border-l-transparent border-r-transparent border-t-black"></div>
                                     </div>
-                                    <!-- Circular Profile Image -->
                                     <div class="w-8 h-8 rounded-full border-2 border-black overflow-hidden bg-white shadow-[2px_2px_0px_rgba(0,0,0,1)]">
                                         <img src="assets/home/hero_image.png" alt="Me" class="w-full h-full object-cover">
                                     </div>
@@ -449,36 +438,25 @@
                 </div>
             </div>
         </div>
-        
-        <!-- Subtle bottom fade to blend into the next section -->
         <div class="absolute bottom-0 left-0 w-full h-24 bg-gradient-to-t from-gray-50 to-transparent z-0 pointer-events-none"></div>
     </section>
 
-    <!-- NEW: Tech Stack Marquee Divider -->
+    <!-- Tech Stack Marquee Divider -->
     <div class="border-y-2 border-black bg-white overflow-hidden py-3 flex relative z-20">
-        <!-- We repeat the content twice to create the seamless infinite scroll -->
         <div class="marquee-content whitespace-nowrap flex gap-4 text-xs font-mono font-bold uppercase tracking-widest text-black">
-            <span>PYTHON +++ TABLEAU +++ SQL +++ AWS REDSHIFT +++ POWER BI +++ PYSPARK +++ STATISTICS +++ MACHINE LEARNING +++ EXPERIMENTATION +++ BIG DATA +++ </span>
-            <span>PYTHON +++ TABLEAU +++ SQL +++ AWS REDSHIFT +++ POWER BI +++ PYSPARK +++ STATISTICS +++ MACHINE LEARNING +++ EXPERIMENTATION +++ BIG DATA +++ </span>
+            <span>POWER BI +++ TABLEAU +++ EXCEL (ADVANCED) +++ PYTHON (EDA) +++ POWER QUERY +++ BUSINESS INTELLIGENCE +++ MARKETING METRICS +++ DASHBOARD DESIGN +++ STATISTICS +++ STRATEGY +++ </span>
+            <span>POWER BI +++ TABLEAU +++ EXCEL (ADVANCED) +++ PYTHON (EDA) +++ POWER QUERY +++ BUSINESS INTELLIGENCE +++ MARKETING METRICS +++ DASHBOARD DESIGN +++ STATISTICS +++ STRATEGY +++ </span>
         </div>
     </div>
 
-  <!-- About Me Section -->
+    <!-- About Me Section -->
     <section id="about" class="py-24 bg-gray-50 border-t border-gray-200">
         <div class="max-w-7xl mx-auto px-6">
-            <!-- Changed md:items-start to md:items-center for vertical centering -->
             <div class="flex flex-col md:flex-row gap-12 lg:gap-20 md:items-center">
-                
-                <!-- Left: Editorial Image -->
                 <div class="w-full md:w-[40%] reveal">
-                    <!-- Standard image holder, no forced height or cropping -->
                     <img src="assets/home/about_image.png" alt="About Me" class="w-full h-auto grayscale">
                 </div>
-
-                <!-- Right: Structured Editorial Content -->
                 <div class="w-full md:w-[60%] flex flex-col justify-center py-4 md:py-8 reveal" style="transition-delay: 150ms;">
-                    
-                    <!-- Meta Header & Title -->
                     <div class="flex justify-between items-start mb-12">
                         <div>
                             <h2 class="text-5xl md:text-6xl lg:text-7xl font-black tracking-tighter uppercase text-black leading-none">About</h2>
@@ -486,46 +464,39 @@
                         </div>
                         <div class="flex flex-col items-end text-right mt-2">
                             <span class="text-[10px] font-mono font-bold text-gray-400 uppercase tracking-widest">Dhaka, Bangladesh</span>
-                            <span class="text-[10px] font-mono font-bold text-gray-400 uppercase tracking-widest">March, 2026</span>
-                            <!-- Minimalist upward diagonal arrow -->
+                            <span class="text-[10px] font-mono font-bold text-gray-400 uppercase tracking-widest">BSS Economics (2026)</span>
                             <svg class="w-5 h-5 text-black mt-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 17L17 7M17 7H7M17 7v10"></path></svg>
                         </div>
                     </div>
-
-                    <!-- Bio Paragraph -->
                     <p class="text-sm md:text-base text-gray-600 leading-relaxed mb-16 max-w-xl">
-                        With over five years of experience in the data landscape, I bridge the gap between technical complexity and business strategy. I believe that data is more than just rows in a database; it's a narrative waiting to be told. My approach combines rigorous statistical analysis with intuitive design, crafting insights that resonate with target audiences and push boundaries within strict guidelines.
+                        As an Economics graduate (BUP, 2026) with hands-on experience as a two-time co-founder and a digital marketing intern, I bridge the gap between quantitative theory and business strategy. I combine my academic background in Business Statistics with practical skills in data analysis, CRM systems, and performance tracking. My passion lies in identifying data anomalies, streamlining operations, and driving growth through rigorous analysis.
                     </p>
-
-                    <!-- Structured Data Grid -->
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-12 gap-y-12">
-                        
-                        <!-- Education -->
                         <div>
                             <div class="flex justify-between items-center mb-4">
                                 <h4 class="text-lg font-black text-black uppercase tracking-tight">Education</h4>
-                                <!-- Date pill matching the reference -->
-                                <span class="px-3 py-1 border border-gray-300 rounded-full text-[10px] font-mono font-bold text-gray-500">2018 - 2022</span>
+                                <span class="px-3 py-1 border border-gray-300 rounded-full text-[10px] font-mono font-bold text-gray-500">2022 - 2026</span>
                             </div>
-                            <p class="text-sm font-bold text-black">B.S. Computer Science</p>
-                            <p class="text-xs text-gray-600 mt-1">University of Technology<br>CGPA: 3.8 / 4.0</p>
+                            <p class="text-sm font-bold text-black">BSS (Hons) in Economics</p>
+                            <p class="text-xs text-gray-600 mt-1">Bangladesh University of Professionals (BUP)</p>
+                            
+                            <div class="mt-4 pt-4 border-t border-gray-200">
+                                <p class="text-sm font-bold text-black">HSC, Science</p>
+                                <p class="text-xs text-gray-600 mt-1">Udayan Higher Secondary School<br>GPA: 5.00/5.00 (2020)</p>
+                            </div>
                         </div>
-
-                        <!-- Skills -->
                         <div>
-                            <h4 class="text-lg font-black text-black uppercase tracking-tight mb-4">Skills</h4>
-                            <div class="grid grid-cols-2 gap-x-2 gap-y-2 text-xs text-gray-600">
-                                <span>Python</span>
-                                <span>Tableau</span>
-                                <span>SQL</span>
-                                <span>Power BI</span>
-                                <span>AWS Redshift</span>
-                                <span>PySpark</span>
+                            <h4 class="text-lg font-black text-black uppercase tracking-tight mb-4">Core Skills</h4>
+                            <div class="grid grid-cols-2 gap-x-2 gap-y-2 text-xs text-gray-600 font-medium">
+                                <span>Power BI & Tableau</span>
+                                <span>Python (EDA)</span>
+                                <span>Advanced Excel</span>
+                                <span>Marketing Metrics</span>
+                                <span>Dashboard Design</span>
+                                <span>Statistical Analysis</span>
                             </div>
                         </div>
-                        
                     </div>
-
                 </div>
             </div>
         </div>
@@ -538,56 +509,50 @@
                 <h2 class="text-4xl font-bold tracking-tight text-black uppercase">Work Experience</h2>
                 <p class="text-gray-600 mt-2 text-base">A chronicle of my professional growth</p>
             </div>
-            
             <div class="flex flex-col">
-                <!-- Job 1 -->
                 <div class="timeline-item relative timeline-container border-t border-gray-200 pt-10 reveal">
                     <div class="timeline-line-left"></div>
                     <div class="timeline-marker"></div>
                     <div class="grid md:grid-cols-[150px_1fr] gap-6">
-                        <span class="text-sm font-bold text-gray-400 uppercase tracking-widest mt-1">2022 - Present</span>
+                        <span class="text-sm font-bold text-gray-400 uppercase tracking-widest mt-1">Dec 2025 - Present</span>
                         <div class="flex flex-col gap-3">
                             <div>
-                                <h3 class="text-lg font-bold text-black">Lead Data Strategist</h3>
-                                <p class="text-base text-black font-medium">TechVision Analytics</p>
+                                <h3 class="text-lg font-bold text-black">Digital Marketing Intern (i2i)</h3>
+                                <p class="text-base text-black font-medium">Skill Jobs</p>
                             </div>
                             <p class="text-base text-gray-600 max-w-2xl leading-relaxed">
-                                Spearheading data architecture for Fortune 500 clients. Reduced data processing latency by 40% through SQL optimization and automated anomaly detection.
+                                Developed customer segmentation frameworks to identify high-value audiences. Audited digital presence, aligned full-funnel strategies (TOFU-MOFU-BOFU), and analyzed key metrics including CAC, LTV, ROI, and YoY growth to support scaling decisions.
                             </p>
                         </div>
                     </div>
                 </div>
-
-                <!-- Job 2 -->
                 <div class="timeline-item relative timeline-container border-t border-gray-200 pt-10 reveal">
                     <div class="timeline-line-left"></div>
                     <div class="timeline-marker"></div>
                     <div class="grid md:grid-cols-[150px_1fr] gap-6">
-                        <span class="text-sm font-bold text-gray-400 uppercase tracking-widest mt-1">2020 - 2022</span>
+                        <span class="text-sm font-bold text-gray-400 uppercase tracking-widest mt-1">Nov 2024 - Jan 2026</span>
                         <div class="flex flex-col gap-3">
                             <div>
-                                <h3 class="text-lg font-bold text-black">Junior Data Analyst</h3>
-                                <p class="text-base text-black font-medium">Global Retail Corp</p>
+                                <h3 class="text-lg font-bold text-black">Co-Founder | Lead, BI & Supply Chain</h3>
+                                <p class="text-base text-black font-medium">ZARIWALI</p>
                             </div>
                             <p class="text-base text-gray-600 max-w-2xl leading-relaxed">
-                                Developed interactive Tableau dashboards that pinpointed a 15% leakage in supply chain logistics. Managed migration of legacy Excel reporting to cloud databases.
+                                Secured retail presence at Prelegant Mall through strategic negotiation. Managed end-to-end production lifecycle, applying lean principles to protect margins, and defined brand USP via gap analysis and persona mapping.
                             </p>
                         </div>
                     </div>
                 </div>
-
-                <!-- Job 3 -->
                 <div class="timeline-item relative timeline-container border-t border-gray-200 pt-10 reveal">
                     <div class="timeline-marker"></div>
                     <div class="grid md:grid-cols-[150px_1fr] gap-6">
-                        <span class="text-sm font-bold text-gray-400 uppercase tracking-widest mt-1">2018 - 2020</span>
+                        <span class="text-sm font-bold text-gray-400 uppercase tracking-widest mt-1">Nov 2024 - Aug 2025</span>
                         <div class="flex flex-col gap-3">
                             <div>
-                                <h3 class="text-lg font-bold text-black">Data Research Intern</h3>
-                                <p class="text-base text-black font-medium">University Data Lab</p>
+                                <h3 class="text-lg font-bold text-black">Technical Co-Founder & Data Analyst</h3>
+                                <p class="text-base text-black font-medium">The Rage House, Dhaka</p>
                             </div>
                             <p class="text-base text-gray-600 max-w-2xl leading-relaxed">
-                                Conducted exploratory analysis on climate datasets and assisted in creating complex visualizations using Python for published research papers.
+                                Designed an end-to-end CRM dashboard using Google Sheets for real-time operational reporting. Restructured pricing models using demographic analytical frameworks and optimized workforce deployment to improve capacity.
                             </p>
                         </div>
                     </div>
@@ -603,7 +568,6 @@
                 <h2 class="text-4xl font-bold tracking-tight text-black uppercase">Projects</h2>
                 <p class="text-gray-600 mt-2 text-base">Selected work</p>
             </div>
-            <!-- NEW: Arrow Navigation Buttons -->
             <div class="hidden md:flex gap-2">
                 <button id="proj-prev" class="w-10 h-10 border-2 border-black flex items-center justify-center hover:bg-black hover:text-white custom-transition">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
@@ -615,50 +579,44 @@
         </div>
 
         <div class="carousel-wrapper max-w-7xl mx-auto reveal" style="transition-delay: 100ms;">
-            <!-- Added grab-scroll class -->
             <div id="projects-carousel" class="flex overflow-x-auto snap-x snap-mandatory gap-6 px-6 hide-scrollbar pb-8 grab-scroll">
                 
                 <!-- Project 1 -->
                 <div class="project-card relative w-[85vw] md:w-[604px] shrink-0 snap-center border-2 border-black bg-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] flex flex-col custom-transition hover:-translate-y-1 overflow-hidden">
                     <div class="aspect-video relative object-cover w-full border-b-2 border-black bg-gray-100 overflow-hidden group">
                         <img src="https://picsum.photos/seed/proj1/800/600" alt="Project Banner" class="w-full h-full object-cover custom-transition hover:scale-105">
-                        
-                        <!-- NEW: Raw Data Toggle -->
                         <button class="data-toggle-btn custom-transition">&lt; / &gt;</button>
                         <div class="raw-data-overlay hide-scrollbar">
-<pre><code>import pandas as pd
-from sklearn.ensemble import RandomForestClassifier
+<pre><code># Google Sheets / Power Query Logic
+=QUERY(Orders!A:Z, 
+  "SELECT C, SUM(F), AVG(H) 
+   WHERE D = 'Delivered' 
+   GROUP BY C 
+   ORDER BY SUM(F) DESC", 1)
 
-# Loading telemetry data pipeline
-df = pd.read_csv('s3://data-lake/telemetry_stream.csv')
-features = df.drop('churn', axis=1)
-
-# Training Predictive Model
-model = RandomForestClassifier(n_estimators=150, max_depth=12)
-model.fit(features, df['churn'])
-
-print("Validation Accuracy: 89.4%")
-print("Pipeline Execution: Success")</code></pre>
+# Operational Metrics Tracker
+Status: LIVE
+Data Latency: < 1m
+Key Insight: Workforce capacity utilized at 88%</code></pre>
                         </div>
                     </div>
                     <div class="p-6 flex flex-col gap-3 flex-grow">
-                        <p class="text-sm text-gray-400 uppercase tracking-widest font-bold">Machine Learning</p>
-                        <h3 class="text-lg font-bold text-black">Customer Churn Prediction</h3>
-                        <p class="text-gray-600 text-sm max-w-2xl line-clamp-2">Random Forest and XGBoost pipeline to identify at-risk customers with 89% accuracy.</p>
+                        <p class="text-sm text-gray-400 uppercase tracking-widest font-bold">Business Intelligence</p>
+                        <h3 class="text-lg font-bold text-black">End-to-End CRM Dashboard</h3>
+                        <p class="text-gray-600 text-sm max-w-2xl line-clamp-2">Built an automated CRM dashboard enabling real-time operational reporting and decision-making for The Rage House.</p>
                         <button class="see-more-btn mt-auto pt-4 flex items-center gap-2 text-xs font-bold uppercase tracking-wider custom-transition hover:text-gray-600 w-fit">
                             See More
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
                         </button>
                     </div>
-                    <!-- Slide Up Layer -->
                     <div class="project-details absolute inset-0 bg-white border-t-4 border-black p-6 z-10 flex flex-col">
                         <button class="close-project-btn self-end text-gray-400 hover:text-black mb-4 custom-transition"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg></button>
                         <div class="flex flex-col gap-3 overflow-y-auto hide-scrollbar flex-grow">
-                            <h3 class="text-lg font-bold text-black">Detailed Analysis</h3>
-                            <p class="text-gray-600 text-sm leading-relaxed max-w-2xl">Developed a machine learning pipeline using Random Forest and XGBoost to identify at-risk customers with 89% accuracy. Implemented automated data pipelines via Python.</p>
+                            <h3 class="text-lg font-bold text-black">Operational Analytics</h3>
+                            <p class="text-gray-600 text-sm leading-relaxed max-w-2xl">Designed a comprehensive CRM dashboard tracking orders, workforce deployment, and raw material status. Transitioned the team from static tracking to real-time, evidence-based capacity planning.</p>
                             <div class="flex flex-wrap gap-2 mt-2">
-                                <span class="px-2 py-1 bg-gray-100 text-[10px] font-bold uppercase border border-gray-200">Python</span>
-                                <span class="px-2 py-1 bg-gray-100 text-[10px] font-bold uppercase border border-gray-200">Scikit-Learn</span>
+                                <span class="px-2 py-1 bg-gray-100 text-[10px] font-bold uppercase border border-gray-200">Google Sheets</span>
+                                <span class="px-2 py-1 bg-gray-100 text-[10px] font-bold uppercase border border-gray-200">Data Modeling</span>
                             </div>
                         </div>
                         <a href="#" class="mt-6 bg-black text-white px-6 py-3 font-medium text-center custom-transition hover:bg-gray-800">View Full Case Study</a>
@@ -669,33 +627,28 @@ print("Pipeline Execution: Success")</code></pre>
                 <div class="project-card relative w-[85vw] md:w-[604px] shrink-0 snap-center border-2 border-black bg-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] flex flex-col custom-transition hover:-translate-y-1 overflow-hidden">
                     <div class="aspect-video relative object-cover w-full border-b-2 border-black bg-gray-100 overflow-hidden group">
                         <img src="https://picsum.photos/seed/proj2/800/600" alt="Project Banner" class="w-full h-full object-cover custom-transition hover:scale-105">
-                        
-                        <!-- NEW: Raw Data Toggle -->
                         <button class="data-toggle-btn custom-transition">&lt; / &gt;</button>
                         <div class="raw-data-overlay hide-scrollbar">
-<pre><code>WITH RegionalBottleneck AS (
-    SELECT 
-        region_id,
-        AVG(transit_time) as avg_transit,
-        PERCENTILE_CONT(0.9) WITHIN GROUP (ORDER BY transit_time) 
-            as p90_transit
-    FROM logistics.shipments
-    WHERE status = 'DELIVERED'
-    GROUP BY region_id
-)
-SELECT 
-    r.region_name,
-    b.avg_transit,
-    (b.p90_transit - b.avg_transit) as variance_delay
-FROM RegionalBottleneck b
-JOIN reference.regions r ON b.region_id = r.id
-ORDER BY variance_delay DESC;</code></pre>
+<pre><code>import pandas as pd
+import seaborn as sns
+
+# Customer Segmentation Framework
+customers = pd.read_csv('crm_export.csv')
+
+# Defining high-value cohorts
+high_value = customers[
+    (customers['LTV'] > 500) & 
+    (customers['engagement_score'] >= 0.8)
+]
+
+print(f"Target Cohort Size: {len(high_value)}")
+# Output: Segments identified for BOFU retargeting.</code></pre>
                         </div>
                     </div>
                     <div class="p-6 flex flex-col gap-3 flex-grow">
-                        <p class="text-sm text-gray-400 uppercase tracking-widest font-bold">Visualization</p>
-                        <h3 class="text-lg font-bold text-black">Supply Chain Dashboard</h3>
-                        <p class="text-gray-600 text-sm max-w-2xl line-clamp-2">End-to-end Tableau dashboard connecting live AWS warehouse data for regional bottleneck analysis.</p>
+                        <p class="text-sm text-gray-400 uppercase tracking-widest font-bold">Exploratory Data Analysis</p>
+                        <h3 class="text-lg font-bold text-black">Customer Segmentation Framework</h3>
+                        <p class="text-gray-600 text-sm max-w-2xl line-clamp-2">Developed geographic, demographic, and behavioral models to identify high-value target audiences.</p>
                         <button class="see-more-btn mt-auto pt-4 flex items-center gap-2 text-xs font-bold uppercase tracking-wider custom-transition hover:text-gray-600 w-fit">
                             See More
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
@@ -704,14 +657,14 @@ ORDER BY variance_delay DESC;</code></pre>
                     <div class="project-details absolute inset-0 bg-white border-t-4 border-black p-6 z-10 flex flex-col">
                         <button class="close-project-btn self-end text-gray-400 hover:text-black mb-4 custom-transition"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg></button>
                         <div class="flex flex-col gap-3 overflow-y-auto hide-scrollbar flex-grow">
-                            <h3 class="text-lg font-bold text-black">Visualization Strategy</h3>
-                            <p class="text-gray-600 text-sm leading-relaxed max-w-2xl">Designed an end-to-end Tableau dashboard connecting live AWS warehouse data for regional bottleneck analysis.</p>
+                            <h3 class="text-lg font-bold text-black">Audience Targeting</h3>
+                            <p class="text-gray-600 text-sm leading-relaxed max-w-2xl">Built structured frameworks to analyze customer psychographics and behavior. Translated complex raw data insights into refined targeting strategies for brand positioning.</p>
                             <div class="flex flex-wrap gap-2 mt-2">
-                                <span class="px-2 py-1 bg-gray-100 text-[10px] font-bold uppercase border border-gray-200">Tableau</span>
-                                <span class="px-2 py-1 bg-gray-100 text-[10px] font-bold uppercase border border-gray-200">AWS Redshift</span>
+                                <span class="px-2 py-1 bg-gray-100 text-[10px] font-bold uppercase border border-gray-200">Python (EDA)</span>
+                                <span class="px-2 py-1 bg-gray-100 text-[10px] font-bold uppercase border border-gray-200">Statistics</span>
                             </div>
                         </div>
-                        <a href="#" class="mt-6 bg-black text-white px-6 py-3 font-medium text-center custom-transition hover:bg-gray-800">View Dashboard</a>
+                        <a href="#" class="mt-6 bg-black text-white px-6 py-3 font-medium text-center custom-transition hover:bg-gray-800">View Methodology</a>
                     </div>
                 </div>
 
@@ -719,31 +672,24 @@ ORDER BY variance_delay DESC;</code></pre>
                 <div class="project-card relative w-[85vw] md:w-[604px] shrink-0 snap-center border-2 border-black bg-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] flex flex-col custom-transition hover:-translate-y-1 overflow-hidden">
                     <div class="aspect-video relative object-cover w-full border-b-2 border-black bg-gray-100 overflow-hidden group">
                         <img src="https://picsum.photos/seed/proj3/800/600" alt="Project Banner" class="w-full h-full object-cover custom-transition hover:scale-105">
-                        
-                        <!-- NEW: Raw Data Toggle -->
                         <button class="data-toggle-btn custom-transition">&lt; / &gt;</button>
                         <div class="raw-data-overlay hide-scrollbar">
-<pre><code>{
-  "analysis_id": "req_88492a",
-  "timestamp": "2026-03-26T11:42Z",
-  "document_count": 14502,
-  "vader_results": {
-    "compound_score": -0.642,
-    "sentiment": "NEGATIVE",
-    "key_phrases": [
-      {"token": "battery life", "freq": 842, "weight": -0.8},
-      {"token": "screen glare", "freq": 310, "weight": -0.4}
-    ]
-  },
-  "action_flag": true,
-  "routing": "product_team_queue"
-}</code></pre>
+<pre><code>// Marketing Metrics DAX Calculation
+ROI % = 
+DIVIDE(
+    [Total Lifetime Value (LTV)] - [Total Ad Spend],
+    [Total Ad Spend],
+    0
+)
+
+Customer Acquisition Cost (CAC) = 
+DIVIDE([Total Ad Spend], [New Customers Acquired])</code></pre>
                         </div>
                     </div>
                     <div class="p-6 flex flex-col gap-3 flex-grow">
-                        <p class="text-sm text-gray-400 uppercase tracking-widest font-bold">Natural Language</p>
-                        <h3 class="text-lg font-bold text-black">Sentiment Mining Engine</h3>
-                        <p class="text-gray-600 text-sm max-w-2xl line-clamp-2">NLTK and Vader semantic analysis across diverse product categories to identify feature flaws.</p>
+                        <p class="text-sm text-gray-400 uppercase tracking-widest font-bold">Marketing Analytics</p>
+                        <h3 class="text-lg font-bold text-black">Funnel Strategy & ROI Tracking</h3>
+                        <p class="text-gray-600 text-sm max-w-2xl line-clamp-2">Analyzed key marketing metrics (CAC, LTV, ROI) to support budget planning and scalability decisions.</p>
                         <button class="see-more-btn mt-auto pt-4 flex items-center gap-2 text-xs font-bold uppercase tracking-wider custom-transition hover:text-gray-600 w-fit">
                             See More
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
@@ -752,11 +698,11 @@ ORDER BY variance_delay DESC;</code></pre>
                     <div class="project-details absolute inset-0 bg-white border-t-4 border-black p-6 z-10 flex flex-col">
                         <button class="close-project-btn self-end text-gray-400 hover:text-black mb-4 custom-transition"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg></button>
                         <div class="flex flex-col gap-3 overflow-y-auto hide-scrollbar flex-grow">
-                            <h3 class="text-lg font-bold text-black">NLP Research</h3>
-                            <p class="text-gray-600 text-sm leading-relaxed max-w-2xl">Implemented NLTK and Vader for semantic analysis across diverse product categories to identify feature flaws.</p>
+                            <h3 class="text-lg font-bold text-black">Performance Tracking</h3>
+                            <p class="text-gray-600 text-sm leading-relaxed max-w-2xl">Evaluated full-funnel marketing strategies (TOFU-MOFU-BOFU). Tracked AIDA metrics to improve message clarity and structural alignment across digital conversion channels.</p>
                             <div class="flex flex-wrap gap-2 mt-2">
-                                <span class="px-2 py-1 bg-gray-100 text-[10px] font-bold uppercase border border-gray-200">NLTK</span>
-                                <span class="px-2 py-1 bg-gray-100 text-[10px] font-bold uppercase border border-gray-200">Python</span>
+                                <span class="px-2 py-1 bg-gray-100 text-[10px] font-bold uppercase border border-gray-200">Power BI</span>
+                                <span class="px-2 py-1 bg-gray-100 text-[10px] font-bold uppercase border border-gray-200">CAC / LTV Analysis</span>
                             </div>
                         </div>
                         <a href="#" class="mt-6 bg-black text-white px-6 py-3 font-medium text-center custom-transition hover:bg-gray-800">View Demo</a>
@@ -767,45 +713,37 @@ ORDER BY variance_delay DESC;</code></pre>
                 <div class="project-card relative w-[85vw] md:w-[604px] shrink-0 snap-center border-2 border-black bg-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] flex flex-col custom-transition hover:-translate-y-1 overflow-hidden">
                     <div class="aspect-video relative object-cover w-full border-b-2 border-black bg-gray-100 overflow-hidden group">
                         <img src="https://picsum.photos/seed/proj4/800/600" alt="Project Banner" class="w-full h-full object-cover custom-transition hover:scale-105">
-                        
-                        <!-- NEW: Raw Data Toggle -->
                         <button class="data-toggle-btn custom-transition">&lt; / &gt;</button>
                         <div class="raw-data-overlay hide-scrollbar">
-<pre><code>import scipy.stats as stats
-import numpy as np
+<pre><code># Pricing Restructure Logic (Excel/Python)
+base_cost = materials + labor_overhead
+target_margin = 0.35
 
-def calculate_power(n, effect_size, alpha=0.05):
-    """Automated power analysis for experiment"""
-    z_alpha = stats.norm.ppf(1 - alpha/2)
-    standard_error = np.sqrt(2 / n)
-    z_beta = (effect_size / standard_error) - z_alpha
-    power = stats.norm.cdf(z_beta)
-    return power
+# Psychographic markup adjustments
+premium_segment_elasticity = 1.2
+standard_segment_elasticity = 0.95
 
-# Testing variant significance
-required_n = 15000 # per variant
-print(f"Statistical Power: {calculate_power(required_n, 0.02)}")
-# OUT: Statistical Power: 0.814 (Valid)</code></pre>
+optimized_price = base_cost * (1 + target_margin) * premium_segment_elasticity
+print(f"Calculated SKU Price: ৳{optimized_price}")</code></pre>
                         </div>
                     </div>
                     <div class="p-6 flex flex-col gap-3 flex-grow">
-                        <p class="text-sm text-gray-400 uppercase tracking-widest font-bold">Optimization</p>
-                        <h3 class="text-lg font-bold text-black">A/B Testing Framework</h3>
-                        <p class="text-gray-600 text-sm max-w-2xl line-clamp-2">Designed automated power analysis tools to determine necessary sample sizes and statistical significance levels.</p>
+                        <p class="text-sm text-gray-400 uppercase tracking-widest font-bold">Strategy & Economics</p>
+                        <h3 class="text-lg font-bold text-black">Pricing Model Restructure</h3>
+                        <p class="text-gray-600 text-sm max-w-2xl line-clamp-2">Utilized demographic and psychographic data to recalculate pricing tiers and protect profit margins.</p>
                         <button class="see-more-btn mt-auto pt-4 flex items-center gap-2 text-xs font-bold uppercase tracking-wider custom-transition hover:text-gray-600 w-fit">
                             See More
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
                         </button>
                     </div>
-                    <!-- Slide Up Layer -->
                     <div class="project-details absolute inset-0 bg-white border-t-4 border-black p-6 z-10 flex flex-col">
                         <button class="close-project-btn self-end text-gray-400 hover:text-black mb-4 custom-transition"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg></button>
                         <div class="flex flex-col gap-3 overflow-y-auto hide-scrollbar flex-grow">
-                            <h3 class="text-lg font-bold text-black">Experimentation Strategy</h3>
-                            <p class="text-gray-600 text-sm leading-relaxed max-w-2xl">Rebuilt the marketing team's internal testing process by deploying a robust statistical framework that eliminates peeking and reduces false positives by 12%.</p>
+                            <h3 class="text-lg font-bold text-black">Economic Modeling</h3>
+                            <p class="text-gray-600 text-sm leading-relaxed max-w-2xl">Applied academic economic theory to a real-world business context. Analyzed the relationship between customer personas and price elasticity to optimize workforce deployment and profitability at The Rage House.</p>
                             <div class="flex flex-wrap gap-2 mt-2">
-                                <span class="px-2 py-1 bg-gray-100 text-[10px] font-bold uppercase border border-gray-200">Statistics</span>
-                                <span class="px-2 py-1 bg-gray-100 text-[10px] font-bold uppercase border border-gray-200">Pandas</span>
+                                <span class="px-2 py-1 bg-gray-100 text-[10px] font-bold uppercase border border-gray-200">Economics</span>
+                                <span class="px-2 py-1 bg-gray-100 text-[10px] font-bold uppercase border border-gray-200">Advanced Excel</span>
                             </div>
                         </div>
                         <a href="#" class="mt-6 bg-black text-white px-6 py-3 font-medium text-center custom-transition hover:bg-gray-800">Methodology</a>
@@ -816,47 +754,37 @@ print(f"Statistical Power: {calculate_power(required_n, 0.02)}")
                 <div class="project-card relative w-[85vw] md:w-[604px] shrink-0 snap-center border-2 border-black bg-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] flex flex-col custom-transition hover:-translate-y-1 overflow-hidden">
                     <div class="aspect-video relative object-cover w-full border-b-2 border-black bg-gray-100 overflow-hidden group">
                         <img src="https://picsum.photos/seed/proj5/800/600" alt="Project Banner" class="w-full h-full object-cover custom-transition hover:scale-105">
-                        
-                        <!-- NEW: Raw Data Toggle -->
                         <button class="data-toggle-btn custom-transition">&lt; / &gt;</button>
                         <div class="raw-data-overlay hide-scrollbar">
-<pre><code>from pyspark.sql import SparkSession
-from pyspark.sql.functions import window, col
+<pre><code>[ SWOT ANALYSIS : SHONDHIBAZAR ]
 
-spark = SparkSession.builder.appName("IoTSensor").getOrCreate()
+STRENGTHS: Localized supply chains
+WEAKNESSES: Digital funnel friction
+OPPORTUNITIES: Untapped demographic sectors
+THREATS: Aggressive pricing by competitors
 
-# Real-time stream processing
-stream_df = spark.readStream.format("kafka") \
-    .option("subscribe", "manufacturing_sensors") \
-    .load()
-
-# Aggregate temperature over 5m tumbling windows
-anomalies = stream_df \
-    .groupBy(window(col("timestamp"), "5 minutes")) \
-    .agg({"temperature": "avg"}) \
-    .filter(col("avg(temperature)") > 110.0)
-
-anomalies.writeStream.format("console").start()</code></pre>
+# Recommendation Matrix
+Execute BOFU targeted ad spend focusing on 
+differentiating factor: Quality Assurance vs Price.</code></pre>
                         </div>
                     </div>
                     <div class="p-6 flex flex-col gap-3 flex-grow">
-                        <p class="text-sm text-gray-400 uppercase tracking-widest font-bold">Big Data</p>
-                        <h3 class="text-lg font-bold text-black">IoT Sensor Analytics</h3>
-                        <p class="text-gray-600 text-sm max-w-2xl line-clamp-2">Utilized Spark to handle terabytes of sensor logs and built time-series models for anomaly detection.</p>
+                        <p class="text-sm text-gray-400 uppercase tracking-widest font-bold">Market Intelligence</p>
+                        <h3 class="text-lg font-bold text-black">SWOT & Competitor Analysis</h3>
+                        <p class="text-gray-600 text-sm max-w-2xl line-clamp-2">Conducted rigorous gap analysis to find differentiation opportunities and strengthen market positioning.</p>
                         <button class="see-more-btn mt-auto pt-4 flex items-center gap-2 text-xs font-bold uppercase tracking-wider custom-transition hover:text-gray-600 w-fit">
                             See More
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
                         </button>
                     </div>
-                    <!-- Slide Up Layer -->
                     <div class="project-details absolute inset-0 bg-white border-t-4 border-black p-6 z-10 flex flex-col">
                         <button class="close-project-btn self-end text-gray-400 hover:text-black mb-4 custom-transition"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg></button>
                         <div class="flex flex-col gap-3 overflow-y-auto hide-scrollbar flex-grow">
-                            <h3 class="text-lg font-bold text-black">Predictive Maintenance</h3>
-                            <p class="text-gray-600 text-sm leading-relaxed max-w-2xl">Ingested over 5TB of continuous sensor data from manufacturing equipment. Designed an LSTM neural network architecture to predict machine failure points 48 hours in advance.</p>
+                            <h3 class="text-lg font-bold text-black">Strategic Planning</h3>
+                            <p class="text-gray-600 text-sm leading-relaxed max-w-2xl">Compiled extensive competitor data to map out unique brand USPs. Delivered structured presentation decks outlining clear strategies for market differentiation and targeted audience capture.</p>
                             <div class="flex flex-wrap gap-2 mt-2">
-                                <span class="px-2 py-1 bg-gray-100 text-[10px] font-bold uppercase border border-gray-200">PySpark</span>
-                                <span class="px-2 py-1 bg-gray-100 text-[10px] font-bold uppercase border border-gray-200">Kafka</span>
+                                <span class="px-2 py-1 bg-gray-100 text-[10px] font-bold uppercase border border-gray-200">SWOT</span>
+                                <span class="px-2 py-1 bg-gray-100 text-[10px] font-bold uppercase border border-gray-200">Market Research</span>
                             </div>
                         </div>
                         <a href="#" class="mt-6 bg-black text-white px-6 py-3 font-medium text-center custom-transition hover:bg-gray-800">View Results</a>
@@ -867,50 +795,36 @@ anomalies.writeStream.format("console").start()</code></pre>
                 <div class="project-card relative w-[85vw] md:w-[604px] shrink-0 snap-center border-2 border-black bg-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] flex flex-col custom-transition hover:-translate-y-1 overflow-hidden">
                     <div class="aspect-video relative object-cover w-full border-b-2 border-black bg-gray-100 overflow-hidden group">
                         <img src="https://picsum.photos/seed/proj6/800/600" alt="Project Banner" class="w-full h-full object-cover custom-transition hover:scale-105">
-                        
-                        <!-- NEW: Raw Data Toggle -->
                         <button class="data-toggle-btn custom-transition">&lt; / &gt;</button>
                         <div class="raw-data-overlay hide-scrollbar">
-<pre><code>import numpy as np
+<pre><code># Lean Supply Chain Optimization
+Vendor DB Sync... [SUCCESS]
+Raw Material Variance: -4%
+Production Lead Time: 12 days
 
-# Monte Carlo Simulation Engine
-iterations = 10000
-days = 252 # trading days
-
-# Historical parameters
-mu, sigma = 0.08, 0.15 
-initial_portfolio = 1000000
-
-# Generating random walk matrix
-daily_returns = np.random.normal(
-    mu/days, 
-    sigma/np.sqrt(days), 
-    (days, iterations)
-)
-price_paths = initial_portfolio * np.cumprod(1 + daily_returns, axis=0)
-
-var_95 = np.percentile(price_paths[-1], 5)
-print(f"95% Value at Risk: ${initial_portfolio - var_95:,.2f}")</code></pre>
+# Action Generated
+Re-routed sourcing to vendor_id: 8042 
+Result: Protected margin by reducing defect 
+rate across batch deliveries.</code></pre>
                         </div>
                     </div>
                     <div class="p-6 flex flex-col gap-3 flex-grow">
-                        <p class="text-sm text-gray-400 uppercase tracking-widest font-bold">Finance</p>
-                        <h3 class="text-lg font-bold text-black">Portfolio Risk Model</h3>
-                        <p class="text-gray-600 text-sm max-w-2xl line-clamp-2">Built a Python tool that simulates thousands of market scenarios to identify potential drawdown risks for equities.</p>
+                        <p class="text-sm text-gray-400 uppercase tracking-widest font-bold">Operations</p>
+                        <h3 class="text-lg font-bold text-black">Lean Supply Chain Integration</h3>
+                        <p class="text-gray-600 text-sm max-w-2xl line-clamp-2">Managed end-to-end production lifecycles and vendor relations to minimize overhead waste.</p>
                         <button class="see-more-btn mt-auto pt-4 flex items-center gap-2 text-xs font-bold uppercase tracking-wider custom-transition hover:text-gray-600 w-fit">
                             See More
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
                         </button>
                     </div>
-                    <!-- Slide Up Layer -->
                     <div class="project-details absolute inset-0 bg-white border-t-4 border-black p-6 z-10 flex flex-col">
                         <button class="close-project-btn self-end text-gray-400 hover:text-black mb-4 custom-transition"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg></button>
                         <div class="flex flex-col gap-3 overflow-y-auto hide-scrollbar flex-grow">
-                            <h3 class="text-lg font-bold text-black">Risk Management</h3>
-                            <p class="text-gray-600 text-sm leading-relaxed max-w-2xl">Developed a Monte Carlo simulation engine scaling 10,000+ potential future market paths based on historical volatility to stress-test high-yield dividend portfolios.</p>
+                            <h3 class="text-lg font-bold text-black">Margin Protection</h3>
+                            <p class="text-gray-600 text-sm leading-relaxed max-w-2xl">Applied lean principles to raw material sourcing and fabric quality control at ZARIWALI. Successfully identified operational inefficiencies and negotiated vendor terms to protect bottom-line margins.</p>
                             <div class="flex flex-wrap gap-2 mt-2">
-                                <span class="px-2 py-1 bg-gray-100 text-[10px] font-bold uppercase border border-gray-200">NumPy</span>
-                                <span class="px-2 py-1 bg-gray-100 text-[10px] font-bold uppercase border border-gray-200">FinTech</span>
+                                <span class="px-2 py-1 bg-gray-100 text-[10px] font-bold uppercase border border-gray-200">Supply Chain</span>
+                                <span class="px-2 py-1 bg-gray-100 text-[10px] font-bold uppercase border border-gray-200">Vendor Management</span>
                             </div>
                         </div>
                         <a href="#" class="mt-6 bg-black text-white px-6 py-3 font-medium text-center custom-transition hover:bg-gray-800">Case Study</a>
@@ -920,7 +834,6 @@ print(f"95% Value at Risk: ${initial_portfolio - var_95:,.2f}")</code></pre>
             </div>
         </div>
         
-        <!-- Scroll Guide Track -->
         <div class="max-w-7xl mx-auto mt-8 px-6">
             <div id="scroll-track" class="h-1 w-full max-w-xs bg-gray-200 relative cursor-pointer mx-auto">
                 <div id="scroll-thumb" class="absolute top-0 left-0 h-full bg-black w-1/4 custom-transition"></div>
@@ -935,7 +848,6 @@ print(f"95% Value at Risk: ${initial_portfolio - var_95:,.2f}")</code></pre>
                 <h2 class="text-4xl font-bold tracking-tight text-black uppercase">Certifications</h2>
                 <p class="text-gray-600 mt-2 text-base">Verified credentials</p>
             </div>
-            <!-- NEW: Arrow Navigation Buttons -->
             <div class="hidden md:flex gap-2">
                 <button id="cert-prev" class="w-10 h-10 border-2 border-black flex items-center justify-center hover:bg-black hover:text-white custom-transition">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
@@ -947,7 +859,6 @@ print(f"95% Value at Risk: ${initial_portfolio - var_95:,.2f}")</code></pre>
         </div>
 
         <div class="carousel-wrapper max-w-7xl mx-auto reveal" style="transition-delay: 100ms;">
-            <!-- Added grab-scroll class -->
             <div id="certs-carousel" class="flex overflow-x-auto snap-x snap-mandatory gap-6 px-6 hide-scrollbar pb-8 grab-scroll">
                 
                 <!-- Cert 1 -->
@@ -956,9 +867,9 @@ print(f"95% Value at Risk: ${initial_portfolio - var_95:,.2f}")</code></pre>
                         <img src="https://picsum.photos/seed/cert1/800/600" alt="Certificate" class="w-full h-full object-cover custom-transition hover:scale-105">
                     </div>
                     <div class="p-6 flex flex-col gap-3 flex-grow">
-                        <p class="text-sm text-gray-400 uppercase tracking-widest font-bold">Google / Coursera</p>
-                        <h3 class="text-lg font-bold text-black">Google Data Analytics</h3>
-                        <p class="text-gray-600 text-sm max-w-2xl line-clamp-2">Comprehensive 8-course program covering the entire data analysis process.</p>
+                        <p class="text-sm text-gray-400 uppercase tracking-widest font-bold">IBM</p>
+                        <h3 class="text-lg font-bold text-black">Statistics for Data Science with Python</h3>
+                        <p class="text-gray-600 text-sm max-w-2xl line-clamp-2">Rigorous certification validating core statistical concepts and Python application for data science.</p>
                         <button class="see-cert-btn mt-auto pt-4 flex items-center gap-2 text-xs font-bold uppercase tracking-wider custom-transition hover:text-gray-600 w-fit">
                             See More
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
@@ -967,12 +878,12 @@ print(f"95% Value at Risk: ${initial_portfolio - var_95:,.2f}")</code></pre>
                     <div class="cert-details absolute inset-0 bg-white border-t-4 border-black p-6 z-10 flex flex-col">
                         <button class="close-cert-btn self-end text-gray-400 hover:text-black mb-4 custom-transition"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg></button>
                         <div class="flex flex-col gap-3 overflow-y-auto hide-scrollbar flex-grow">
-                            <p class="text-sm text-gray-400 uppercase tracking-widest font-bold">Google / Coursera</p>
-                            <h3 class="text-lg font-bold text-black">Google Data Analytics Professional</h3>
-                            <p class="text-gray-600 text-sm leading-relaxed max-w-2xl">Comprehensive 8-course program covering the entire data analysis process. Includes rigorous training in data cleaning, exploratory analysis, visualization, and actionable business insights using modern tech stacks.</p>
+                            <p class="text-sm text-gray-400 uppercase tracking-widest font-bold">IBM (2026)</p>
+                            <h3 class="text-lg font-bold text-black">Statistics for Data Science with Python</h3>
+                            <p class="text-gray-600 text-sm leading-relaxed max-w-2xl">Completed intensive training validating statistical logic, probability, and exploratory data analysis (EDA) techniques using modern Python libraries.</p>
                             <div class="flex flex-wrap gap-2 mt-2">
-                                <span class="px-2 py-1 bg-gray-100 text-[10px] font-bold uppercase border border-gray-200">SQL</span>
-                                <span class="px-2 py-1 bg-gray-100 text-[10px] font-bold uppercase border border-gray-200">Tableau</span>
+                                <span class="px-2 py-1 bg-gray-100 text-[10px] font-bold uppercase border border-gray-200">Python</span>
+                                <span class="px-2 py-1 bg-gray-100 text-[10px] font-bold uppercase border border-gray-200">Statistics</span>
                             </div>
                         </div>
                         <a href="#" class="mt-6 border-2 border-black px-6 py-3 font-medium text-center custom-transition hover:bg-gray-50">Verify Credential</a>
@@ -985,9 +896,9 @@ print(f"95% Value at Risk: ${initial_portfolio - var_95:,.2f}")</code></pre>
                         <img src="https://picsum.photos/seed/cert2/800/600" alt="Certificate" class="w-full h-full object-cover custom-transition hover:scale-105">
                     </div>
                     <div class="p-6 flex flex-col gap-3 flex-grow">
-                        <p class="text-sm text-gray-400 uppercase tracking-widest font-bold">IBM</p>
-                        <h3 class="text-lg font-bold text-black">IBM Data Science</h3>
-                        <p class="text-gray-600 text-sm max-w-2xl line-clamp-2">Advanced certificate diving deep into Python-centric data science and ML pipelines.</p>
+                        <p class="text-sm text-gray-400 uppercase tracking-widest font-bold">Google</p>
+                        <h3 class="text-lg font-bold text-black">Advanced Data Analytics</h3>
+                        <p class="text-gray-600 text-sm max-w-2xl line-clamp-2">Currently enrolled in Google's high-level program focusing on predictive modeling and advanced insights.</p>
                         <button class="see-cert-btn mt-auto pt-4 flex items-center gap-2 text-xs font-bold uppercase tracking-wider custom-transition hover:text-gray-600 w-fit">
                             See More
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
@@ -996,15 +907,15 @@ print(f"95% Value at Risk: ${initial_portfolio - var_95:,.2f}")</code></pre>
                     <div class="cert-details absolute inset-0 bg-white border-t-4 border-black p-6 z-10 flex flex-col">
                         <button class="close-cert-btn self-end text-gray-400 hover:text-black mb-4 custom-transition"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg></button>
                         <div class="flex flex-col gap-3 overflow-y-auto hide-scrollbar flex-grow">
-                            <p class="text-sm text-gray-400 uppercase tracking-widest font-bold">IBM</p>
-                            <h3 class="text-lg font-bold text-black">IBM Data Science Professional</h3>
-                            <p class="text-gray-600 text-sm leading-relaxed max-w-2xl">Advanced certificate diving deep into Python-centric data science. Focused on building machine learning pipelines, statistical analysis, and deploying predictive models to solve real-world problems.</p>
+                            <p class="text-sm text-gray-400 uppercase tracking-widest font-bold">Google (Expected 2026)</p>
+                            <h3 class="text-lg font-bold text-black">Google Advanced Data Analytics</h3>
+                            <p class="text-gray-600 text-sm leading-relaxed max-w-2xl">Focused on building complex machine learning pipelines, writing sophisticated database queries, and deriving actionable predictive insights for enterprise-level scale.</p>
                             <div class="flex flex-wrap gap-2 mt-2">
-                                <span class="px-2 py-1 bg-gray-100 text-[10px] font-bold uppercase border border-gray-200">Python</span>
                                 <span class="px-2 py-1 bg-gray-100 text-[10px] font-bold uppercase border border-gray-200">Machine Learning</span>
+                                <span class="px-2 py-1 bg-gray-100 text-[10px] font-bold uppercase border border-gray-200">Advanced Analytics</span>
                             </div>
                         </div>
-                        <a href="#" class="mt-6 border-2 border-black px-6 py-3 font-medium text-center custom-transition hover:bg-gray-50">Verify Credential</a>
+                        <a href="#" class="mt-6 border-2 border-black px-6 py-3 font-medium text-center custom-transition hover:bg-gray-50">View Program Info</a>
                     </div>
                 </div>
 
@@ -1014,9 +925,9 @@ print(f"95% Value at Risk: ${initial_portfolio - var_95:,.2f}")</code></pre>
                         <img src="https://picsum.photos/seed/cert3/800/600" alt="Certificate" class="w-full h-full object-cover custom-transition hover:scale-105">
                     </div>
                     <div class="p-6 flex flex-col gap-3 flex-grow">
-                        <p class="text-sm text-gray-400 uppercase tracking-widest font-bold">Microsoft</p>
-                        <h3 class="text-lg font-bold text-black">Data Analyst Associate</h3>
-                        <p class="text-gray-600 text-sm max-w-2xl line-clamp-2">Official certification for mastering Power BI, data modeling, and DAX queries.</p>
+                        <p class="text-sm text-gray-400 uppercase tracking-widest font-bold">UN Women</p>
+                        <h3 class="text-lg font-bold text-black">Ultimate Green-Skilled Professional</h3>
+                        <p class="text-gray-600 text-sm max-w-2xl line-clamp-2">Currently enrolled. Focuses on integrating sustainable and socially responsible practices into modern business intelligence.</p>
                         <button class="see-cert-btn mt-auto pt-4 flex items-center gap-2 text-xs font-bold uppercase tracking-wider custom-transition hover:text-gray-600 w-fit">
                             See More
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
@@ -1025,15 +936,15 @@ print(f"95% Value at Risk: ${initial_portfolio - var_95:,.2f}")</code></pre>
                     <div class="cert-details absolute inset-0 bg-white border-t-4 border-black p-6 z-10 flex flex-col">
                         <button class="close-cert-btn self-end text-gray-400 hover:text-black mb-4 custom-transition"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg></button>
                         <div class="flex flex-col gap-3 overflow-y-auto hide-scrollbar flex-grow">
-                            <p class="text-sm text-gray-400 uppercase tracking-widest font-bold">Microsoft</p>
-                            <h3 class="text-lg font-bold text-black">Power BI Data Analyst Associate</h3>
-                            <p class="text-gray-600 text-sm leading-relaxed max-w-2xl">Official certification for mastering Power BI. Validated ability to design data models, write complex DAX queries, and deploy scalable dashboards for enterprise-level reporting.</p>
+                            <p class="text-sm text-gray-400 uppercase tracking-widest font-bold">UN Women (Expected 2026)</p>
+                            <h3 class="text-lg font-bold text-black">The Ultimate Green-Skilled Young Professional</h3>
+                            <p class="text-gray-600 text-sm leading-relaxed max-w-2xl">A unique program linking ESG (Environmental, Social, and Governance) metrics with data analysis, preparing professionals to advise on green supply chains and sustainable operations.</p>
                             <div class="flex flex-wrap gap-2 mt-2">
-                                <span class="px-2 py-1 bg-gray-100 text-[10px] font-bold uppercase border border-gray-200">Power BI</span>
-                                <span class="px-2 py-1 bg-gray-100 text-[10px] font-bold uppercase border border-gray-200">DAX</span>
+                                <span class="px-2 py-1 bg-gray-100 text-[10px] font-bold uppercase border border-gray-200">ESG Data</span>
+                                <span class="px-2 py-1 bg-gray-100 text-[10px] font-bold uppercase border border-gray-200">Strategy</span>
                             </div>
                         </div>
-                        <a href="#" class="mt-6 border-2 border-black px-6 py-3 font-medium text-center custom-transition hover:bg-gray-50">Verify Credential</a>
+                        <a href="#" class="mt-6 border-2 border-black px-6 py-3 font-medium text-center custom-transition hover:bg-gray-50">View Program Info</a>
                     </div>
                 </div>
 
@@ -1043,9 +954,9 @@ print(f"95% Value at Risk: ${initial_portfolio - var_95:,.2f}")</code></pre>
                         <img src="https://picsum.photos/seed/cert4/800/600" alt="Certificate" class="w-full h-full object-cover custom-transition hover:scale-105">
                     </div>
                     <div class="p-6 flex flex-col gap-3 flex-grow">
-                        <p class="text-sm text-gray-400 uppercase tracking-widest font-bold">Amazon Web Services</p>
-                        <h3 class="text-lg font-bold text-black">AWS Data Analytics</h3>
-                        <p class="text-gray-600 text-sm max-w-2xl line-clamp-2">Validated expertise in using AWS data lakes and analytics services to design and secure solutions.</p>
+                        <p class="text-sm text-gray-400 uppercase tracking-widest font-bold">Skill Jobs</p>
+                        <h3 class="text-lg font-bold text-black">Digital Marketing i2i Program</h3>
+                        <p class="text-gray-600 text-sm max-w-2xl line-clamp-2">Completed an intensive industry-to-internship program focused on digital analytics, funnels, and ROI tracking.</p>
                         <button class="see-cert-btn mt-auto pt-4 flex items-center gap-2 text-xs font-bold uppercase tracking-wider custom-transition hover:text-gray-600 w-fit">
                             See More
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
@@ -1054,12 +965,12 @@ print(f"95% Value at Risk: ${initial_portfolio - var_95:,.2f}")</code></pre>
                     <div class="cert-details absolute inset-0 bg-white border-t-4 border-black p-6 z-10 flex flex-col">
                         <button class="close-cert-btn self-end text-gray-400 hover:text-black mb-4 custom-transition"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg></button>
                         <div class="flex flex-col gap-3 overflow-y-auto hide-scrollbar flex-grow">
-                            <p class="text-sm text-gray-400 uppercase tracking-widest font-bold">Amazon Web Services</p>
-                            <h3 class="text-lg font-bold text-black">AWS Certified Data Analytics – Specialty</h3>
-                            <p class="text-gray-600 text-sm leading-relaxed max-w-2xl">Validated expertise in using AWS data lakes and analytics services to design, build, secure, and maintain analytics solutions that extract insight from raw data.</p>
+                            <p class="text-sm text-gray-400 uppercase tracking-widest font-bold">Skill Jobs (2026)</p>
+                            <h3 class="text-lg font-bold text-black">i2i Program Certification</h3>
+                            <p class="text-gray-600 text-sm leading-relaxed max-w-2xl">Completed practical training in applying the AIDA framework, executing SWOT-based competitor analysis, and translating marketing metrics into high-level business presentations.</p>
                             <div class="flex flex-wrap gap-2 mt-2">
-                                <span class="px-2 py-1 bg-gray-100 text-[10px] font-bold uppercase border border-gray-200">AWS Redshift</span>
-                                <span class="px-2 py-1 bg-gray-100 text-[10px] font-bold uppercase border border-gray-200">Kinesis</span>
+                                <span class="px-2 py-1 bg-gray-100 text-[10px] font-bold uppercase border border-gray-200">Marketing Analytics</span>
+                                <span class="px-2 py-1 bg-gray-100 text-[10px] font-bold uppercase border border-gray-200">CAC/LTV</span>
                             </div>
                         </div>
                         <a href="#" class="mt-6 border-2 border-black px-6 py-3 font-medium text-center custom-transition hover:bg-gray-50">Verify Credential</a>
@@ -1072,9 +983,9 @@ print(f"95% Value at Risk: ${initial_portfolio - var_95:,.2f}")</code></pre>
                         <img src="https://picsum.photos/seed/cert5/800/600" alt="Certificate" class="w-full h-full object-cover custom-transition hover:scale-105">
                     </div>
                     <div class="p-6 flex flex-col gap-3 flex-grow">
-                        <p class="text-sm text-gray-400 uppercase tracking-widest font-bold">Salesforce</p>
-                        <h3 class="text-lg font-bold text-black">Tableau Desktop Specialist</h3>
-                        <p class="text-gray-600 text-sm max-w-2xl line-clamp-2">Demonstrated foundational skills in connecting to data sources and creating interactive dashboards.</p>
+                        <p class="text-sm text-gray-400 uppercase tracking-widest font-bold">Presidency University</p>
+                        <h3 class="text-lg font-bold text-black">Hult Prize Champion</h3>
+                        <p class="text-gray-600 text-sm max-w-2xl line-clamp-2">Awarded 1st place in the prestigious social entrepreneurship competition.</p>
                         <button class="see-cert-btn mt-auto pt-4 flex items-center gap-2 text-xs font-bold uppercase tracking-wider custom-transition hover:text-gray-600 w-fit">
                             See More
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
@@ -1083,44 +994,15 @@ print(f"95% Value at Risk: ${initial_portfolio - var_95:,.2f}")</code></pre>
                     <div class="cert-details absolute inset-0 bg-white border-t-4 border-black p-6 z-10 flex flex-col">
                         <button class="close-cert-btn self-end text-gray-400 hover:text-black mb-4 custom-transition"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg></button>
                         <div class="flex flex-col gap-3 overflow-y-auto hide-scrollbar flex-grow">
-                            <p class="text-sm text-gray-400 uppercase tracking-widest font-bold">Salesforce</p>
-                            <h3 class="text-lg font-bold text-black">Tableau Desktop Specialist</h3>
-                            <p class="text-gray-600 text-sm leading-relaxed max-w-2xl">Demonstrated foundational skills in connecting to complex data sources, creating interactive dashboards, and sharing compelling visual stories with stakeholders.</p>
+                            <p class="text-sm text-gray-400 uppercase tracking-widest font-bold">Award (2026)</p>
+                            <h3 class="text-lg font-bold text-black">Hult Prize Champion</h3>
+                            <p class="text-gray-600 text-sm leading-relaxed max-w-2xl">Secured the championship title at Presidency University for proposing an innovative, scalable, and data-backed solution to a pressing global social challenge.</p>
                             <div class="flex flex-wrap gap-2 mt-2">
-                                <span class="px-2 py-1 bg-gray-100 text-[10px] font-bold uppercase border border-gray-200">Tableau</span>
-                                <span class="px-2 py-1 bg-gray-100 text-[10px] font-bold uppercase border border-gray-200">Visualization</span>
+                                <span class="px-2 py-1 bg-gray-100 text-[10px] font-bold uppercase border border-gray-200">Entrepreneurship</span>
+                                <span class="px-2 py-1 bg-gray-100 text-[10px] font-bold uppercase border border-gray-200">Strategy</span>
                             </div>
                         </div>
-                        <a href="#" class="mt-6 border-2 border-black px-6 py-3 font-medium text-center custom-transition hover:bg-gray-50">Verify Credential</a>
-                    </div>
-                </div>
-
-                <!-- Cert 6 -->
-                <div class="cert-card relative w-[85vw] md:w-[604px] shrink-0 snap-center border-2 border-black bg-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] flex flex-col custom-transition hover:-translate-y-1 overflow-hidden">
-                    <div class="aspect-[1.414/1] object-cover w-full border-b-2 border-black bg-gray-100 overflow-hidden">
-                        <img src="https://picsum.photos/seed/cert6/800/600" alt="Certificate" class="w-full h-full object-cover custom-transition hover:scale-105">
-                    </div>
-                    <div class="p-6 flex flex-col gap-3 flex-grow">
-                        <p class="text-sm text-gray-400 uppercase tracking-widest font-bold">LinkedIn Learning</p>
-                        <h3 class="text-lg font-bold text-black">Advanced SQL for Data</h3>
-                        <p class="text-gray-600 text-sm max-w-2xl line-clamp-2">Mastery of advanced concepts including window functions, CTEs, and recursive queries.</p>
-                        <button class="see-cert-btn mt-auto pt-4 flex items-center gap-2 text-xs font-bold uppercase tracking-wider custom-transition hover:text-gray-600 w-fit">
-                            See More
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
-                        </button>
-                    </div>
-                    <div class="cert-details absolute inset-0 bg-white border-t-4 border-black p-6 z-10 flex flex-col">
-                        <button class="close-cert-btn self-end text-gray-400 hover:text-black mb-4 custom-transition"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg></button>
-                        <div class="flex flex-col gap-3 overflow-y-auto hide-scrollbar flex-grow">
-                            <p class="text-sm text-gray-400 uppercase tracking-widest font-bold">LinkedIn Learning</p>
-                            <h3 class="text-lg font-bold text-black">Advanced SQL for Data Scientists</h3>
-                            <p class="text-gray-600 text-sm leading-relaxed max-w-2xl">Mastery of advanced SQL concepts including window functions, common table expressions (CTEs), recursive queries, and query performance tuning on massive datasets.</p>
-                            <div class="flex flex-wrap gap-2 mt-2">
-                                <span class="px-2 py-1 bg-gray-100 text-[10px] font-bold uppercase border border-gray-200">PostgreSQL</span>
-                                <span class="px-2 py-1 bg-gray-100 text-[10px] font-bold uppercase border border-gray-200">CTEs</span>
-                            </div>
-                        </div>
-                        <a href="#" class="mt-6 border-2 border-black px-6 py-3 font-medium text-center custom-transition hover:bg-gray-50">Verify Credential</a>
+                        <a href="#" class="mt-6 border-2 border-black px-6 py-3 font-medium text-center custom-transition hover:bg-gray-50">View Achievement</a>
                     </div>
                 </div>
 
@@ -1141,7 +1023,6 @@ print(f"95% Value at Risk: ${initial_portfolio - var_95:,.2f}")</code></pre>
                 <h2 class="text-4xl font-bold tracking-tight text-black uppercase">Articles</h2>
                 <p class="text-gray-600 mt-2 text-base">Thoughts, tutorials, and insights</p>
             </div>
-            <!-- NEW: Arrow Navigation Buttons -->
             <div class="hidden md:flex gap-2">
                 <button id="art-prev" class="w-10 h-10 border-2 border-black flex items-center justify-center hover:bg-black hover:text-white custom-transition">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
@@ -1153,7 +1034,6 @@ print(f"95% Value at Risk: ${initial_portfolio - var_95:,.2f}")</code></pre>
         </div>
 
         <div class="carousel-wrapper max-w-7xl mx-auto reveal" style="transition-delay: 100ms;">
-            <!-- Added grab-scroll class -->
             <div id="articles-carousel" class="flex overflow-x-auto snap-x snap-mandatory gap-6 px-6 hide-scrollbar pb-8 grab-scroll">
                 
                 <!-- Article 1 -->
@@ -1164,7 +1044,7 @@ print(f"95% Value at Risk: ${initial_portfolio - var_95:,.2f}")</code></pre>
                     <div class="p-6 flex flex-col gap-3 flex-grow">
                         <p class="text-sm text-gray-400 uppercase tracking-widest font-bold">Towards Data Science</p>
                         <h3 class="text-lg font-bold text-black">The Future of AI in Retail</h3>
-                        <p class="text-gray-600 text-sm max-w-2xl line-clamp-2">How predictive algorithms are moving from buzzwords to practical tools in retail supply chains.</p>
+                        <p class="text-gray-600 text-sm max-w-2xl line-clamp-2">How predictive algorithms are moving from buzzwords to practical tools.</p>
                         <button class="see-gist-btn mt-auto pt-4 flex items-center gap-2 text-xs font-bold uppercase tracking-wider custom-transition hover:text-gray-600 w-fit">
                             See Gist
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
@@ -1175,7 +1055,7 @@ print(f"95% Value at Risk: ${initial_portfolio - var_95:,.2f}")</code></pre>
                         <div class="flex flex-col gap-3 overflow-y-auto hide-scrollbar flex-grow">
                             <p class="text-sm text-gray-400 uppercase tracking-widest font-bold">Towards Data Science</p>
                             <h3 class="text-lg font-bold text-black">How Machine Learning is Reshaping the Modern Supply Chain</h3>
-                            <p class="text-gray-600 text-sm leading-relaxed max-w-2xl">This article explores how predictive algorithms are moving from buzzwords to practical tools in retail. We cover real-world examples of demand forecasting reducing waste by 20% and how dynamic pricing models are adapting to micro-market changes in real-time.</p>
+                            <p class="text-gray-600 text-sm leading-relaxed max-w-2xl">This article explores how predictive algorithms are moving from buzzwords to practical tools in retail.</p>
                         </div>
                         <a href="#" class="mt-6 border-2 border-black px-6 py-3 font-medium text-center custom-transition hover:bg-gray-50">Read Full Story</a>
                     </div>
@@ -1321,7 +1201,6 @@ print(f"95% Value at Risk: ${initial_portfolio - var_95:,.2f}")</code></pre>
         <div class="max-w-7xl mx-auto px-6">
             <div class="grid md:grid-cols-2 gap-16">
                 
-                <!-- Left: Info -->
                 <div class="flex flex-col gap-6 reveal">
                     <div class="mb-4">
                         <h2 class="text-4xl font-bold tracking-tight text-black uppercase">Contact</h2>
@@ -1329,40 +1208,38 @@ print(f"95% Value at Risk: ${initial_portfolio - var_95:,.2f}")</code></pre>
                     </div>
                     
                     <p class="text-base text-gray-600 max-w-2xl leading-relaxed">
-                        I'm always open to discussing new data strategies, potential collaborations, or just nerding out about the latest advancements in machine learning. 
+                        I'm always open to discussing new business intelligence strategies, potential collaborations, or how we can reduce your lead loss through evidence-based analysis.
                     </p>
 
                     <div class="flex flex-col gap-3 mt-4">
                         <div class="flex items-center gap-2">
                             <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
-                            <p class="font-bold text-base text-black">hello@alexrivers.data</p>
+                            <p class="font-bold text-base text-black">eyasin.113t@gmail.com</p>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path></svg>
+                            <p class="font-bold text-base text-black">+880 1830 728213</p>
                         </div>
                         <div class="flex items-center gap-2">
                             <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
-                            <p class="text-gray-600 text-base">San Francisco, CA (Remote Open)</p>
+                            <p class="text-gray-600 text-base">Dhaka, Bangladesh</p>
                         </div>
                     </div>
 
-                    <!-- Social Icons -->
                     <div class="flex gap-6 mt-8">
-                        <!-- LinkedIn -->
                         <a href="#" class="text-black hover:text-gray-600 custom-transition">
                             <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
                         </a>
-                        <!-- Facebook -->
                         <a href="#" class="text-black hover:text-gray-600 custom-transition">
                             <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M9 8h-3v4h3v12h5v-12h3.642l.358-4h-4v-1.667c0-.955.192-1.333 1.115-1.333h2.885v-5h-3.808c-3.596 0-5.192 1.583-5.192 4.615v3.385z"/></svg>
                         </a>
                     </div>
                 </div>
 
-                <!-- Right: Form -->
                 <div class="reveal" style="transition-delay: 200ms;">
-                    <!-- NEW: 3D Flip Container -->
                     <div class="flip-container">
                         <div id="contact-flip-card" class="flip-card">
                             
-                            <!-- Front Face: The Form -->
                             <div class="flip-front">
                                 <form id="contact-form" action="https://formspree.io/f/xvzwoqok" method="POST" class="flex flex-col gap-6">
                                     <div>
@@ -1380,12 +1257,10 @@ print(f"95% Value at Risk: ${initial_portfolio - var_95:,.2f}")</code></pre>
                                     <button type="submit" id="submit-btn" class="bg-black text-white px-6 py-3 font-medium shadow-[4px_4px_0px_black] custom-transition hover:-translate-y-1 hover:shadow-[4px_6px_0px_black] mt-2">
                                         Send Message
                                     </button>
-                                    <!-- Error/Loading Container (Kept on front for API errors) -->
                                     <div id="form-status" class="hidden font-bold text-sm tracking-wide text-center p-3 border-2"></div>
                                 </form>
                             </div>
 
-                            <!-- Back Face: The Success Message -->
                             <div class="flip-back bg-black text-white p-8 border-4 border-black shadow-[4px_4px_0px_0px_rgba(200,200,200,1)] text-center">
                                 <svg class="w-16 h-16 mb-4 text-white mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                                 <h3 class="text-3xl font-black uppercase tracking-tight mb-2">Transmitted.</h3>
@@ -1405,14 +1280,104 @@ print(f"95% Value at Risk: ${initial_portfolio - var_95:,.2f}")</code></pre>
         </div>
     </section>
 
+    <!-- PROJECT MIRROR - Live Telemetry Dashboard (Desktop Only) -->
+    <section id="telemetry-dashboard" class="hidden lg:block py-24 bg-gray-50 border-t-4 border-black border-b-4 relative overflow-hidden">
+        <div class="absolute inset-0 bg-grid-pattern opacity-50 pointer-events-none"></div>
+        
+        <div class="max-w-7xl mx-auto px-6 relative z-10 reveal">
+            <!-- Header -->
+            <div class="flex justify-between items-end mb-12 border-b-2 border-black pb-4">
+                <div>
+                    <h2 class="text-4xl font-black tracking-tighter text-black uppercase">Live Session Telemetry</h2>
+                    <p class="text-gray-600 mt-2 font-mono text-xs uppercase tracking-widest">Project Mirror // Analyzing Recruiter Behavior</p>
+                </div>
+                <div class="text-right">
+                    <span class="bg-black text-white text-[10px] font-bold px-3 py-1 uppercase tracking-widest">Status: Secure Local Storage</span>
+                    <p class="text-gray-400 mt-2 font-mono text-[10px] uppercase tracking-widest">No data transmitted externally</p>
+                </div>
+            </div>
+
+            <!-- Dashboard Grid -->
+            <div class="grid grid-cols-12 gap-6">
+                
+                <!-- Card 1: Time Invested (Col span 3) -->
+                <div class="col-span-3 border-2 border-black bg-white p-6 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] flex flex-col justify-between custom-transition hover:-translate-y-1 hover:shadow-[4px_8px_0px_0px_rgba(0,0,0,1)]">
+                    <div class="flex justify-between items-start mb-6">
+                        <h3 class="text-xs font-bold uppercase tracking-widest text-gray-500">Time Invested</h3>
+                        <svg class="w-4 h-4 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    </div>
+                    <div>
+                        <div id="tel-time" class="text-4xl font-black font-mono text-black">00:00</div>
+                        <p class="text-[10px] text-gray-400 font-mono mt-2 uppercase tracking-widest">Total evaluation duration</p>
+                    </div>
+                </div>
+
+                <!-- Card 2: Exploration Rate (Col span 3) -->
+                <div class="col-span-3 border-2 border-black bg-white p-6 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] flex flex-col justify-between custom-transition hover:-translate-y-1 hover:shadow-[4px_8px_0px_0px_rgba(0,0,0,1)]">
+                    <div class="flex justify-between items-start mb-6">
+                        <h3 class="text-xs font-bold uppercase tracking-widest text-gray-500">Exploration Rate</h3>
+                        <svg class="w-4 h-4 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path></svg>
+                    </div>
+                    <div>
+                        <div class="flex items-end gap-2 mb-2">
+                            <div id="tel-depth" class="text-4xl font-black font-mono text-black">0</div>
+                            <span class="text-xl font-bold pb-1">%</span>
+                        </div>
+                        <div class="w-full bg-gray-200 h-2 border border-black relative">
+                            <div id="tel-depth-bar" class="bg-black h-full absolute left-0 top-0 transition-all duration-500 w-0"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 3: Analytical Review (Col span 3) -->
+                <div class="col-span-3 border-2 border-black bg-white p-6 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] flex flex-col justify-between custom-transition hover:-translate-y-1 hover:shadow-[4px_8px_0px_0px_rgba(0,0,0,1)]">
+                    <div class="flex justify-between items-start mb-6">
+                        <h3 class="text-xs font-bold uppercase tracking-widest text-gray-500">Analytical Review</h3>
+                        <svg class="w-4 h-4 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+                    </div>
+                    <div>
+                        <div class="flex items-end gap-2">
+                            <div id="tel-reversals" class="text-4xl font-black font-mono text-black">0</div>
+                            <span class="text-sm font-bold pb-1 text-gray-500 uppercase tracking-widest">Times</span>
+                        </div>
+                        <p class="text-[10px] text-gray-400 font-mono mt-2 uppercase tracking-widest">Scroll reversals (Double-takes)</p>
+                    </div>
+                </div>
+
+                <!-- Card 4: Focus Score (Col span 3) -->
+                <div class="col-span-3 border-2 border-black bg-white p-6 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] flex flex-col justify-between custom-transition hover:-translate-y-1 hover:shadow-[4px_8px_0px_0px_rgba(0,0,0,1)]">
+                    <div class="flex justify-between items-start mb-6">
+                        <h3 class="text-xs font-bold uppercase tracking-widest text-gray-500">Focus Score</h3>
+                        <svg class="w-4 h-4 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                    </div>
+                    <div>
+                        <div class="flex items-end gap-2 mb-2">
+                            <div id="tel-focus" class="text-4xl font-black font-mono text-black">100</div>
+                            <span class="text-xl font-bold pb-1">%</span>
+                        </div>
+                        <p class="text-[10px] text-gray-400 font-mono uppercase tracking-widest">Active vs Idle engagement</p>
+                    </div>
+                </div>
+
+                <!-- Card 5: Primary Interest Chart (Col span 12) -->
+                <div class="col-span-12 border-2 border-black bg-white p-6 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] custom-transition hover:-translate-y-1 hover:shadow-[4px_8px_0px_0px_rgba(0,0,0,1)]">
+                    <div class="flex justify-between items-start mb-6">
+                        <h3 class="text-xs font-bold uppercase tracking-widest text-gray-500">Primary Interest (Hover Duration)</h3>
+                        <div class="text-[10px] font-mono font-bold bg-gray-100 border border-gray-300 px-2 py-1 uppercase" id="tel-top-interest">Analyzing...</div>
+                    </div>
+                    <div class="h-64 w-full relative">
+                        <canvas id="telemetryChart"></canvas>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
     <!-- Footer - Inverted Typographic Monolith -->
     <footer class="bg-black text-white pt-16 pb-8 md:pt-24 border-t-4 border-black selection:bg-white selection:text-black">
         <div class="max-w-7xl mx-auto px-6">
-            
-            <!-- Top Row: Strict Grid & Actions -->
             <div class="flex flex-col md:flex-row justify-between items-start md:items-end gap-8 border-b border-gray-800 pb-8 mb-8">
-                
-                <!-- Status & Copyright -->
                 <div class="flex flex-col gap-4">
                     <div class="inline-flex items-center gap-3 border border-gray-800 px-4 py-2 bg-gray-900/50">
                         <span class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
@@ -1420,21 +1385,16 @@ print(f"95% Value at Risk: ${initial_portfolio - var_95:,.2f}")</code></pre>
                     </div>
                     <p class="font-mono text-[10px] font-bold uppercase tracking-widest text-gray-600">© 2026. Engineered with grid precision.</p>
                 </div>
-                
-                <!-- Brutalist Back to Top Block -->
                 <button onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="border-2 border-white px-6 py-4 flex items-center gap-3 text-xs font-mono font-bold uppercase tracking-widest hover:bg-white hover:text-black transition-colors duration-300 group w-full md:w-auto justify-between md:justify-start">
                     <span>Back to Top</span>
                     <svg class="w-5 h-5 transform group-hover:-translate-y-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18"></path></svg>
                 </button>
             </div>
-
-            <!-- Bottom Row: Massive Billboard Typography -->
             <div class="w-full overflow-hidden flex justify-center pt-4">
                 <h1 class="text-[14vw] md:text-[10vw] lg:text-[10.5vw] font-black tracking-tighter uppercase leading-none text-white select-none opacity-90">
                     Eyasin Arafath
                 </h1>
             </div>
-            
         </div>
     </footer>
 
@@ -1451,8 +1411,6 @@ print(f"95% Value at Risk: ${initial_portfolio - var_95:,.2f}")</code></pre>
                     mobileMenu.classList.toggle('hidden');
                     mobileMenu.classList.toggle('flex');
                 });
-
-                // Auto-close menu when a link is clicked
                 mobileLinks.forEach(link => {
                     link.addEventListener('click', () => {
                         mobileMenu.classList.add('hidden');
@@ -1493,54 +1451,51 @@ print(f"95% Value at Risk: ${initial_portfolio - var_95:,.2f}")</code></pre>
                     carousel.scrollTo({ left: targetScroll, behavior: 'smooth' });
                 });
 
-                // --- NEW: Arrow Button Functionality ---
                 if (prevBtn) {
                     prevBtn.addEventListener('click', () => {
-                        const cardWidth = carousel.querySelector('div').offsetWidth + 24; // Card width + gap
+                        const cardWidth = carousel.querySelector('div').offsetWidth + 24; 
                         carousel.scrollBy({ left: -cardWidth, behavior: 'smooth' });
                     });
                 }
                 
                 if (nextBtn) {
                     nextBtn.addEventListener('click', () => {
-                        const cardWidth = carousel.querySelector('div').offsetWidth + 24; // Card width + gap
+                        const cardWidth = carousel.querySelector('div').offsetWidth + 24; 
                         carousel.scrollBy({ left: cardWidth, behavior: 'smooth' });
                     });
                 }
 
-                updateThumb(); // Init
+                updateThumb(); 
 
-                // --- Grab and Drag functionality ---
                 let isDown = false;
                 let startX;
                 let scrollLeft;
 
-                // Prevent native image dragging which disrupts our custom grab-scroll
                 const images = carousel.querySelectorAll('img');
                 images.forEach(img => img.addEventListener('dragstart', (e) => e.preventDefault()));
 
                 carousel.addEventListener('mousedown', (e) => {
                     isDown = true;
-                    carousel.classList.add('no-snap'); // Disables snap constraints for fluid dragging
+                    carousel.classList.add('no-snap'); 
                     startX = e.pageX - carousel.offsetLeft;
                     scrollLeft = carousel.scrollLeft;
                 });
 
                 carousel.addEventListener('mouseleave', () => {
                     isDown = false;
-                    carousel.classList.remove('no-snap'); // Restores snapping
+                    carousel.classList.remove('no-snap'); 
                 });
 
                 carousel.addEventListener('mouseup', () => {
                     isDown = false;
-                    carousel.classList.remove('no-snap'); // Restores snapping
+                    carousel.classList.remove('no-snap'); 
                 });
 
                 carousel.addEventListener('mousemove', (e) => {
                     if (!isDown) return;
                     e.preventDefault();
                     const x = e.pageX - carousel.offsetLeft;
-                    const walk = (x - startX) * 2; // The *2 multiplies scroll speed for a faster swipe feel
+                    const walk = (x - startX) * 2; 
                     carousel.scrollLeft = scrollLeft - walk;
                 });
             };
@@ -1555,17 +1510,11 @@ print(f"95% Value at Risk: ${initial_portfolio - var_95:,.2f}")</code></pre>
 
             window.addEventListener('scroll', () => {
                 if (!mainNav) return;
-                
-                // Keep nav visible if mobile menu is open
                 if (mobileMenu && !mobileMenu.classList.contains('hidden')) return;
-
                 const currentScrollY = window.scrollY;
-                
                 if (currentScrollY > lastScrollY && currentScrollY > 100) {
-                    // Scrolling down
                     mainNav.classList.add('hide-nav');
                 } else {
-                    // Scrolling up
                     mainNav.classList.remove('hide-nav');
                 }
                 lastScrollY = currentScrollY;
@@ -1574,16 +1523,20 @@ print(f"95% Value at Risk: ${initial_portfolio - var_95:,.2f}")</code></pre>
             // --- Scroll Spy Logic ---
             const sections = document.querySelectorAll('section[id]');
             const navItems = document.querySelectorAll('.nav-link, .mobile-link');
+            
+            // Global variable for Telemetry to track what section user is looking at
+            window.activeSectionId = 'home'; 
 
             const scrollSpy = () => {
                 const scrollY = window.scrollY;
                 
                 sections.forEach(sec => {
                     const sectionHeight = sec.offsetHeight;
-                    const sectionTop = sec.offsetTop - 150; // Offset accounts for fixed header
+                    const sectionTop = sec.offsetTop - 150; 
                     const sectionId = sec.getAttribute('id');
                     
                     if(scrollY > sectionTop && scrollY <= sectionTop + sectionHeight) {
+                        window.activeSectionId = sectionId;
                         navItems.forEach(link => {
                             link.classList.remove('active-nav');
                             if(link.getAttribute('href') === '#' + sectionId) {
@@ -1595,7 +1548,7 @@ print(f"95% Value at Risk: ${initial_portfolio - var_95:,.2f}")</code></pre>
             };
 
             window.addEventListener('scroll', scrollSpy, { passive: true });
-            scrollSpy(); // Trigger once on load to set initial state
+            scrollSpy(); 
 
             // --- Unified Layer Toggle Logic ---
             const setupLayers = (openBtnClass, closeBtnClass, detailContainerClass) => {
@@ -1618,11 +1571,10 @@ print(f"95% Value at Risk: ${initial_portfolio - var_95:,.2f}")</code></pre>
             setupLayers('.see-cert-btn', '.close-cert-btn', '.cert-details');
             setupLayers('.see-gist-btn', '.close-article-btn', '.article-details');
 
-            // --- Dark Mode / Inverted Theme Logic ---
+            // --- Dark Mode Logic ---
             const htmlElement = document.documentElement;
             const themeToggles = document.querySelectorAll('.theme-toggle');
             
-            // Check local storage or system preference
             const savedTheme = localStorage.getItem('theme');
             const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
             
@@ -1652,75 +1604,55 @@ print(f"95% Value at Risk: ${initial_portfolio - var_95:,.2f}")</code></pre>
                 }
             }
 
-            // --- NEW: Scroll Progress Logic ---
+            // --- Scroll Progress Logic ---
             const progressBar = document.getElementById('scroll-progress-bar');
             const desktopPct = document.getElementById('desktop-scroll-pct');
             const mobilePct = document.getElementById('mobile-scroll-pct');
 
             window.addEventListener('scroll', () => {
-                // Calculate scroll percentage
                 const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
                 const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
                 const scrolled = (winScroll / height) * 100;
                 
-                // Update Progress Bar
                 if(progressBar) progressBar.style.width = scrolled + '%';
                 
-                // Update text counters
                 const roundedPct = Math.round(scrolled);
                 if(desktopPct) desktopPct.innerText = roundedPct;
                 if(mobilePct) mobilePct.innerText = roundedPct;
             }, { passive: true });
 
-            // --- NEW: Scroll Reveal (Intersection Observer) ---
+            // --- Scroll Reveal (Intersection Observer) ---
             const revealElements = document.querySelectorAll('.reveal');
-            
             const revealOptions = {
-                threshold: 0.15, // Trigger when 15% of the element is visible
-                rootMargin: "0px 0px -50px 0px" // Triggers slightly before the element fully enters viewport
+                threshold: 0.15,
+                rootMargin: "0px 0px -50px 0px" 
             };
-
             const revealOnScroll = new IntersectionObserver(function(entries, observer) {
                 entries.forEach(entry => {
-                    if (!entry.isIntersecting) {
-                        return; // Keeps it hidden if not visible
-                    } else {
-                        entry.target.classList.add('visible');
-                        observer.unobserve(entry.target); // Stop observing once revealed
-                    }
+                    if (!entry.isIntersecting) return;
+                    entry.target.classList.add('visible');
+                    observer.unobserve(entry.target); 
                 });
             }, revealOptions);
 
-            revealElements.forEach(el => {
-                revealOnScroll.observe(el);
-            });
+            revealElements.forEach(el => revealOnScroll.observe(el));
 
-            // --- Hero Section Interactive Chart (Live Data) ---
+            // --- Hero Section Interactive Chart ---
             const ctx = document.getElementById('heroChart');
             if (ctx) {
-                // Simulated data points showing an upward "optimization" trend
                 const dataPoints = [45, 52, 48, 61, 59, 75, 71, 85, 82, 98, 95, 110];
                 const labels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-
-                // Automatically get the current month index (0 = Jan, 11 = Dec)
                 const currentMonthIndex = new Date().getMonth();
 
-                // Custom plugin to move the HTML marker based on the current month's chart coordinates
                 const monthTrackerPlugin = {
                     id: 'monthTracker',
                     afterDraw: (chart) => {
                         const meta = chart.getDatasetMeta(0);
                         const marker = document.getElementById('current-month-marker');
-                        
-                        // Check if the current month's data point exists
                         if (meta.data[currentMonthIndex] && marker) {
                             const point = meta.data[currentMonthIndex];
-                            
-                            // Unhide the marker once we have coordinates
                             marker.classList.remove('hidden');
                             marker.classList.add('flex');
-                            
-                            // Pin the marker precisely on the X and Y coordinates
                             marker.style.left = point.x + 'px';
                             marker.style.top = point.y + 'px';
                         }
@@ -1734,8 +1666,8 @@ print(f"95% Value at Risk: ${initial_portfolio - var_95:,.2f}")</code></pre>
                         datasets: [{
                             label: 'Optimization Metric',
                             data: dataPoints,
-                            borderColor: '#000000', // Solid black line
-                            backgroundColor: 'rgba(0, 0, 0, 0.03)', // Very subtle gray fill under the line
+                            borderColor: '#000000',
+                            backgroundColor: 'rgba(0, 0, 0, 0.03)',
                             borderWidth: 2,
                             pointBackgroundColor: '#ffffff',
                             pointBorderColor: '#000000',
@@ -1744,50 +1676,32 @@ print(f"95% Value at Risk: ${initial_portfolio - var_95:,.2f}")</code></pre>
                             pointHoverRadius: 7,
                             pointHoverBackgroundColor: '#000000',
                             fill: true,
-                            tension: 0.2 // Slight curve for a mathematical feel
+                            tension: 0.2
                         }]
                     },
                     options: {
                         responsive: true,
                         maintainAspectRatio: false,
-                        animation: {
-                            duration: 2500,
-                            easing: 'easeOutQuart'
-                        },
-                        interaction: {
-                            mode: 'index',
-                            intersect: false,
-                        },
+                        animation: { duration: 2500, easing: 'easeOutQuart' },
+                        interaction: { mode: 'index', intersect: false },
                         plugins: {
-                            legend: {
-                                display: false // Hidden for minimalist look
-                            },
+                            legend: { display: false },
                             tooltip: {
                                 backgroundColor: '#000000',
                                 titleFont: { family: 'Inter', size: 11 },
                                 bodyFont: { family: 'Inter', size: 13, weight: 'bold' },
                                 padding: 10,
-                                cornerRadius: 0, // Brutalist sharp edges
+                                cornerRadius: 0,
                                 displayColors: false,
-                                callbacks: {
-                                    label: function(context) {
-                                        return 'Efficiency: ' + context.parsed.y + '%';
-                                    }
-                                }
+                                callbacks: { label: function(context) { return 'Efficiency: ' + context.parsed.y + '%'; } }
                             }
                         },
                         scales: {
-                            x: {
-                                grid: { display: false },
-                                ticks: { font: { family: 'Inter', size: 10, weight: 'bold' }, color: '#9ca3af' }
-                            },
-                            y: {
-                                grid: { color: '#f3f4f6', drawBorder: false },
-                                ticks: { display: false } // Hide Y axis numbers to keep it looking like an abstract graphic
-                            }
+                            x: { grid: { display: false }, ticks: { font: { family: 'Inter', size: 10, weight: 'bold' }, color: '#9ca3af' } },
+                            y: { grid: { color: '#f3f4f6', drawBorder: false }, ticks: { display: false } }
                         }
                     },
-                    plugins: [monthTrackerPlugin] // Register our custom tracking plugin
+                    plugins: [monthTrackerPlugin] 
                 });
             }
 
@@ -1810,25 +1724,12 @@ print(f"95% Value at Risk: ${initial_portfolio - var_95:,.2f}")</code></pre>
                     submitBtn.disabled = true;
 
                     try {
-                        const response = await fetch(contactForm.action, {
-                            method: 'POST',
-                            body: data,
-                            headers: { 'Accept': 'application/json' }
-                        });
-                        
+                        const response = await fetch(contactForm.action, { method: 'POST', body: data, headers: { 'Accept': 'application/json' } });
                         if (response.ok) {
-                            // Hide the status text on the front
                             formStatus.classList.add('hidden');
                             contactForm.reset();
-                            
-                            // Trigger the 3D Flip
                             flipCard.classList.add('flipped');
-                            
-                            // Auto-flip back after 5 seconds
-                            flipTimeout = setTimeout(() => {
-                                flipCard.classList.remove('flipped');
-                            }, 5000);
-                            
+                            flipTimeout = setTimeout(() => { flipCard.classList.remove('flipped'); }, 5000);
                         } else {
                             throw new Error('Network response was not ok');
                         }
@@ -1843,26 +1744,23 @@ print(f"95% Value at Risk: ${initial_portfolio - var_95:,.2f}")</code></pre>
                 });
             }
 
-            // Manual Flip Reset Button Logic
             if (resetBtn) {
                 resetBtn.addEventListener('click', () => {
                     flipCard.classList.remove('flipped');
-                    clearTimeout(flipTimeout); // Stop the 5-second auto-timer
+                    clearTimeout(flipTimeout);
                 });
             }
 
-            // --- NEW: Boot-Up Preloader Logic ---
+            // --- Boot-Up Preloader Logic ---
             const preloader = document.getElementById('preloader');
             const progressBarElem = document.getElementById('progress-bar');
             const progressPct = document.getElementById('progress-pct');
             
-            // Lock scrolling temporarily
             document.body.style.overflow = 'hidden'; 
-            
             let progress = 0;
+            let bootFinished = false;
 
             const bootInterval = setInterval(() => {
-                // Advance progress randomly
                 progress += Math.floor(Math.random() * 25) + 15;
                 if (progress > 100) progress = 100;
                 
@@ -1870,24 +1768,24 @@ print(f"95% Value at Risk: ${initial_portfolio - var_95:,.2f}")</code></pre>
                 const bars = Math.floor(progress / 10);
                 progressBarElem.innerText = "█".repeat(bars) + "_".repeat(10 - bars);
                 
-                // Finish boot
                 if (progress === 100) {
                     clearInterval(bootInterval);
                     setTimeout(() => {
-                        preloader.classList.add('flash-screen'); // Flash white
+                        preloader.classList.add('flash-screen'); 
                         setTimeout(() => {
                             preloader.classList.add('preloader-hidden');
-                            document.body.style.overflow = 'auto'; // Unlock scrolling
+                            document.body.style.overflow = 'auto'; 
+                            bootFinished = true; // Signal telemetry to start
                         }, 150);
-                    }, 400); // Tiny pause at 100% for impact
+                    }, 400); 
                 }
-            }, 120); // Sped up slightly for a cleaner bar-only feel
+            }, 120);
 
-            // --- NEW: Raw Data Project Toggles Logic ---
+            // --- Raw Data Project Toggles Logic ---
             const dataToggles = document.querySelectorAll('.data-toggle-btn');
             dataToggles.forEach(btn => {
                 btn.addEventListener('click', (e) => {
-                    e.stopPropagation(); // Prevent grabbing/sliding when clicking button
+                    e.stopPropagation(); 
                     const overlay = btn.nextElementSibling;
                     const isActive = overlay.classList.contains('active');
                     
@@ -1902,6 +1800,185 @@ print(f"95% Value at Risk: ${initial_portfolio - var_95:,.2f}")</code></pre>
                     }
                 });
             });
+
+            // =====================================================================
+            // --- NEW: PROJECT MIRROR (LIVE TELEMETRY ENGINE) ---
+            // =====================================================================
+            
+            // Only execute if on a desktop screen
+            if (window.innerWidth >= 1024) {
+                
+                // 1. Initialize or Load Session Data (Survives Refresh)
+                let telemetry = JSON.parse(sessionStorage.getItem('recruiterTelemetry')) || {
+                    timeInvested: 0,
+                    maxScrollDepth: 0,
+                    scrollReversals: 0,
+                    activeTime: 0,
+                    idleTime: 0,
+                    sectionHover: {
+                        about: 0, work: 0, projects: 0, certifications: 0, articles: 0
+                    }
+                };
+
+                // DOM Elements
+                const elTime = document.getElementById('tel-time');
+                const elDepth = document.getElementById('tel-depth');
+                const elDepthBar = document.getElementById('tel-depth-bar');
+                const elReversals = document.getElementById('tel-reversals');
+                const elFocus = document.getElementById('tel-focus');
+                const elTopInterest = document.getElementById('tel-top-interest');
+                
+                // Telemetry state variables
+                let lastActivityTime = Date.now();
+                let lastScrollPos = window.scrollY;
+                let isScrollingDown = true;
+                let upDistance = 0;
+
+                // 2. Activity Tracking (Active vs Idle Focus Score)
+                const updateActivity = () => { lastActivityTime = Date.now(); };
+                window.addEventListener('mousemove', updateActivity, { passive: true });
+                window.addEventListener('scroll', updateActivity, { passive: true });
+                window.addEventListener('click', updateActivity, { passive: true });
+
+                // 3. Scroll Dynamics Tracking (Depth & Reversals)
+                window.addEventListener('scroll', () => {
+                    if (!bootFinished) return;
+                    
+                    let currentPos = window.scrollY;
+                    
+                    // Track Max Depth
+                    let maxScrollable = document.documentElement.scrollHeight - window.innerHeight;
+                    let currentDepth = Math.round((currentPos / maxScrollable) * 100);
+                    if (currentDepth > telemetry.maxScrollDepth) {
+                        telemetry.maxScrollDepth = currentDepth > 100 ? 100 : currentDepth;
+                    }
+
+                    // Track Scroll Reversals (The "Analytical Review" metric)
+                    // Uses a 100px buffer to prevent trackpad jitters from counting as a deliberate reversal
+                    if (currentPos < lastScrollPos) {
+                        // Scrolling UP
+                        upDistance += (lastScrollPos - currentPos);
+                        if (isScrollingDown && upDistance > 100) {
+                            telemetry.scrollReversals++;
+                            isScrollingDown = false;
+                        }
+                    } else {
+                        // Scrolling DOWN
+                        isScrollingDown = true;
+                        upDistance = 0; 
+                    }
+                    lastScrollPos = currentPos;
+                }, { passive: true });
+
+                // 4. Chart.js Setup for "Primary Interest"
+                const ctxTel = document.getElementById('telemetryChart');
+                let telemetryChart;
+                
+                if (ctxTel) {
+                    telemetryChart = new Chart(ctxTel, {
+                        type: 'bar',
+                        data: {
+                            labels: ['About', 'Work', 'Projects', 'Certs', 'Articles'],
+                            datasets: [{
+                                label: 'Seconds Hovered',
+                                data: [
+                                    telemetry.sectionHover.about, 
+                                    telemetry.sectionHover.work, 
+                                    telemetry.sectionHover.projects, 
+                                    telemetry.sectionHover.certifications, 
+                                    telemetry.sectionHover.articles
+                                ],
+                                backgroundColor: '#000000',
+                                borderWidth: 0,
+                                barPercentage: 0.6,
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            animation: { duration: 500 },
+                            plugins: {
+                                legend: { display: false },
+                                tooltip: {
+                                    backgroundColor: '#000000',
+                                    titleFont: { family: 'Inter', size: 10 },
+                                    bodyFont: { family: 'Inter', size: 12, weight: 'bold' },
+                                    cornerRadius: 0,
+                                    displayColors: false,
+                                    callbacks: { label: function(context) { return context.parsed.y + ' Seconds'; } }
+                                }
+                            },
+                            scales: {
+                                x: { grid: { display: false }, ticks: { font: { family: 'Inter', size: 10, weight: 'bold' }, color: '#6b7280' } },
+                                y: { display: false, grid: { display: false }, beginAtZero: true }
+                            }
+                        }
+                    });
+                }
+
+                // 5. The Core Engine Loop (Fires exactly 1x per second)
+                setInterval(() => {
+                    if (!bootFinished) return; // Don't track during loading screen
+
+                    // Update Time Invested
+                    telemetry.timeInvested++;
+                    
+                    // Format MM:SS
+                    let m = Math.floor(telemetry.timeInvested / 60).toString().padStart(2, '0');
+                    let s = (telemetry.timeInvested % 60).toString().padStart(2, '0');
+                    if(elTime) elTime.innerText = `${m}:${s}`;
+
+                    // Update Active/Idle & Focus Score
+                    let now = Date.now();
+                    if (now - lastActivityTime < 3000) {
+                        telemetry.activeTime++; // Active if moved mouse in last 3s
+                    } else {
+                        telemetry.idleTime++;
+                    }
+                    
+                    let totalTime = telemetry.activeTime + telemetry.idleTime;
+                    let focusScore = totalTime > 0 ? Math.round((telemetry.activeTime / totalTime) * 100) : 100;
+                    if(elFocus) elFocus.innerText = focusScore;
+
+                    // Update Depth & Reversals in DOM
+                    if(elDepth) elDepth.innerText = telemetry.maxScrollDepth;
+                    if(elDepthBar) elDepthBar.style.width = telemetry.maxScrollDepth + '%';
+                    if(elReversals) elReversals.innerText = telemetry.scrollReversals;
+
+                    // Update Section Interest
+                    let activeSec = window.activeSectionId;
+                    if (telemetry.sectionHover[activeSec] !== undefined) {
+                        telemetry.sectionHover[activeSec]++;
+                    }
+
+                    // Determine Top Interest
+                    let topSection = 'Analyzing...';
+                    let maxVal = 0;
+                    for (const [key, value] of Object.entries(telemetry.sectionHover)) {
+                        if (value > maxVal) {
+                            maxVal = value;
+                            topSection = key.charAt(0).toUpperCase() + key.slice(1);
+                        }
+                    }
+                    if(elTopInterest) elTopInterest.innerText = `Top: ${topSection}`;
+
+                    // Update Chart Data
+                    if (telemetryChart) {
+                        telemetryChart.data.datasets[0].data = [
+                            telemetry.sectionHover.about, 
+                            telemetry.sectionHover.work, 
+                            telemetry.sectionHover.projects, 
+                            telemetry.sectionHover.certifications, 
+                            telemetry.sectionHover.articles
+                        ];
+                        telemetryChart.update('none'); // Update without full re-animation
+                    }
+
+                    // SAVE TO SESSION STORAGE (So data survives page refresh)
+                    sessionStorage.setItem('recruiterTelemetry', JSON.stringify(telemetry));
+
+                }, 1000);
+            }
         });
     </script>
 </body>
