@@ -1,0 +1,1972 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio - Data Analyst</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Add Chart.js for the Live Data visualization -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            scroll-behavior: smooth;
+        }
+
+        /* 1. Crucial UX Fix: Scroll Margin for Fixed Header */
+        section {
+            scroll-margin-top: 110px; /* Accounts for dock height + offset */
+        }
+
+        /* 2. Aesthetic Polish: Brutalist Text Highlight */
+        ::selection {
+            background-color: #000;
+            color: #fff;
+        }
+
+        /* 3. Aesthetic Polish: Custom Sharp Scrollbar */
+        ::-webkit-scrollbar {
+            width: 14px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f9fafb; /* matches gray-50 */
+            border-left: 1px solid #e5e7eb; /* matches border-gray-200 */
+        }
+        ::-webkit-scrollbar-thumb {
+            background-color: #000;
+            border: 3px solid #f9fafb;
+            border-radius: 0; /* Keeps it sharp and architectural */
+        }
+
+        .custom-transition {
+            transition: all 0.25s ease;
+        }
+
+        .border-box {
+            border: 2px solid #000;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .border-box:hover {
+            transform: translate(-4px, -4px);
+            box-shadow: 8px 8px 0px 0px rgba(0,0,0,1);
+        }
+
+        .nav-link {
+            position: relative;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -4px;
+            left: 0;
+            background-color: #000;
+            transition: width 0.25s ease;
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        /* Active Nav State for Scroll Spy */
+        .nav-link.active-nav, .mobile-link.active-nav {
+            color: #000 !important;
+        }
+        .nav-link.active-nav::after {
+            width: 100%;
+        }
+
+        /* Minimal Timeline Styles */
+        .timeline-container {
+            position: relative;
+            padding-left: 32px;
+        }
+
+        .timeline-line-left {
+            position: absolute;
+            left: 0;
+            top: 2.5rem; /* Aligned with pt-10 */
+            bottom: 0;
+            width: 2px;
+            background-color: #e5e7eb; /* gray-200 */
+        }
+
+        .timeline-marker {
+            position: absolute;
+            left: -5px;
+            top: 2.5rem; /* Aligned with pt-10 */
+            width: 12px;
+            height: 12px;
+            background-color: #000;
+            border-radius: 50%;
+            z-index: 10;
+        }
+
+        .timeline-item:last-child .timeline-line-left {
+            display: none;
+        }
+
+        .timeline-item {
+            padding-bottom: 2.5rem;
+        }
+
+        /* Hide scrollbar for carousel but keep functionality */
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        /* Carousel Edge Gradient Overlay */
+        .carousel-wrapper {
+            position: relative;
+        }
+        .carousel-wrapper::after {
+            content: '';
+            position: absolute;
+            right: 0;
+            top: 0;
+            width: 80px;
+            height: 100%;
+            background: linear-gradient(to right, transparent, white);
+            pointer-events: none;
+            z-index: 20;
+        }
+
+        /* Layer Animations */
+        .project-details, .cert-details, .article-details {
+            transform: translateY(100%);
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .project-details.active, .cert-details.active, .article-details.active {
+            transform: translateY(0);
+        }
+
+        /* Smart Header Hide Class */
+        .hide-nav {
+            transform: translateY(-150%);
+        }
+
+        /* Architectural Grid Pattern */
+        .bg-grid-pattern {
+            background-image: 
+                linear-gradient(to right, rgba(0,0,0,0.04) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(0,0,0,0.04) 1px, transparent 1px);
+            background-size: 32px 32px;
+            background-position: center top;
+        }
+
+        /* 4. Night Mode Filter Trick */
+        html {
+            background-color: #ffffff; /* Explicitly set to ensure clean inversion */
+            transition: filter 0.5s ease-in-out, background-color 0.5s ease-in-out;
+        }
+
+        html.dark-mode {
+            filter: invert(1) hue-rotate(180deg);
+        }
+
+        /* Re-invert images so they retain their normal color */
+        html.dark-mode img {
+            filter: invert(1) hue-rotate(180deg);
+            opacity: 0.85; /* Slight dimming of images for better eye comfort in dark mode */
+        }
+
+        /* --- NEW: Marquee Animation --- */
+        .marquee-content {
+            display: inline-block;
+            animation: marquee 25s linear infinite;
+        }
+        @keyframes marquee {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); } /* Shifts exactly half its width to loop */
+        }
+
+        /* --- NEW: Scroll Reveal Classes --- */
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* --- NEW: Grab & Drag Classes --- */
+        .grab-scroll {
+            cursor: grab;
+            scroll-behavior: smooth; /* <-- THIS LINE MAKES ARROW CLICKS GLIDE SMOOTHLY */
+        }
+        .grab-scroll:active {
+            cursor: grabbing;
+        }
+        .no-snap {
+            /* Disable snap and smooth scroll during drag to make it instant and responsive */
+            scroll-snap-type: none !important;
+            scroll-behavior: auto !important;
+        }
+
+        /* --- NEW: 3D Flip Form Classes --- */
+        .flip-container {
+            perspective: 1000px;
+            width: 100%;
+        }
+        .flip-card {
+            width: 100%;
+            position: relative;
+            transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            transform-style: preserve-3d;
+        }
+        .flip-card.flipped {
+            transform: rotateY(180deg);
+        }
+        .flip-front, .flip-back {
+            width: 100%;
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
+        }
+        .flip-back {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            transform: rotateY(180deg);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* --- NEW: Custom Magnetic Cursor --- */
+        #custom-cursor { display: none; }
+        @media (pointer: fine) {
+            body { cursor: none !important; }
+            #custom-cursor {
+                display: block;
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 16px;
+                height: 16px;
+                border: 2px solid white;
+                background-color: transparent;
+                pointer-events: none;
+                z-index: 10000;
+                mix-blend-mode: difference;
+                transform: translate(-50%, -50%);
+                transition: width 0.2s, height 0.2s, background-color 0.2s;
+            }
+            #custom-cursor.cursor-hover {
+                width: 48px;
+                height: 48px;
+                background-color: rgba(255, 255, 255, 0.1);
+            }
+            /* Hide cursor over iframes or explicitly normal elements */
+            .grab-scroll { cursor: none !important; }
+        }
+
+        /* --- NEW: Boot-Up Preloader --- */
+        #preloader {
+            position: fixed;
+            inset: 0;
+            background-color: #000;
+            color: #0f0; /* Hacker Terminal Green */
+            font-family: monospace;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 0.4s ease-out;
+        }
+        .preloader-hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+        .flash-screen {
+            animation: flash 0.15s ease-out;
+        }
+        @keyframes flash {
+            0% { background-color: #fff; }
+            100% { background-color: #000; }
+        }
+
+        /* --- NEW: Raw Data Project Toggles --- */
+        .raw-data-overlay {
+            position: absolute;
+            inset: 0;
+            background-color: #000;
+            color: #0f0;
+            padding: 1.25rem;
+            font-family: monospace;
+            font-size: 0.7rem;
+            line-height: 1.4;
+            overflow-y: auto;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            text-align: left;
+            box-shadow: inset 0 0 20px rgba(0,255,0,0.1);
+        }
+        .raw-data-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .data-toggle-btn {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            z-index: 20;
+            background: #000;
+            color: #fff;
+            border: 1px solid #333;
+            padding: 0.25rem 0.5rem;
+            font-family: monospace;
+            font-size: 0.75rem;
+            opacity: 0;
+        }
+        .group:hover .data-toggle-btn, .data-toggle-btn.active {
+            opacity: 1;
+        }
+        .data-toggle-btn:hover {
+            background: #fff;
+            color: #000;
+        }
+        /* Make scrollbar look like terminal */
+        .raw-data-overlay::-webkit-scrollbar { width: 6px; }
+        .raw-data-overlay::-webkit-scrollbar-thumb { background: #0f0; }
+    </style>
+</head>
+<body class="bg-white text-black overflow-x-hidden">
+
+    <!-- NEW: Custom Cursor -->
+    <div id="custom-cursor"></div>
+
+    <!-- NEW: Boot-Up Preloader -->
+    <div id="preloader">
+        <div class="max-w-xl w-full px-6 flex flex-col gap-4">
+            <div id="terminal-text" class="text-xs md:text-sm leading-relaxed min-h-[100px] whitespace-pre-wrap"></div>
+            <div class="flex items-center gap-4 text-sm font-bold">
+                <span>[</span>
+                <span id="progress-bar" class="tracking-[0.2em] w-48 text-left"></span>
+                <span>]</span>
+                <span id="progress-pct" class="w-12 text-right">0%</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- NEW: Top Scroll Progress Bar -->
+    <div id="scroll-progress-bar" class="fixed top-0 left-0 h-1 bg-black z-[100] w-0 custom-transition"></div>
+
+    <!-- Navigation Bar -->
+    <nav id="main-nav" class="fixed top-0 z-50 bg-white border-b border-gray-200 w-full md:w-fit md:top-6 md:left-0 md:right-0 md:mx-auto md:border-2 md:border-black md:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] md:hover:-translate-y-1 md:hover:shadow-[4px_6px_0px_0px_rgba(0,0,0,1)] custom-transition">
+        <div class="w-full md:w-auto px-6 md:px-10">
+            <div class="flex justify-between md:justify-center items-center h-16 md:h-14">
+                
+                <!-- Mobile Logo / Initials (Visible only on mobile for balance) -->
+                <div class="md:hidden font-bold text-lg tracking-widest uppercase flex items-center gap-3">
+                    EA. <span class="font-mono text-[10px] border border-black px-1">L: <span id="mobile-scroll-pct">0</span>%</span>
+                </div>
+
+                <!-- Desktop Menu -->
+                <div class="hidden md:flex items-center space-x-8 text-sm font-medium">
+                    <a href="#home" class="nav-link custom-transition text-gray-600 hover:text-black active-nav">Home</a>
+                    <a href="#about" class="nav-link custom-transition text-gray-600 hover:text-black">About</a>
+                    <a href="#work" class="nav-link custom-transition text-gray-600 hover:text-black">Work</a>
+                    <a href="#projects" class="nav-link custom-transition text-gray-600 hover:text-black">Projects</a>
+                    <a href="#certifications" class="nav-link custom-transition text-gray-600 hover:text-black">Certifications</a>
+                    <a href="#articles" class="nav-link custom-transition text-gray-600 hover:text-black">Articles</a>
+                    <a href="#contact" class="nav-link custom-transition text-gray-600 hover:text-black">Contact</a>
+                    
+                    <!-- NEW: Desktop Scroll Progress Badge -->
+                    <div class="font-mono text-[10px] font-bold tracking-widest border border-black px-2 py-1 bg-gray-50 flex items-center w-24 justify-center">
+                        LOAD: <span id="desktop-scroll-pct" class="ml-1 w-6 text-right">0</span>%
+                    </div>
+
+                    <!-- Desktop Theme Toggle -->
+                    <button class="theme-toggle custom-transition flex items-center justify-center w-8 h-8 border-2 border-black hover:bg-black hover:text-white group">
+                        <!-- Moon Icon (Default/Light Mode) -->
+                        <svg class="icon-moon w-4 h-4 block group-hover:text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+                        <!-- Sun Icon (Dark Mode) -->
+                        <svg class="icon-sun w-4 h-4 hidden group-hover:text-white" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+                    </button>
+                </div>
+
+                <!-- Mobile Action Buttons -->
+                <div class="md:hidden flex items-center gap-4">
+                    <!-- Mobile Theme Toggle -->
+                    <button class="theme-toggle custom-transition flex items-center justify-center w-8 h-8 border-2 border-black hover:bg-black hover:text-white group">
+                        <svg class="icon-moon w-4 h-4 block group-hover:text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+                        <svg class="icon-sun w-4 h-4 hidden group-hover:text-white" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+                    </button>
+
+                    <!-- Mobile Hamburger Button -->
+                    <button id="mobile-menu-btn" class="text-black focus:outline-none custom-transition hover:text-gray-600">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Dropdown Menu -->
+        <div id="mobile-menu" class="hidden absolute top-16 left-0 w-full bg-white border-b border-gray-200 shadow-xl flex-col z-40 md:hidden origin-top">
+            <a href="#home" class="mobile-link block w-full text-center text-sm font-bold uppercase tracking-wider text-gray-600 hover:text-black py-4 border-b border-green-200 last:border-0 active-nav">Home</a>
+            <a href="#about" class="mobile-link block w-full text-center text-sm font-bold uppercase tracking-wider text-gray-600 hover:text-black py-4 border-b border-green-200 last:border-0">About</a>
+            <a href="#work" class="mobile-link block w-full text-center text-sm font-bold uppercase tracking-wider text-gray-600 hover:text-black py-4 border-b border-green-200 last:border-0">Work</a>
+            <a href="#projects" class="mobile-link block w-full text-center text-sm font-bold uppercase tracking-wider text-gray-600 hover:text-black py-4 border-b border-green-200 last:border-0">Projects</a>
+            <a href="#certifications" class="mobile-link block w-full text-center text-sm font-bold uppercase tracking-wider text-gray-600 hover:text-black py-4 border-b border-green-200 last:border-0">Certifications</a>
+            <a href="#articles" class="mobile-link block w-full text-center text-sm font-bold uppercase tracking-wider text-gray-600 hover:text-black py-4 border-b border-green-200 last:border-0">Articles</a>
+            <a href="#contact" class="mobile-link block w-full text-center text-sm font-bold uppercase tracking-wider text-gray-600 hover:text-black py-4 border-b border-green-200 last:border-0">Contact</a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="pt-32 pb-24 md:pt-48 md:pb-32 bg-grid-pattern relative">
+        <div class="max-w-7xl mx-auto px-6 relative z-10">
+            <div class="grid md:grid-cols-2 gap-16 items-center">
+                <div class="flex flex-col gap-6 max-w-lg">
+                    <div>
+                        <h1 class="text-5xl font-bold tracking-tight uppercase break-words text-black">Eyasin Arafath</h1>
+                        <h2 class="text-lg font-bold text-gray-400 mt-2 uppercase tracking-widest">Data Analyst</h2>
+                    </div>
+                    <p class="text-base text-gray-600 max-w-2xl leading-relaxed mt-2">
+                        I transform complex datasets into actionable business intelligence. Specialized in predictive modeling, SQL optimization, and interactive dashboarding.
+                    </p>
+                    <div class="flex flex-wrap gap-4 mt-2">
+                        <button class="bg-black text-white px-6 py-3 font-medium shadow-[4px_4px_0px_black] custom-transition hover:-translate-y-1 hover:shadow-[4px_6px_0px_black]">View Case Studies</button>
+                        <button class="border-2 border-black px-6 py-3 font-medium custom-transition hover:bg-gray-50">Download CV</button>
+                    </div>
+                </div>
+                <div class="flex justify-center md:justify-end">
+                    <div class="border-box w-full max-w-md aspect-[4/3] bg-gray-100 custom-transition p-4 flex flex-col items-start justify-center cursor-crosshair relative group">
+                        <!-- Abstract badge overlay -->
+                        <div class="absolute top-4 left-4 border border-black px-2 py-1 text-[10px] font-bold uppercase tracking-widest bg-white z-10 shadow-[2px_2px_0px_black]">
+                            Live Interaction
+                        </div>
+                        
+                        <!-- Replaced static image with interactive canvas -->
+                        <div class="w-full h-full relative z-0 pt-8 flex-grow">
+                            <!-- Inner relative container for strict positioning -->
+                            <div class="relative w-full h-full">
+                                <canvas id="heroChart"></canvas>
+                                
+                                <!-- Dynamic Current Month Marker -->
+                                <div id="current-month-marker" class="absolute hidden flex-col items-center justify-center pointer-events-none z-10 transform -translate-x-1/2 -translate-y-1/2">
+                                    <!-- Tooltip Label -->
+                                    <div class="bg-black text-white text-[10px] font-bold px-3 py-1 mb-1 shadow-[2px_2px_0px_rgba(0,0,0,0.3)] whitespace-nowrap relative transform -translate-y-1">
+                                        I am here
+                                        <!-- Down arrow triangle -->
+                                        <div class="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-[4px] border-r-[4px] border-t-[4px] border-l-transparent border-r-transparent border-t-black"></div>
+                                    </div>
+                                    <!-- Circular Profile Image -->
+                                    <div class="w-8 h-8 rounded-full border-2 border-black overflow-hidden bg-white shadow-[2px_2px_0px_rgba(0,0,0,1)]">
+                                        <img src="assets/home/hero_image.png" alt="Me" class="w-full h-full object-cover">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Subtle bottom fade to blend into the next section -->
+        <div class="absolute bottom-0 left-0 w-full h-24 bg-gradient-to-t from-gray-50 to-transparent z-0 pointer-events-none"></div>
+    </section>
+
+    <!-- NEW: Tech Stack Marquee Divider -->
+    <div class="border-y-2 border-black bg-white overflow-hidden py-3 flex relative z-20">
+        <!-- We repeat the content twice to create the seamless infinite scroll -->
+        <div class="marquee-content whitespace-nowrap flex gap-4 text-xs font-mono font-bold uppercase tracking-widest text-black">
+            <span>PYTHON +++ TABLEAU +++ SQL +++ AWS REDSHIFT +++ POWER BI +++ PYSPARK +++ STATISTICS +++ MACHINE LEARNING +++ EXPERIMENTATION +++ BIG DATA +++ </span>
+            <span>PYTHON +++ TABLEAU +++ SQL +++ AWS REDSHIFT +++ POWER BI +++ PYSPARK +++ STATISTICS +++ MACHINE LEARNING +++ EXPERIMENTATION +++ BIG DATA +++ </span>
+        </div>
+    </div>
+
+  <!-- About Me Section -->
+    <section id="about" class="py-24 bg-gray-50 border-t border-gray-200">
+        <div class="max-w-7xl mx-auto px-6">
+            <!-- Changed md:items-start to md:items-center for vertical centering -->
+            <div class="flex flex-col md:flex-row gap-12 lg:gap-20 md:items-center">
+                
+                <!-- Left: Editorial Image -->
+                <div class="w-full md:w-[40%] reveal">
+                    <!-- Standard image holder, no forced height or cropping -->
+                    <img src="assets/home/about_image.png" alt="About Me" class="w-full h-auto grayscale">
+                </div>
+
+                <!-- Right: Structured Editorial Content -->
+                <div class="w-full md:w-[60%] flex flex-col justify-center py-4 md:py-8 reveal" style="transition-delay: 150ms;">
+                    
+                    <!-- Meta Header & Title -->
+                    <div class="flex justify-between items-start mb-12">
+                        <div>
+                            <h2 class="text-5xl md:text-6xl lg:text-7xl font-black tracking-tighter uppercase text-black leading-none">About</h2>
+                            <h3 class="text-lg md:text-xl font-bold tracking-tight uppercase text-black mt-2">Eyasin.A</h3>
+                        </div>
+                        <div class="flex flex-col items-end text-right mt-2">
+                            <span class="text-[10px] font-mono font-bold text-gray-400 uppercase tracking-widest">Dhaka, Bangladesh</span>
+                            <span class="text-[10px] font-mono font-bold text-gray-400 uppercase tracking-widest">March, 2026</span>
+                            <!-- Minimalist upward diagonal arrow -->
+                            <svg class="w-5 h-5 text-black mt-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 17L17 7M17 7H7M17 7v10"></path></svg>
+                        </div>
+                    </div>
+
+                    <!-- Bio Paragraph -->
+                    <p class="text-sm md:text-base text-gray-600 leading-relaxed mb-16 max-w-xl">
+                        With over five years of experience in the data landscape, I bridge the gap between technical complexity and business strategy. I believe that data is more than just rows in a database; it's a narrative waiting to be told. My approach combines rigorous statistical analysis with intuitive design, crafting insights that resonate with target audiences and push boundaries within strict guidelines.
+                    </p>
+
+                    <!-- Structured Data Grid -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-12 gap-y-12">
+                        
+                        <!-- Education -->
+                        <div>
+                            <div class="flex justify-between items-center mb-4">
+                                <h4 class="text-lg font-black text-black uppercase tracking-tight">Education</h4>
+                                <!-- Date pill matching the reference -->
+                                <span class="px-3 py-1 border border-gray-300 rounded-full text-[10px] font-mono font-bold text-gray-500">2018 - 2022</span>
+                            </div>
+                            <p class="text-sm font-bold text-black">B.S. Computer Science</p>
+                            <p class="text-xs text-gray-600 mt-1">University of Technology<br>CGPA: 3.8 / 4.0</p>
+                        </div>
+
+                        <!-- Skills -->
+                        <div>
+                            <h4 class="text-lg font-black text-black uppercase tracking-tight mb-4">Skills</h4>
+                            <div class="grid grid-cols-2 gap-x-2 gap-y-2 text-xs text-gray-600">
+                                <span>Python</span>
+                                <span>Tableau</span>
+                                <span>SQL</span>
+                                <span>Power BI</span>
+                                <span>AWS Redshift</span>
+                                <span>PySpark</span>
+                            </div>
+                        </div>
+                        
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Work Experience Section -->
+    <section id="work" class="py-24 bg-white border-t border-gray-200">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="mb-12 reveal">
+                <h2 class="text-4xl font-bold tracking-tight text-black uppercase">Work Experience</h2>
+                <p class="text-gray-600 mt-2 text-base">A chronicle of my professional growth</p>
+            </div>
+            
+            <div class="flex flex-col">
+                <!-- Job 1 -->
+                <div class="timeline-item relative timeline-container border-t border-gray-200 pt-10 reveal">
+                    <div class="timeline-line-left"></div>
+                    <div class="timeline-marker"></div>
+                    <div class="grid md:grid-cols-[150px_1fr] gap-6">
+                        <span class="text-sm font-bold text-gray-400 uppercase tracking-widest mt-1">2022 - Present</span>
+                        <div class="flex flex-col gap-3">
+                            <div>
+                                <h3 class="text-lg font-bold text-black">Lead Data Strategist</h3>
+                                <p class="text-base text-black font-medium">TechVision Analytics</p>
+                            </div>
+                            <p class="text-base text-gray-600 max-w-2xl leading-relaxed">
+                                Spearheading data architecture for Fortune 500 clients. Reduced data processing latency by 40% through SQL optimization and automated anomaly detection.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Job 2 -->
+                <div class="timeline-item relative timeline-container border-t border-gray-200 pt-10 reveal">
+                    <div class="timeline-line-left"></div>
+                    <div class="timeline-marker"></div>
+                    <div class="grid md:grid-cols-[150px_1fr] gap-6">
+                        <span class="text-sm font-bold text-gray-400 uppercase tracking-widest mt-1">2020 - 2022</span>
+                        <div class="flex flex-col gap-3">
+                            <div>
+                                <h3 class="text-lg font-bold text-black">Junior Data Analyst</h3>
+                                <p class="text-base text-black font-medium">Global Retail Corp</p>
+                            </div>
+                            <p class="text-base text-gray-600 max-w-2xl leading-relaxed">
+                                Developed interactive Tableau dashboards that pinpointed a 15% leakage in supply chain logistics. Managed migration of legacy Excel reporting to cloud databases.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Job 3 -->
+                <div class="timeline-item relative timeline-container border-t border-gray-200 pt-10 reveal">
+                    <div class="timeline-marker"></div>
+                    <div class="grid md:grid-cols-[150px_1fr] gap-6">
+                        <span class="text-sm font-bold text-gray-400 uppercase tracking-widest mt-1">2018 - 2020</span>
+                        <div class="flex flex-col gap-3">
+                            <div>
+                                <h3 class="text-lg font-bold text-black">Data Research Intern</h3>
+                                <p class="text-base text-black font-medium">University Data Lab</p>
+                            </div>
+                            <p class="text-base text-gray-600 max-w-2xl leading-relaxed">
+                                Conducted exploratory analysis on climate datasets and assisted in creating complex visualizations using Python for published research papers.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="projects" class="py-24 bg-gray-50 border-t border-gray-200">
+        <div class="max-w-7xl mx-auto px-6 mb-12 reveal flex justify-between items-end">
+            <div>
+                <h2 class="text-4xl font-bold tracking-tight text-black uppercase">Projects</h2>
+                <p class="text-gray-600 mt-2 text-base">Selected work</p>
+            </div>
+            <!-- NEW: Arrow Navigation Buttons -->
+            <div class="hidden md:flex gap-2">
+                <button id="proj-prev" class="w-10 h-10 border-2 border-black flex items-center justify-center hover:bg-black hover:text-white custom-transition">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+                </button>
+                <button id="proj-next" class="w-10 h-10 border-2 border-black flex items-center justify-center hover:bg-black hover:text-white custom-transition">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                </button>
+            </div>
+        </div>
+
+        <div class="carousel-wrapper max-w-7xl mx-auto reveal" style="transition-delay: 100ms;">
+            <!-- Added grab-scroll class -->
+            <div id="projects-carousel" class="flex overflow-x-auto snap-x snap-mandatory gap-6 px-6 hide-scrollbar pb-8 grab-scroll">
+                
+                <!-- Project 1 -->
+                <div class="project-card relative w-[85vw] md:w-[604px] shrink-0 snap-center border-2 border-black bg-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] flex flex-col custom-transition hover:-translate-y-1 overflow-hidden">
+                    <div class="aspect-video relative object-cover w-full border-b-2 border-black bg-gray-100 overflow-hidden group">
+                        <img src="https://picsum.photos/seed/proj1/800/600" alt="Project Banner" class="w-full h-full object-cover custom-transition hover:scale-105">
+                        
+                        <!-- NEW: Raw Data Toggle -->
+                        <button class="data-toggle-btn custom-transition">&lt; / &gt;</button>
+                        <div class="raw-data-overlay hide-scrollbar">
+<pre><code>import pandas as pd
+from sklearn.ensemble import RandomForestClassifier
+
+# Loading telemetry data pipeline
+df = pd.read_csv('s3://data-lake/telemetry_stream.csv')
+features = df.drop('churn', axis=1)
+
+# Training Predictive Model
+model = RandomForestClassifier(n_estimators=150, max_depth=12)
+model.fit(features, df['churn'])
+
+print("Validation Accuracy: 89.4%")
+print("Pipeline Execution: Success")</code></pre>
+                        </div>
+                    </div>
+                    <div class="p-6 flex flex-col gap-3 flex-grow">
+                        <p class="text-sm text-gray-400 uppercase tracking-widest font-bold">Machine Learning</p>
+                        <h3 class="text-lg font-bold text-black">Customer Churn Prediction</h3>
+                        <p class="text-gray-600 text-sm max-w-2xl line-clamp-2">Random Forest and XGBoost pipeline to identify at-risk customers with 89% accuracy.</p>
+                        <button class="see-more-btn mt-auto pt-4 flex items-center gap-2 text-xs font-bold uppercase tracking-wider custom-transition hover:text-gray-600 w-fit">
+                            See More
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+                        </button>
+                    </div>
+                    <!-- Slide Up Layer -->
+                    <div class="project-details absolute inset-0 bg-white border-t-4 border-black p-6 z-10 flex flex-col">
+                        <button class="close-project-btn self-end text-gray-400 hover:text-black mb-4 custom-transition"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg></button>
+                        <div class="flex flex-col gap-3 overflow-y-auto hide-scrollbar flex-grow">
+                            <h3 class="text-lg font-bold text-black">Detailed Analysis</h3>
+                            <p class="text-gray-600 text-sm leading-relaxed max-w-2xl">Developed a machine learning pipeline using Random Forest and XGBoost to identify at-risk customers with 89% accuracy. Implemented automated data pipelines via Python.</p>
+                            <div class="flex flex-wrap gap-2 mt-2">
+                                <span class="px-2 py-1 bg-gray-100 text-[10px] font-bold uppercase border border-gray-200">Python</span>
+                                <span class="px-2 py-1 bg-gray-100 text-[10px] font-bold uppercase border border-gray-200">Scikit-Learn</span>
+                            </div>
+                        </div>
+                        <a href="#" class="mt-6 bg-black text-white px-6 py-3 font-medium text-center custom-transition hover:bg-gray-800">View Full Case Study</a>
+                    </div>
+                </div>
+
+                <!-- Project 2 -->
+                <div class="project-card relative w-[85vw] md:w-[604px] shrink-0 snap-center border-2 border-black bg-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] flex flex-col custom-transition hover:-translate-y-1 overflow-hidden">
+                    <div class="aspect-video relative object-cover w-full border-b-2 border-black bg-gray-100 overflow-hidden group">
+                        <img src="https://picsum.photos/seed/proj2/800/600" alt="Project Banner" class="w-full h-full object-cover custom-transition hover:scale-105">
+                        
+                        <!-- NEW: Raw Data Toggle -->
+                        <button class="data-toggle-btn custom-transition">&lt; / &gt;</button>
+                        <div class="raw-data-overlay hide-scrollbar">
+<pre><code>WITH RegionalBottleneck AS (
+    SELECT 
+        region_id,
+        AVG(transit_time) as avg_transit,
+        PERCENTILE_CONT(0.9) WITHIN GROUP (ORDER BY transit_time) 
+            as p90_transit
+    FROM logistics.shipments
+    WHERE status = 'DELIVERED'
+    GROUP BY region_id
+)
+SELECT 
+    r.region_name,
+    b.avg_transit,
+    (b.p90_transit - b.avg_transit) as variance_delay
+FROM RegionalBottleneck b
+JOIN reference.regions r ON b.region_id = r.id
+ORDER BY variance_delay DESC;</code></pre>
+                        </div>
+                    </div>
+                    <div class="p-6 flex flex-col gap-3 flex-grow">
+                        <p class="text-sm text-gray-400 uppercase tracking-widest font-bold">Visualization</p>
+                        <h3 class="text-lg font-bold text-black">Supply Chain Dashboard</h3>
+                        <p class="text-gray-600 text-sm max-w-2xl line-clamp-2">End-to-end Tableau dashboard connecting live AWS warehouse data for regional bottleneck analysis.</p>
+                        <button class="see-more-btn mt-auto pt-4 flex items-center gap-2 text-xs font-bold uppercase tracking-wider custom-transition hover:text-gray-600 w-fit">
+                            See More
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+                        </button>
+                    </div>
+                    <div class="project-details absolute inset-0 bg-white border-t-4 border-black p-6 z-10 flex flex-col">
+                        <button class="close-project-btn self-end text-gray-400 hover:text-black mb-4 custom-transition"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg></button>
+                        <div class="flex flex-col gap-3 overflow-y-auto hide-scrollbar flex-grow">
+                            <h3 class="text-lg font-bold text-black">Visualization Strategy</h3>
+                            <p class="text-gray-600 text-sm leading-relaxed max-w-2xl">Designed an end-to-end Tableau dashboard connecting live AWS warehouse data for regional bottleneck analysis.</p>
+                            <div class="flex flex-wrap gap-2 mt-2">
+                                <span class="px-2 py-1 bg-gray-100 text-[10px] font-bold uppercase border border-gray-200">Tableau</span>
+                                <span class="px-2 py-1 bg-gray-100 text-[10px] font-bold uppercase border border-gray-200">AWS Redshift</span>
+                            </div>
+                        </div>
+                        <a href="#" class="mt-6 bg-black text-white px-6 py-3 font-medium text-center custom-transition hover:bg-gray-800">View Dashboard</a>
+                    </div>
+                </div>
+
+                <!-- Project 3 -->
+                <div class="project-card relative w-[85vw] md:w-[604px] shrink-0 snap-center border-2 border-black bg-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] flex flex-col custom-transition hover:-translate-y-1 overflow-hidden">
+                    <div class="aspect-video relative object-cover w-full border-b-2 border-black bg-gray-100 overflow-hidden group">
+                        <img src="https://picsum.photos/seed/proj3/800/600" alt="Project Banner" class="w-full h-full object-cover custom-transition hover:scale-105">
+                        
+                        <!-- NEW: Raw Data Toggle -->
+                        <button class="data-toggle-btn custom-transition">&lt; / &gt;</button>
+                        <div class="raw-data-overlay hide-scrollbar">
+<pre><code>{
+  "analysis_id": "req_88492a",
+  "timestamp": "2026-03-26T11:42Z",
+  "document_count": 14502,
+  "vader_results": {
+    "compound_score": -0.642,
+    "sentiment": "NEGATIVE",
+    "key_phrases": [
+      {"token": "battery life", "freq": 842, "weight": -0.8},
+      {"token": "screen glare", "freq": 310, "weight": -0.4}
+    ]
+  },
+  "action_flag": true,
+  "routing": "product_team_queue"
+}</code></pre>
+                        </div>
+                    </div>
+                    <div class="p-6 flex flex-col gap-3 flex-grow">
+                        <p class="text-sm text-gray-400 uppercase tracking-widest font-bold">Natural Language</p>
+                        <h3 class="text-lg font-bold text-black">Sentiment Mining Engine</h3>
+                        <p class="text-gray-600 text-sm max-w-2xl line-clamp-2">NLTK and Vader semantic analysis across diverse product categories to identify feature flaws.</p>
+                        <button class="see-more-btn mt-auto pt-4 flex items-center gap-2 text-xs font-bold uppercase tracking-wider custom-transition hover:text-gray-600 w-fit">
+                            See More
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+                        </button>
+                    </div>
+                    <div class="project-details absolute inset-0 bg-white border-t-4 border-black p-6 z-10 flex flex-col">
+                        <button class="close-project-btn self-end text-gray-400 hover:text-black mb-4 custom-transition"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg></button>
+                        <div class="flex flex-col gap-3 overflow-y-auto hide-scrollbar flex-grow">
+                            <h3 class="text-lg font-bold text-black">NLP Research</h3>
+                            <p class="text-gray-600 text-sm leading-relaxed max-w-2xl">Implemented NLTK and Vader for semantic analysis across diverse product categories to identify feature flaws.</p>
+                            <div class="flex flex-wrap gap-2 mt-2">
+                                <span class="px-2 py-1 bg-gray-100 text-[10px] font-bold uppercase border border-gray-200">NLTK</span>
+                                <span class="px-2 py-1 bg-gray-100 text-[10px] font-bold uppercase border border-gray-200">Python</span>
+                            </div>
+                        </div>
+                        <a href="#" class="mt-6 bg-black text-white px-6 py-3 font-medium text-center custom-transition hover:bg-gray-800">View Demo</a>
+                    </div>
+                </div>
+
+                <!-- Project 4 -->
+                <div class="project-card relative w-[85vw] md:w-[604px] shrink-0 snap-center border-2 border-black bg-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] flex flex-col custom-transition hover:-translate-y-1 overflow-hidden">
+                    <div class="aspect-video relative object-cover w-full border-b-2 border-black bg-gray-100 overflow-hidden group">
+                        <img src="https://picsum.photos/seed/proj4/800/600" alt="Project Banner" class="w-full h-full object-cover custom-transition hover:scale-105">
+                        
+                        <!-- NEW: Raw Data Toggle -->
+                        <button class="data-toggle-btn custom-transition">&lt; / &gt;</button>
+                        <div class="raw-data-overlay hide-scrollbar">
+<pre><code>import scipy.stats as stats
+import numpy as np
+
+def calculate_power(n, effect_size, alpha=0.05):
+    """Automated power analysis for experiment"""
+    z_alpha = stats.norm.ppf(1 - alpha/2)
+    standard_error = np.sqrt(2 / n)
+    z_beta = (effect_size / standard_error) - z_alpha
+    power = stats.norm.cdf(z_beta)
+    return power
+
+# Testing variant significance
+required_n = 15000 # per variant
+print(f"Statistical Power: {calculate_power(required_n, 0.02)}")
+# OUT: Statistical Power: 0.814 (Valid)</code></pre>
+                        </div>
+                    </div>
+                    <div class="p-6 flex flex-col gap-3 flex-grow">
+                        <p class="text-sm text-gray-400 uppercase tracking-widest font-bold">Optimization</p>
+                        <h3 class="text-lg font-bold text-black">A/B Testing Framework</h3>
+                        <p class="text-gray-600 text-sm max-w-2xl line-clamp-2">Designed automated power analysis tools to determine necessary sample sizes and statistical significance levels.</p>
+                        <button class="see-more-btn mt-auto pt-4 flex items-center gap-2 text-xs font-bold uppercase tracking-wider custom-transition hover:text-gray-600 w-fit">
+                            See More
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+                        </button>
+                    </div>
+                    <!-- Slide Up Layer -->
+                    <div class="project-details absolute inset-0 bg-white border-t-4 border-black p-6 z-10 flex flex-col">
+                        <button class="close-project-btn self-end text-gray-400 hover:text-black mb-4 custom-transition"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg></button>
+                        <div class="flex flex-col gap-3 overflow-y-auto hide-scrollbar flex-grow">
+                            <h3 class="text-lg font-bold text-black">Experimentation Strategy</h3>
+                            <p class="text-gray-600 text-sm leading-relaxed max-w-2xl">Rebuilt the marketing team's internal testing process by deploying a robust statistical framework that eliminates peeking and reduces false positives by 12%.</p>
+                            <div class="flex flex-wrap gap-2 mt-2">
+                                <span class="px-2 py-1 bg-gray-100 text-[10px] font-bold uppercase border border-gray-200">Statistics</span>
+                                <span class="px-2 py-1 bg-gray-100 text-[10px] font-bold uppercase border border-gray-200">Pandas</span>
+                            </div>
+                        </div>
+                        <a href="#" class="mt-6 bg-black text-white px-6 py-3 font-medium text-center custom-transition hover:bg-gray-800">Methodology</a>
+                    </div>
+                </div>
+
+                <!-- Project 5 -->
+                <div class="project-card relative w-[85vw] md:w-[604px] shrink-0 snap-center border-2 border-black bg-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] flex flex-col custom-transition hover:-translate-y-1 overflow-hidden">
+                    <div class="aspect-video relative object-cover w-full border-b-2 border-black bg-gray-100 overflow-hidden group">
+                        <img src="https://picsum.photos/seed/proj5/800/600" alt="Project Banner" class="w-full h-full object-cover custom-transition hover:scale-105">
+                        
+                        <!-- NEW: Raw Data Toggle -->
+                        <button class="data-toggle-btn custom-transition">&lt; / &gt;</button>
+                        <div class="raw-data-overlay hide-scrollbar">
+<pre><code>from pyspark.sql import SparkSession
+from pyspark.sql.functions import window, col
+
+spark = SparkSession.builder.appName("IoTSensor").getOrCreate()
+
+# Real-time stream processing
+stream_df = spark.readStream.format("kafka") \
+    .option("subscribe", "manufacturing_sensors") \
+    .load()
+
+# Aggregate temperature over 5m tumbling windows
+anomalies = stream_df \
+    .groupBy(window(col("timestamp"), "5 minutes")) \
+    .agg({"temperature": "avg"}) \
+    .filter(col("avg(temperature)") > 110.0)
+
+anomalies.writeStream.format("console").start()</code></pre>
+                        </div>
+                    </div>
+                    <div class="p-6 flex flex-col gap-3 flex-grow">
+                        <p class="text-sm text-gray-400 uppercase tracking-widest font-bold">Big Data</p>
+                        <h3 class="text-lg font-bold text-black">IoT Sensor Analytics</h3>
+                        <p class="text-gray-600 text-sm max-w-2xl line-clamp-2">Utilized Spark to handle terabytes of sensor logs and built time-series models for anomaly detection.</p>
+                        <button class="see-more-btn mt-auto pt-4 flex items-center gap-2 text-xs font-bold uppercase tracking-wider custom-transition hover:text-gray-600 w-fit">
+                            See More
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+                        </button>
+                    </div>
+                    <!-- Slide Up Layer -->
+                    <div class="project-details absolute inset-0 bg-white border-t-4 border-black p-6 z-10 flex flex-col">
+                        <button class="close-project-btn self-end text-gray-400 hover:text-black mb-4 custom-transition"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg></button>
+                        <div class="flex flex-col gap-3 overflow-y-auto hide-scrollbar flex-grow">
+                            <h3 class="text-lg font-bold text-black">Predictive Maintenance</h3>
+                            <p class="text-gray-600 text-sm leading-relaxed max-w-2xl">Ingested over 5TB of continuous sensor data from manufacturing equipment. Designed an LSTM neural network architecture to predict machine failure points 48 hours in advance.</p>
+                            <div class="flex flex-wrap gap-2 mt-2">
+                                <span class="px-2 py-1 bg-gray-100 text-[10px] font-bold uppercase border border-gray-200">PySpark</span>
+                                <span class="px-2 py-1 bg-gray-100 text-[10px] font-bold uppercase border border-gray-200">Kafka</span>
+                            </div>
+                        </div>
+                        <a href="#" class="mt-6 bg-black text-white px-6 py-3 font-medium text-center custom-transition hover:bg-gray-800">View Results</a>
+                    </div>
+                </div>
+
+                <!-- Project 6 -->
+                <div class="project-card relative w-[85vw] md:w-[604px] shrink-0 snap-center border-2 border-black bg-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] flex flex-col custom-transition hover:-translate-y-1 overflow-hidden">
+                    <div class="aspect-video relative object-cover w-full border-b-2 border-black bg-gray-100 overflow-hidden group">
+                        <img src="https://picsum.photos/seed/proj6/800/600" alt="Project Banner" class="w-full h-full object-cover custom-transition hover:scale-105">
+                        
+                        <!-- NEW: Raw Data Toggle -->
+                        <button class="data-toggle-btn custom-transition">&lt; / &gt;</button>
+                        <div class="raw-data-overlay hide-scrollbar">
+<pre><code>import numpy as np
+
+# Monte Carlo Simulation Engine
+iterations = 10000
+days = 252 # trading days
+
+# Historical parameters
+mu, sigma = 0.08, 0.15 
+initial_portfolio = 1000000
+
+# Generating random walk matrix
+daily_returns = np.random.normal(
+    mu/days, 
+    sigma/np.sqrt(days), 
+    (days, iterations)
+)
+price_paths = initial_portfolio * np.cumprod(1 + daily_returns, axis=0)
+
+var_95 = np.percentile(price_paths[-1], 5)
+print(f"95% Value at Risk: ${initial_portfolio - var_95:,.2f}")</code></pre>
+                        </div>
+                    </div>
+                    <div class="p-6 flex flex-col gap-3 flex-grow">
+                        <p class="text-sm text-gray-400 uppercase tracking-widest font-bold">Finance</p>
+                        <h3 class="text-lg font-bold text-black">Portfolio Risk Model</h3>
+                        <p class="text-gray-600 text-sm max-w-2xl line-clamp-2">Built a Python tool that simulates thousands of market scenarios to identify potential drawdown risks for equities.</p>
+                        <button class="see-more-btn mt-auto pt-4 flex items-center gap-2 text-xs font-bold uppercase tracking-wider custom-transition hover:text-gray-600 w-fit">
+                            See More
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+                        </button>
+                    </div>
+                    <!-- Slide Up Layer -->
+                    <div class="project-details absolute inset-0 bg-white border-t-4 border-black p-6 z-10 flex flex-col">
+                        <button class="close-project-btn self-end text-gray-400 hover:text-black mb-4 custom-transition"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg></button>
+                        <div class="flex flex-col gap-3 overflow-y-auto hide-scrollbar flex-grow">
+                            <h3 class="text-lg font-bold text-black">Risk Management</h3>
+                            <p class="text-gray-600 text-sm leading-relaxed max-w-2xl">Developed a Monte Carlo simulation engine scaling 10,000+ potential future market paths based on historical volatility to stress-test high-yield dividend portfolios.</p>
+                            <div class="flex flex-wrap gap-2 mt-2">
+                                <span class="px-2 py-1 bg-gray-100 text-[10px] font-bold uppercase border border-gray-200">NumPy</span>
+                                <span class="px-2 py-1 bg-gray-100 text-[10px] font-bold uppercase border border-gray-200">FinTech</span>
+                            </div>
+                        </div>
+                        <a href="#" class="mt-6 bg-black text-white px-6 py-3 font-medium text-center custom-transition hover:bg-gray-800">Case Study</a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        
+        <!-- Scroll Guide Track -->
+        <div class="max-w-7xl mx-auto mt-8 px-6">
+            <div id="scroll-track" class="h-1 w-full max-w-xs bg-gray-200 relative cursor-pointer mx-auto">
+                <div id="scroll-thumb" class="absolute top-0 left-0 h-full bg-black w-1/4 custom-transition"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Certifications Section -->
+    <section id="certifications" class="py-24 bg-white border-t border-gray-200">
+        <div class="max-w-7xl mx-auto px-6 mb-12 reveal flex justify-between items-end">
+            <div>
+                <h2 class="text-4xl font-bold tracking-tight text-black uppercase">Certifications</h2>
+                <p class="text-gray-600 mt-2 text-base">Verified credentials</p>
+            </div>
+            <!-- NEW: Arrow Navigation Buttons -->
+            <div class="hidden md:flex gap-2">
+                <button id="cert-prev" class="w-10 h-10 border-2 border-black flex items-center justify-center hover:bg-black hover:text-white custom-transition">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+                </button>
+                <button id="cert-next" class="w-10 h-10 border-2 border-black flex items-center justify-center hover:bg-black hover:text-white custom-transition">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                </button>
+            </div>
+        </div>
+
+        <div class="carousel-wrapper max-w-7xl mx-auto reveal" style="transition-delay: 100ms;">
+            <!-- Added grab-scroll class -->
+            <div id="certs-carousel" class="flex overflow-x-auto snap-x snap-mandatory gap-6 px-6 hide-scrollbar pb-8 grab-scroll">
+                
+                <!-- Cert 1 -->
+                <div class="cert-card relative w-[85vw] md:w-[604px] shrink-0 snap-center border-2 border-black bg-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] flex flex-col custom-transition hover:-translate-y-1 overflow-hidden">
+                    <div class="aspect-[1.414/1] object-cover w-full border-b-2 border-black bg-gray-100 overflow-hidden">
+                        <img src="https://picsum.photos/seed/cert1/800/600" alt="Certificate" class="w-full h-full object-cover custom-transition hover:scale-105">
+                    </div>
+                    <div class="p-6 flex flex-col gap-3 flex-grow">
+                        <p class="text-sm text-gray-400 uppercase tracking-widest font-bold">Google / Coursera</p>
+                        <h3 class="text-lg font-bold text-black">Google Data Analytics</h3>
+                        <p class="text-gray-600 text-sm max-w-2xl line-clamp-2">Comprehensive 8-course program covering the entire data analysis process.</p>
+                        <button class="see-cert-btn mt-auto pt-4 flex items-center gap-2 text-xs font-bold uppercase tracking-wider custom-transition hover:text-gray-600 w-fit">
+                            See More
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+                        </button>
+                    </div>
+                    <div class="cert-details absolute inset-0 bg-white border-t-4 border-black p-6 z-10 flex flex-col">
+                        <button class="close-cert-btn self-end text-gray-400 hover:text-black mb-4 custom-transition"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg></button>
+                        <div class="flex flex-col gap-3 overflow-y-auto hide-scrollbar flex-grow">
+                            <p class="text-sm text-gray-400 uppercase tracking-widest font-bold">Google / Coursera</p>
+                            <h3 class="text-lg font-bold text-black">Google Data Analytics Professional</h3>
+                            <p class="text-gray-600 text-sm leading-relaxed max-w-2xl">Comprehensive 8-course program covering the entire data analysis process. Includes rigorous training in data cleaning, exploratory analysis, visualization, and actionable business insights using modern tech stacks.</p>
+                            <div class="flex flex-wrap gap-2 mt-2">
+                                <span class="px-2 py-1 bg-gray-100 text-[10px] font-bold uppercase border border-gray-200">SQL</span>
+                                <span class="px-2 py-1 bg-gray-100 text-[10px] font-bold uppercase border border-gray-200">Tableau</span>
+                            </div>
+                        </div>
+                        <a href="#" class="mt-6 border-2 border-black px-6 py-3 font-medium text-center custom-transition hover:bg-gray-50">Verify Credential</a>
+                    </div>
+                </div>
+
+                <!-- Cert 2 -->
+                <div class="cert-card relative w-[85vw] md:w-[604px] shrink-0 snap-center border-2 border-black bg-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] flex flex-col custom-transition hover:-translate-y-1 overflow-hidden">
+                    <div class="aspect-[1.414/1] object-cover w-full border-b-2 border-black bg-gray-100 overflow-hidden">
+                        <img src="https://picsum.photos/seed/cert2/800/600" alt="Certificate" class="w-full h-full object-cover custom-transition hover:scale-105">
+                    </div>
+                    <div class="p-6 flex flex-col gap-3 flex-grow">
+                        <p class="text-sm text-gray-400 uppercase tracking-widest font-bold">IBM</p>
+                        <h3 class="text-lg font-bold text-black">IBM Data Science</h3>
+                        <p class="text-gray-600 text-sm max-w-2xl line-clamp-2">Advanced certificate diving deep into Python-centric data science and ML pipelines.</p>
+                        <button class="see-cert-btn mt-auto pt-4 flex items-center gap-2 text-xs font-bold uppercase tracking-wider custom-transition hover:text-gray-600 w-fit">
+                            See More
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+                        </button>
+                    </div>
+                    <div class="cert-details absolute inset-0 bg-white border-t-4 border-black p-6 z-10 flex flex-col">
+                        <button class="close-cert-btn self-end text-gray-400 hover:text-black mb-4 custom-transition"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg></button>
+                        <div class="flex flex-col gap-3 overflow-y-auto hide-scrollbar flex-grow">
+                            <p class="text-sm text-gray-400 uppercase tracking-widest font-bold">IBM</p>
+                            <h3 class="text-lg font-bold text-black">IBM Data Science Professional</h3>
+                            <p class="text-gray-600 text-sm leading-relaxed max-w-2xl">Advanced certificate diving deep into Python-centric data science. Focused on building machine learning pipelines, statistical analysis, and deploying predictive models to solve real-world problems.</p>
+                            <div class="flex flex-wrap gap-2 mt-2">
+                                <span class="px-2 py-1 bg-gray-100 text-[10px] font-bold uppercase border border-gray-200">Python</span>
+                                <span class="px-2 py-1 bg-gray-100 text-[10px] font-bold uppercase border border-gray-200">Machine Learning</span>
+                            </div>
+                        </div>
+                        <a href="#" class="mt-6 border-2 border-black px-6 py-3 font-medium text-center custom-transition hover:bg-gray-50">Verify Credential</a>
+                    </div>
+                </div>
+
+                <!-- Cert 3 -->
+                <div class="cert-card relative w-[85vw] md:w-[604px] shrink-0 snap-center border-2 border-black bg-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] flex flex-col custom-transition hover:-translate-y-1 overflow-hidden">
+                    <div class="aspect-[1.414/1] object-cover w-full border-b-2 border-black bg-gray-100 overflow-hidden">
+                        <img src="https://picsum.photos/seed/cert3/800/600" alt="Certificate" class="w-full h-full object-cover custom-transition hover:scale-105">
+                    </div>
+                    <div class="p-6 flex flex-col gap-3 flex-grow">
+                        <p class="text-sm text-gray-400 uppercase tracking-widest font-bold">Microsoft</p>
+                        <h3 class="text-lg font-bold text-black">Data Analyst Associate</h3>
+                        <p class="text-gray-600 text-sm max-w-2xl line-clamp-2">Official certification for mastering Power BI, data modeling, and DAX queries.</p>
+                        <button class="see-cert-btn mt-auto pt-4 flex items-center gap-2 text-xs font-bold uppercase tracking-wider custom-transition hover:text-gray-600 w-fit">
+                            See More
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+                        </button>
+                    </div>
+                    <div class="cert-details absolute inset-0 bg-white border-t-4 border-black p-6 z-10 flex flex-col">
+                        <button class="close-cert-btn self-end text-gray-400 hover:text-black mb-4 custom-transition"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg></button>
+                        <div class="flex flex-col gap-3 overflow-y-auto hide-scrollbar flex-grow">
+                            <p class="text-sm text-gray-400 uppercase tracking-widest font-bold">Microsoft</p>
+                            <h3 class="text-lg font-bold text-black">Power BI Data Analyst Associate</h3>
+                            <p class="text-gray-600 text-sm leading-relaxed max-w-2xl">Official certification for mastering Power BI. Validated ability to design data models, write complex DAX queries, and deploy scalable dashboards for enterprise-level reporting.</p>
+                            <div class="flex flex-wrap gap-2 mt-2">
+                                <span class="px-2 py-1 bg-gray-100 text-[10px] font-bold uppercase border border-gray-200">Power BI</span>
+                                <span class="px-2 py-1 bg-gray-100 text-[10px] font-bold uppercase border border-gray-200">DAX</span>
+                            </div>
+                        </div>
+                        <a href="#" class="mt-6 border-2 border-black px-6 py-3 font-medium text-center custom-transition hover:bg-gray-50">Verify Credential</a>
+                    </div>
+                </div>
+
+                <!-- Cert 4 -->
+                <div class="cert-card relative w-[85vw] md:w-[604px] shrink-0 snap-center border-2 border-black bg-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] flex flex-col custom-transition hover:-translate-y-1 overflow-hidden">
+                    <div class="aspect-[1.414/1] object-cover w-full border-b-2 border-black bg-gray-100 overflow-hidden">
+                        <img src="https://picsum.photos/seed/cert4/800/600" alt="Certificate" class="w-full h-full object-cover custom-transition hover:scale-105">
+                    </div>
+                    <div class="p-6 flex flex-col gap-3 flex-grow">
+                        <p class="text-sm text-gray-400 uppercase tracking-widest font-bold">Amazon Web Services</p>
+                        <h3 class="text-lg font-bold text-black">AWS Data Analytics</h3>
+                        <p class="text-gray-600 text-sm max-w-2xl line-clamp-2">Validated expertise in using AWS data lakes and analytics services to design and secure solutions.</p>
+                        <button class="see-cert-btn mt-auto pt-4 flex items-center gap-2 text-xs font-bold uppercase tracking-wider custom-transition hover:text-gray-600 w-fit">
+                            See More
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+                        </button>
+                    </div>
+                    <div class="cert-details absolute inset-0 bg-white border-t-4 border-black p-6 z-10 flex flex-col">
+                        <button class="close-cert-btn self-end text-gray-400 hover:text-black mb-4 custom-transition"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg></button>
+                        <div class="flex flex-col gap-3 overflow-y-auto hide-scrollbar flex-grow">
+                            <p class="text-sm text-gray-400 uppercase tracking-widest font-bold">Amazon Web Services</p>
+                            <h3 class="text-lg font-bold text-black">AWS Certified Data Analytics – Specialty</h3>
+                            <p class="text-gray-600 text-sm leading-relaxed max-w-2xl">Validated expertise in using AWS data lakes and analytics services to design, build, secure, and maintain analytics solutions that extract insight from raw data.</p>
+                            <div class="flex flex-wrap gap-2 mt-2">
+                                <span class="px-2 py-1 bg-gray-100 text-[10px] font-bold uppercase border border-gray-200">AWS Redshift</span>
+                                <span class="px-2 py-1 bg-gray-100 text-[10px] font-bold uppercase border border-gray-200">Kinesis</span>
+                            </div>
+                        </div>
+                        <a href="#" class="mt-6 border-2 border-black px-6 py-3 font-medium text-center custom-transition hover:bg-gray-50">Verify Credential</a>
+                    </div>
+                </div>
+
+                <!-- Cert 5 -->
+                <div class="cert-card relative w-[85vw] md:w-[604px] shrink-0 snap-center border-2 border-black bg-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] flex flex-col custom-transition hover:-translate-y-1 overflow-hidden">
+                    <div class="aspect-[1.414/1] object-cover w-full border-b-2 border-black bg-gray-100 overflow-hidden">
+                        <img src="https://picsum.photos/seed/cert5/800/600" alt="Certificate" class="w-full h-full object-cover custom-transition hover:scale-105">
+                    </div>
+                    <div class="p-6 flex flex-col gap-3 flex-grow">
+                        <p class="text-sm text-gray-400 uppercase tracking-widest font-bold">Salesforce</p>
+                        <h3 class="text-lg font-bold text-black">Tableau Desktop Specialist</h3>
+                        <p class="text-gray-600 text-sm max-w-2xl line-clamp-2">Demonstrated foundational skills in connecting to data sources and creating interactive dashboards.</p>
+                        <button class="see-cert-btn mt-auto pt-4 flex items-center gap-2 text-xs font-bold uppercase tracking-wider custom-transition hover:text-gray-600 w-fit">
+                            See More
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+                        </button>
+                    </div>
+                    <div class="cert-details absolute inset-0 bg-white border-t-4 border-black p-6 z-10 flex flex-col">
+                        <button class="close-cert-btn self-end text-gray-400 hover:text-black mb-4 custom-transition"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg></button>
+                        <div class="flex flex-col gap-3 overflow-y-auto hide-scrollbar flex-grow">
+                            <p class="text-sm text-gray-400 uppercase tracking-widest font-bold">Salesforce</p>
+                            <h3 class="text-lg font-bold text-black">Tableau Desktop Specialist</h3>
+                            <p class="text-gray-600 text-sm leading-relaxed max-w-2xl">Demonstrated foundational skills in connecting to complex data sources, creating interactive dashboards, and sharing compelling visual stories with stakeholders.</p>
+                            <div class="flex flex-wrap gap-2 mt-2">
+                                <span class="px-2 py-1 bg-gray-100 text-[10px] font-bold uppercase border border-gray-200">Tableau</span>
+                                <span class="px-2 py-1 bg-gray-100 text-[10px] font-bold uppercase border border-gray-200">Visualization</span>
+                            </div>
+                        </div>
+                        <a href="#" class="mt-6 border-2 border-black px-6 py-3 font-medium text-center custom-transition hover:bg-gray-50">Verify Credential</a>
+                    </div>
+                </div>
+
+                <!-- Cert 6 -->
+                <div class="cert-card relative w-[85vw] md:w-[604px] shrink-0 snap-center border-2 border-black bg-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] flex flex-col custom-transition hover:-translate-y-1 overflow-hidden">
+                    <div class="aspect-[1.414/1] object-cover w-full border-b-2 border-black bg-gray-100 overflow-hidden">
+                        <img src="https://picsum.photos/seed/cert6/800/600" alt="Certificate" class="w-full h-full object-cover custom-transition hover:scale-105">
+                    </div>
+                    <div class="p-6 flex flex-col gap-3 flex-grow">
+                        <p class="text-sm text-gray-400 uppercase tracking-widest font-bold">LinkedIn Learning</p>
+                        <h3 class="text-lg font-bold text-black">Advanced SQL for Data</h3>
+                        <p class="text-gray-600 text-sm max-w-2xl line-clamp-2">Mastery of advanced concepts including window functions, CTEs, and recursive queries.</p>
+                        <button class="see-cert-btn mt-auto pt-4 flex items-center gap-2 text-xs font-bold uppercase tracking-wider custom-transition hover:text-gray-600 w-fit">
+                            See More
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+                        </button>
+                    </div>
+                    <div class="cert-details absolute inset-0 bg-white border-t-4 border-black p-6 z-10 flex flex-col">
+                        <button class="close-cert-btn self-end text-gray-400 hover:text-black mb-4 custom-transition"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg></button>
+                        <div class="flex flex-col gap-3 overflow-y-auto hide-scrollbar flex-grow">
+                            <p class="text-sm text-gray-400 uppercase tracking-widest font-bold">LinkedIn Learning</p>
+                            <h3 class="text-lg font-bold text-black">Advanced SQL for Data Scientists</h3>
+                            <p class="text-gray-600 text-sm leading-relaxed max-w-2xl">Mastery of advanced SQL concepts including window functions, common table expressions (CTEs), recursive queries, and query performance tuning on massive datasets.</p>
+                            <div class="flex flex-wrap gap-2 mt-2">
+                                <span class="px-2 py-1 bg-gray-100 text-[10px] font-bold uppercase border border-gray-200">PostgreSQL</span>
+                                <span class="px-2 py-1 bg-gray-100 text-[10px] font-bold uppercase border border-gray-200">CTEs</span>
+                            </div>
+                        </div>
+                        <a href="#" class="mt-6 border-2 border-black px-6 py-3 font-medium text-center custom-transition hover:bg-gray-50">Verify Credential</a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="max-w-7xl mx-auto mt-8 px-6">
+            <div id="certs-scroll-track" class="h-1 w-full max-w-xs bg-gray-200 relative cursor-pointer mx-auto">
+                <div id="certs-scroll-thumb" class="absolute top-0 left-0 h-full bg-black w-1/4 custom-transition"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Articles Section -->
+    <section id="articles" class="py-24 bg-gray-50 border-t border-gray-200">
+        <div class="max-w-7xl mx-auto px-6 mb-12 reveal flex justify-between items-end">
+            <div>
+                <h2 class="text-4xl font-bold tracking-tight text-black uppercase">Articles</h2>
+                <p class="text-gray-600 mt-2 text-base">Thoughts, tutorials, and insights</p>
+            </div>
+            <!-- NEW: Arrow Navigation Buttons -->
+            <div class="hidden md:flex gap-2">
+                <button id="art-prev" class="w-10 h-10 border-2 border-black flex items-center justify-center hover:bg-black hover:text-white custom-transition">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+                </button>
+                <button id="art-next" class="w-10 h-10 border-2 border-black flex items-center justify-center hover:bg-black hover:text-white custom-transition">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                </button>
+            </div>
+        </div>
+
+        <div class="carousel-wrapper max-w-7xl mx-auto reveal" style="transition-delay: 100ms;">
+            <!-- Added grab-scroll class -->
+            <div id="articles-carousel" class="flex overflow-x-auto snap-x snap-mandatory gap-6 px-6 hide-scrollbar pb-8 grab-scroll">
+                
+                <!-- Article 1 -->
+                <div class="article-card relative w-[85vw] md:w-[394px] shrink-0 snap-center border-2 border-black bg-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] flex flex-col custom-transition hover:-translate-y-1 overflow-hidden">
+                    <div class="aspect-square object-cover w-full border-b-2 border-black bg-gray-100 overflow-hidden">
+                        <img src="https://picsum.photos/seed/article1/800/600" alt="Article Cover" class="w-full h-full object-cover custom-transition hover:scale-105">
+                    </div>
+                    <div class="p-6 flex flex-col gap-3 flex-grow">
+                        <p class="text-sm text-gray-400 uppercase tracking-widest font-bold">Towards Data Science</p>
+                        <h3 class="text-lg font-bold text-black">The Future of AI in Retail</h3>
+                        <p class="text-gray-600 text-sm max-w-2xl line-clamp-2">How predictive algorithms are moving from buzzwords to practical tools in retail supply chains.</p>
+                        <button class="see-gist-btn mt-auto pt-4 flex items-center gap-2 text-xs font-bold uppercase tracking-wider custom-transition hover:text-gray-600 w-fit">
+                            See Gist
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+                        </button>
+                    </div>
+                    <div class="article-details absolute inset-0 bg-white border-t-4 border-black p-6 z-10 flex flex-col">
+                        <button class="close-article-btn self-end text-gray-400 hover:text-black mb-4 custom-transition"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg></button>
+                        <div class="flex flex-col gap-3 overflow-y-auto hide-scrollbar flex-grow">
+                            <p class="text-sm text-gray-400 uppercase tracking-widest font-bold">Towards Data Science</p>
+                            <h3 class="text-lg font-bold text-black">How Machine Learning is Reshaping the Modern Supply Chain</h3>
+                            <p class="text-gray-600 text-sm leading-relaxed max-w-2xl">This article explores how predictive algorithms are moving from buzzwords to practical tools in retail. We cover real-world examples of demand forecasting reducing waste by 20% and how dynamic pricing models are adapting to micro-market changes in real-time.</p>
+                        </div>
+                        <a href="#" class="mt-6 border-2 border-black px-6 py-3 font-medium text-center custom-transition hover:bg-gray-50">Read Full Story</a>
+                    </div>
+                </div>
+
+                <!-- Article 2 -->
+                <div class="article-card relative w-[85vw] md:w-[394px] shrink-0 snap-center border-2 border-black bg-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] flex flex-col custom-transition hover:-translate-y-1 overflow-hidden">
+                    <div class="aspect-square object-cover w-full border-b-2 border-black bg-gray-100 overflow-hidden">
+                        <img src="https://picsum.photos/seed/article2/800/600" alt="Article Cover" class="w-full h-full object-cover custom-transition hover:scale-105">
+                    </div>
+                    <div class="p-6 flex flex-col gap-3 flex-grow">
+                        <p class="text-sm text-gray-400 uppercase tracking-widest font-bold">Medium</p>
+                        <h3 class="text-lg font-bold text-black">SQL vs NoSQL in 2024</h3>
+                        <p class="text-gray-600 text-sm max-w-2xl line-clamp-2">Making the right database architectural choice for heavy analytical workloads.</p>
+                        <button class="see-gist-btn mt-auto pt-4 flex items-center gap-2 text-xs font-bold uppercase tracking-wider custom-transition hover:text-gray-600 w-fit">
+                            See Gist
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+                        </button>
+                    </div>
+                    <div class="article-details absolute inset-0 bg-white border-t-4 border-black p-6 z-10 flex flex-col">
+                        <button class="close-article-btn self-end text-gray-400 hover:text-black mb-4 custom-transition"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg></button>
+                        <div class="flex flex-col gap-3 overflow-y-auto hide-scrollbar flex-grow">
+                            <p class="text-sm text-gray-400 uppercase tracking-widest font-bold">Medium</p>
+                            <h3 class="text-lg font-bold text-black">Making the Right Database Choice for Analytical Workloads</h3>
+                            <p class="text-gray-600 text-sm leading-relaxed max-w-2xl">A deep dive into architectural decisions. When does the schema-less nature of document databases outpace traditional relational models? I break down benchmarking tests performed on AWS infrastructure comparing PostgreSQL and MongoDB.</p>
+                        </div>
+                        <a href="#" class="mt-6 border-2 border-black px-6 py-3 font-medium text-center custom-transition hover:bg-gray-50">Read Full Story</a>
+                    </div>
+                </div>
+
+                <!-- Article 3 -->
+                <div class="article-card relative w-[85vw] md:w-[394px] shrink-0 snap-center border-2 border-black bg-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] flex flex-col custom-transition hover:-translate-y-1 overflow-hidden">
+                    <div class="aspect-square object-cover w-full border-b-2 border-black bg-gray-100 overflow-hidden">
+                        <img src="https://picsum.photos/seed/article3/800/600" alt="Article Cover" class="w-full h-full object-cover custom-transition hover:scale-105">
+                    </div>
+                    <div class="p-6 flex flex-col gap-3 flex-grow">
+                        <p class="text-sm text-gray-400 uppercase tracking-widest font-bold">Analytics Weekly</p>
+                        <h3 class="text-lg font-bold text-black">Mastering Tableau Calcs</h3>
+                        <p class="text-gray-600 text-sm max-w-2xl line-clamp-2">10 Level-of-Detail (LOD) Expressions you need to know for complex aggregation problems.</p>
+                        <button class="see-gist-btn mt-auto pt-4 flex items-center gap-2 text-xs font-bold uppercase tracking-wider custom-transition hover:text-gray-600 w-fit">
+                            See Gist
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+                        </button>
+                    </div>
+                    <div class="article-details absolute inset-0 bg-white border-t-4 border-black p-6 z-10 flex flex-col">
+                        <button class="close-article-btn self-end text-gray-400 hover:text-black mb-4 custom-transition"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg></button>
+                        <div class="flex flex-col gap-3 overflow-y-auto hide-scrollbar flex-grow">
+                            <p class="text-sm text-gray-400 uppercase tracking-widest font-bold">Analytics Weekly</p>
+                            <h3 class="text-lg font-bold text-black">10 Level-of-Detail (LOD) Expressions You Need to Know</h3>
+                            <p class="text-gray-600 text-sm leading-relaxed max-w-2xl">Level of Detail expressions are the secret weapon of advanced Tableau users. This tutorial walks through FIXED, INCLUDE, and EXCLUDE functions to solve common complex aggregation problems like customer cohort analysis.</p>
+                        </div>
+                        <a href="#" class="mt-6 border-2 border-black px-6 py-3 font-medium text-center custom-transition hover:bg-gray-50">Read Full Story</a>
+                    </div>
+                </div>
+
+                <!-- Article 4 -->
+                <div class="article-card relative w-[85vw] md:w-[394px] shrink-0 snap-center border-2 border-black bg-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] flex flex-col custom-transition hover:-translate-y-1 overflow-hidden">
+                    <div class="aspect-square object-cover w-full border-b-2 border-black bg-gray-100 overflow-hidden">
+                        <img src="https://picsum.photos/seed/article4/800/600" alt="Article Cover" class="w-full h-full object-cover custom-transition hover:scale-105">
+                    </div>
+                    <div class="p-6 flex flex-col gap-3 flex-grow">
+                        <p class="text-sm text-gray-400 uppercase tracking-widest font-bold">Personal Blog</p>
+                        <h3 class="text-lg font-bold text-black">A/B Testing Pitfalls</h3>
+                        <p class="text-gray-600 text-sm max-w-2xl line-clamp-2">Why stopping an experiment just because you hit significance early is a major flaw.</p>
+                        <button class="see-gist-btn mt-auto pt-4 flex items-center gap-2 text-xs font-bold uppercase tracking-wider custom-transition hover:text-gray-600 w-fit">
+                            See Gist
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+                        </button>
+                    </div>
+                    <div class="article-details absolute inset-0 bg-white border-t-4 border-black p-6 z-10 flex flex-col">
+                        <button class="close-article-btn self-end text-gray-400 hover:text-black mb-4 custom-transition"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg></button>
+                        <div class="flex flex-col gap-3 overflow-y-auto hide-scrollbar flex-grow">
+                            <p class="text-sm text-gray-400 uppercase tracking-widest font-bold">Personal Blog</p>
+                            <h3 class="text-lg font-bold text-black">Why Your P-Values Might Be Lying to You</h3>
+                            <p class="text-gray-600 text-sm leading-relaxed max-w-2xl">Stopping an experiment just because you hit significance early is a major statistical flaw. I dissect the concept of "peeking" in A/B testing and provide frameworks for sequential testing that preserve validity.</p>
+                        </div>
+                        <a href="#" class="mt-6 border-2 border-black px-6 py-3 font-medium text-center custom-transition hover:bg-gray-50">Read Full Story</a>
+                    </div>
+                </div>
+
+                <!-- Article 5 -->
+                <div class="article-card relative w-[85vw] md:w-[394px] shrink-0 snap-center border-2 border-black bg-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] flex flex-col custom-transition hover:-translate-y-1 overflow-hidden">
+                    <div class="aspect-square object-cover w-full border-b-2 border-black bg-gray-100 overflow-hidden">
+                        <img src="https://picsum.photos/seed/article5/800/600" alt="Article Cover" class="w-full h-full object-cover custom-transition hover:scale-105">
+                    </div>
+                    <div class="p-6 flex flex-col gap-3 flex-grow">
+                        <p class="text-sm text-gray-400 uppercase tracking-widest font-bold">Data Engineering</p>
+                        <h3 class="text-lg font-bold text-black">Data Lakes vs Warehouses</h3>
+                        <p class="text-gray-600 text-sm max-w-2xl line-clamp-2">A comparative analysis of modern storage paradigms and hybrid solutions.</p>
+                        <button class="see-gist-btn mt-auto pt-4 flex items-center gap-2 text-xs font-bold uppercase tracking-wider custom-transition hover:text-gray-600 w-fit">
+                            See Gist
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+                        </button>
+                    </div>
+                    <div class="article-details absolute inset-0 bg-white border-t-4 border-black p-6 z-10 flex flex-col">
+                        <button class="close-article-btn self-end text-gray-400 hover:text-black mb-4 custom-transition"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg></button>
+                        <div class="flex flex-col gap-3 overflow-y-auto hide-scrollbar flex-grow">
+                            <p class="text-sm text-gray-400 uppercase tracking-widest font-bold">Data Engineering</p>
+                            <h3 class="text-lg font-bold text-black">Building Scalable Pipelines</h3>
+                            <p class="text-gray-600 text-sm leading-relaxed max-w-2xl">Exploring the shift towards Data Lakehouses. We evaluate Snowflake vs Databricks, breaking down when strict schematics are necessary versus when raw untransformed data storage makes strategic business sense.</p>
+                        </div>
+                        <a href="#" class="mt-6 border-2 border-black px-6 py-3 font-medium text-center custom-transition hover:bg-gray-50">Read Full Story</a>
+                    </div>
+                </div>
+
+                <!-- Article 6 -->
+                <div class="article-card relative w-[85vw] md:w-[394px] shrink-0 snap-center border-2 border-black bg-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] flex flex-col custom-transition hover:-translate-y-1 overflow-hidden">
+                    <div class="aspect-square object-cover w-full border-b-2 border-black bg-gray-100 overflow-hidden">
+                        <img src="https://picsum.photos/seed/article6/800/600" alt="Article Cover" class="w-full h-full object-cover custom-transition hover:scale-105">
+                    </div>
+                    <div class="p-6 flex flex-col gap-3 flex-grow">
+                        <p class="text-sm text-gray-400 uppercase tracking-widest font-bold">UX & Analytics</p>
+                        <h3 class="text-lg font-bold text-black">Effective Storytelling</h3>
+                        <p class="text-gray-600 text-sm max-w-2xl line-clamp-2">Going beyond the pie chart to communicate actionable business truths.</p>
+                        <button class="see-gist-btn mt-auto pt-4 flex items-center gap-2 text-xs font-bold uppercase tracking-wider custom-transition hover:text-gray-600 w-fit">
+                            See Gist
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+                        </button>
+                    </div>
+                    <div class="article-details absolute inset-0 bg-white border-t-4 border-black p-6 z-10 flex flex-col">
+                        <button class="close-article-btn self-end text-gray-400 hover:text-black mb-4 custom-transition"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg></button>
+                        <div class="flex flex-col gap-3 overflow-y-auto hide-scrollbar flex-grow">
+                            <p class="text-sm text-gray-400 uppercase tracking-widest font-bold">UX & Analytics</p>
+                            <h3 class="text-lg font-bold text-black">Demystifying Complex Dashboards</h3>
+                            <p class="text-gray-600 text-sm leading-relaxed max-w-2xl">A guide on applying cognitive load theory to data design. How removing clutter and using pre-attentive attributes can accelerate executive decision-making.</p>
+                        </div>
+                        <a href="#" class="mt-6 border-2 border-black px-6 py-3 font-medium text-center custom-transition hover:bg-gray-50">Read Full Story</a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="max-w-7xl mx-auto mt-8 px-6">
+            <div id="articles-scroll-track" class="h-1 w-full max-w-xs bg-gray-200 relative cursor-pointer mx-auto">
+                <div id="articles-scroll-thumb" class="absolute top-0 left-0 h-full bg-black w-1/4 custom-transition"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-24 bg-white border-t border-gray-200 border-b">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="grid md:grid-cols-2 gap-16">
+                
+                <!-- Left: Info -->
+                <div class="flex flex-col gap-6 reveal">
+                    <div class="mb-4">
+                        <h2 class="text-4xl font-bold tracking-tight text-black uppercase">Contact</h2>
+                        <p class="text-gray-600 mt-2 text-base">Let's build something data-driven.</p>
+                    </div>
+                    
+                    <p class="text-base text-gray-600 max-w-2xl leading-relaxed">
+                        I'm always open to discussing new data strategies, potential collaborations, or just nerding out about the latest advancements in machine learning. 
+                    </p>
+
+                    <div class="flex flex-col gap-3 mt-4">
+                        <div class="flex items-center gap-2">
+                            <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                            <p class="font-bold text-base text-black">hello@alexrivers.data</p>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                            <p class="text-gray-600 text-base">San Francisco, CA (Remote Open)</p>
+                        </div>
+                    </div>
+
+                    <!-- Social Icons -->
+                    <div class="flex gap-6 mt-8">
+                        <!-- LinkedIn -->
+                        <a href="#" class="text-black hover:text-gray-600 custom-transition">
+                            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+                        </a>
+                        <!-- Facebook -->
+                        <a href="#" class="text-black hover:text-gray-600 custom-transition">
+                            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M9 8h-3v4h3v12h5v-12h3.642l.358-4h-4v-1.667c0-.955.192-1.333 1.115-1.333h2.885v-5h-3.808c-3.596 0-5.192 1.583-5.192 4.615v3.385z"/></svg>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Right: Form -->
+                <div class="reveal" style="transition-delay: 200ms;">
+                    <!-- NEW: 3D Flip Container -->
+                    <div class="flip-container">
+                        <div id="contact-flip-card" class="flip-card">
+                            
+                            <!-- Front Face: The Form -->
+                            <div class="flip-front">
+                                <form id="contact-form" action="https://formspree.io/f/xvzwoqok" method="POST" class="flex flex-col gap-6">
+                                    <div>
+                                        <label for="name" class="block text-sm font-bold uppercase tracking-widest text-black mb-2">Name</label>
+                                        <input type="text" id="name" name="name" placeholder="e.g., Jane Doe" required class="border-2 border-gray-200 px-4 py-3 w-full focus:border-black outline-none custom-transition bg-transparent text-base">
+                                    </div>
+                                    <div>
+                                        <label for="email" class="block text-sm font-bold uppercase tracking-widest text-black mb-2">Email</label>
+                                        <input type="email" id="email" name="email" placeholder="jane@company.com" required class="border-2 border-gray-200 px-4 py-3 w-full focus:border-black outline-none custom-transition bg-transparent text-base">
+                                    </div>
+                                    <div>
+                                        <label for="message" class="block text-sm font-bold uppercase tracking-widest text-black mb-2">Message</label>
+                                        <textarea id="message" name="message" rows="4" placeholder="Hi Alex, I'd love to chat about..." required class="border-2 border-gray-200 px-4 py-3 w-full focus:border-black outline-none custom-transition bg-transparent resize-none text-base"></textarea>
+                                    </div>
+                                    <button type="submit" id="submit-btn" class="bg-black text-white px-6 py-3 font-medium shadow-[4px_4px_0px_black] custom-transition hover:-translate-y-1 hover:shadow-[4px_6px_0px_black] mt-2">
+                                        Send Message
+                                    </button>
+                                    <!-- Error/Loading Container (Kept on front for API errors) -->
+                                    <div id="form-status" class="hidden font-bold text-sm tracking-wide text-center p-3 border-2"></div>
+                                </form>
+                            </div>
+
+                            <!-- Back Face: The Success Message -->
+                            <div class="flip-back bg-black text-white p-8 border-4 border-black shadow-[4px_4px_0px_0px_rgba(200,200,200,1)] text-center">
+                                <svg class="w-16 h-16 mb-4 text-white mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                <h3 class="text-3xl font-black uppercase tracking-tight mb-2">Transmitted.</h3>
+                                <p class="text-gray-400 text-sm mb-8 leading-relaxed">Your data has been successfully routed. I will respond to your query shortly.</p>
+                                
+                                <button id="reset-form-btn" type="button" class="border-2 border-white px-6 py-3 font-medium text-xs uppercase tracking-widest hover:bg-white hover:text-black custom-transition flex items-center gap-2 mx-auto group">
+                                    <svg class="w-4 h-4 transform group-hover:-rotate-180 transition-transform duration-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+                                    Reset Form
+                                </button>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer - Inverted Typographic Monolith -->
+    <footer class="bg-black text-white pt-16 pb-8 md:pt-24 border-t-4 border-black selection:bg-white selection:text-black">
+        <div class="max-w-7xl mx-auto px-6">
+            
+            <!-- Top Row: Strict Grid & Actions -->
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-end gap-8 border-b border-gray-800 pb-8 mb-8">
+                
+                <!-- Status & Copyright -->
+                <div class="flex flex-col gap-4">
+                    <div class="inline-flex items-center gap-3 border border-gray-800 px-4 py-2 bg-gray-900/50">
+                        <span class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
+                        <span class="font-mono text-[10px] font-bold uppercase tracking-widest text-gray-300">Available for new projects</span>
+                    </div>
+                    <p class="font-mono text-[10px] font-bold uppercase tracking-widest text-gray-600">© 2026. Engineered with grid precision.</p>
+                </div>
+                
+                <!-- Brutalist Back to Top Block -->
+                <button onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="border-2 border-white px-6 py-4 flex items-center gap-3 text-xs font-mono font-bold uppercase tracking-widest hover:bg-white hover:text-black transition-colors duration-300 group w-full md:w-auto justify-between md:justify-start">
+                    <span>Back to Top</span>
+                    <svg class="w-5 h-5 transform group-hover:-translate-y-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18"></path></svg>
+                </button>
+            </div>
+
+            <!-- Bottom Row: Massive Billboard Typography -->
+            <div class="w-full overflow-hidden flex justify-center pt-4">
+                <h1 class="text-[14vw] md:text-[10vw] lg:text-[10.5vw] font-black tracking-tighter uppercase leading-none text-white select-none opacity-90">
+                    Eyasin Arafath
+                </h1>
+            </div>
+            
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            
+            // --- Mobile Menu Toggle Logic ---
+            const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+            const mobileMenu = document.getElementById('mobile-menu');
+            const mobileLinks = document.querySelectorAll('.mobile-link');
+
+            if (mobileMenuBtn && mobileMenu) {
+                mobileMenuBtn.addEventListener('click', () => {
+                    mobileMenu.classList.toggle('hidden');
+                    mobileMenu.classList.toggle('flex');
+                });
+
+                // Auto-close menu when a link is clicked
+                mobileLinks.forEach(link => {
+                    link.addEventListener('click', () => {
+                        mobileMenu.classList.add('hidden');
+                        mobileMenu.classList.remove('flex');
+                    });
+                });
+            }
+
+            // --- Unified Carousel Tracking & Grab-Drag Logic ---
+            const setupCarousel = (carouselId, trackId, thumbId, prevBtnId, nextBtnId) => {
+                const carousel = document.getElementById(carouselId);
+                const thumb = document.getElementById(thumbId);
+                const track = document.getElementById(trackId);
+                const prevBtn = document.getElementById(prevBtnId);
+                const nextBtn = document.getElementById(nextBtnId);
+
+                if (!carousel || !thumb || !track) return;
+
+                const updateThumb = () => {
+                    const maxScroll = carousel.scrollWidth - carousel.clientWidth;
+                    if (maxScroll <= 0) {
+                        thumb.style.transform = `translateX(0px)`;
+                        return;
+                    }
+                    const scrollPct = carousel.scrollLeft / maxScroll;
+                    const maxMove = track.clientWidth - thumb.clientWidth;
+                    thumb.style.transform = `translateX(${scrollPct * maxMove}px)`;
+                };
+
+                carousel.addEventListener('scroll', updateThumb);
+                window.addEventListener('resize', updateThumb);
+
+                track.addEventListener('click', (e) => {
+                    const rect = track.getBoundingClientRect();
+                    const clickX = e.clientX - rect.left;
+                    const clickPct = Math.min(Math.max(clickX / track.clientWidth, 0), 1);
+                    const targetScroll = clickPct * (carousel.scrollWidth - carousel.clientWidth);
+                    carousel.scrollTo({ left: targetScroll, behavior: 'smooth' });
+                });
+
+                // --- NEW: Arrow Button Functionality ---
+                if (prevBtn) {
+                    prevBtn.addEventListener('click', () => {
+                        const cardWidth = carousel.querySelector('div').offsetWidth + 24; // Card width + gap
+                        carousel.scrollBy({ left: -cardWidth, behavior: 'smooth' });
+                    });
+                }
+                
+                if (nextBtn) {
+                    nextBtn.addEventListener('click', () => {
+                        const cardWidth = carousel.querySelector('div').offsetWidth + 24; // Card width + gap
+                        carousel.scrollBy({ left: cardWidth, behavior: 'smooth' });
+                    });
+                }
+
+                updateThumb(); // Init
+
+                // --- Grab and Drag functionality ---
+                let isDown = false;
+                let startX;
+                let scrollLeft;
+
+                // Prevent native image dragging which disrupts our custom grab-scroll
+                const images = carousel.querySelectorAll('img');
+                images.forEach(img => img.addEventListener('dragstart', (e) => e.preventDefault()));
+
+                carousel.addEventListener('mousedown', (e) => {
+                    isDown = true;
+                    carousel.classList.add('no-snap'); // Disables snap constraints for fluid dragging
+                    startX = e.pageX - carousel.offsetLeft;
+                    scrollLeft = carousel.scrollLeft;
+                });
+
+                carousel.addEventListener('mouseleave', () => {
+                    isDown = false;
+                    carousel.classList.remove('no-snap'); // Restores snapping
+                });
+
+                carousel.addEventListener('mouseup', () => {
+                    isDown = false;
+                    carousel.classList.remove('no-snap'); // Restores snapping
+                });
+
+                carousel.addEventListener('mousemove', (e) => {
+                    if (!isDown) return;
+                    e.preventDefault();
+                    const x = e.pageX - carousel.offsetLeft;
+                    const walk = (x - startX) * 2; // The *2 multiplies scroll speed for a faster swipe feel
+                    carousel.scrollLeft = scrollLeft - walk;
+                });
+            };
+
+            setupCarousel('projects-carousel', 'scroll-track', 'scroll-thumb', 'proj-prev', 'proj-next');
+            setupCarousel('certs-carousel', 'certs-scroll-track', 'certs-scroll-thumb', 'cert-prev', 'cert-next');
+            setupCarousel('articles-carousel', 'articles-scroll-track', 'articles-scroll-thumb', 'art-prev', 'art-next');
+
+            // --- Smart Scroll Header Logic ---
+            const mainNav = document.getElementById('main-nav');
+            let lastScrollY = window.scrollY;
+
+            window.addEventListener('scroll', () => {
+                if (!mainNav) return;
+                
+                // Keep nav visible if mobile menu is open
+                if (mobileMenu && !mobileMenu.classList.contains('hidden')) return;
+
+                const currentScrollY = window.scrollY;
+                
+                if (currentScrollY > lastScrollY && currentScrollY > 100) {
+                    // Scrolling down
+                    mainNav.classList.add('hide-nav');
+                } else {
+                    // Scrolling up
+                    mainNav.classList.remove('hide-nav');
+                }
+                lastScrollY = currentScrollY;
+            }, { passive: true });
+
+            // --- Scroll Spy Logic ---
+            const sections = document.querySelectorAll('section[id]');
+            const navItems = document.querySelectorAll('.nav-link, .mobile-link');
+
+            const scrollSpy = () => {
+                const scrollY = window.scrollY;
+                
+                sections.forEach(sec => {
+                    const sectionHeight = sec.offsetHeight;
+                    const sectionTop = sec.offsetTop - 150; // Offset accounts for fixed header
+                    const sectionId = sec.getAttribute('id');
+                    
+                    if(scrollY > sectionTop && scrollY <= sectionTop + sectionHeight) {
+                        navItems.forEach(link => {
+                            link.classList.remove('active-nav');
+                            if(link.getAttribute('href') === '#' + sectionId) {
+                                link.classList.add('active-nav');
+                            }
+                        });
+                    }
+                });
+            };
+
+            window.addEventListener('scroll', scrollSpy, { passive: true });
+            scrollSpy(); // Trigger once on load to set initial state
+
+            // --- Unified Layer Toggle Logic ---
+            const setupLayers = (openBtnClass, closeBtnClass, detailContainerClass) => {
+                document.querySelectorAll(openBtnClass).forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        const card = e.currentTarget.closest('div[class*="-card"]');
+                        if(card) card.querySelector(detailContainerClass).classList.add('active');
+                    });
+                });
+
+                document.querySelectorAll(closeBtnClass).forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        const layer = e.currentTarget.closest(detailContainerClass);
+                        if(layer) layer.classList.remove('active');
+                    });
+                });
+            };
+
+            setupLayers('.see-more-btn', '.close-project-btn', '.project-details');
+            setupLayers('.see-cert-btn', '.close-cert-btn', '.cert-details');
+            setupLayers('.see-gist-btn', '.close-article-btn', '.article-details');
+
+            // --- Dark Mode / Inverted Theme Logic ---
+            const htmlElement = document.documentElement;
+            const themeToggles = document.querySelectorAll('.theme-toggle');
+            
+            // Check local storage or system preference
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+            
+            if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
+                htmlElement.classList.add('dark-mode');
+                updateThemeIcons(true);
+            }
+
+            themeToggles.forEach(toggle => {
+                toggle.addEventListener('click', () => {
+                    htmlElement.classList.toggle('dark-mode');
+                    const isDark = htmlElement.classList.contains('dark-mode');
+                    localStorage.setItem('theme', isDark ? 'dark' : 'light');
+                    updateThemeIcons(isDark);
+                });
+            });
+
+            function updateThemeIcons(isDark) {
+                const moons = document.querySelectorAll('.icon-moon');
+                const suns = document.querySelectorAll('.icon-sun');
+                if (isDark) {
+                    moons.forEach(moon => { moon.classList.remove('block'); moon.classList.add('hidden'); });
+                    suns.forEach(sun => { sun.classList.remove('hidden'); sun.classList.add('block'); });
+                } else {
+                    moons.forEach(moon => { moon.classList.remove('hidden'); moon.classList.add('block'); });
+                    suns.forEach(sun => { sun.classList.remove('block'); sun.classList.add('hidden'); });
+                }
+            }
+
+            // --- NEW: Scroll Progress Logic ---
+            const progressBar = document.getElementById('scroll-progress-bar');
+            const desktopPct = document.getElementById('desktop-scroll-pct');
+            const mobilePct = document.getElementById('mobile-scroll-pct');
+
+            window.addEventListener('scroll', () => {
+                // Calculate scroll percentage
+                const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+                const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+                const scrolled = (winScroll / height) * 100;
+                
+                // Update Progress Bar
+                if(progressBar) progressBar.style.width = scrolled + '%';
+                
+                // Update text counters
+                const roundedPct = Math.round(scrolled);
+                if(desktopPct) desktopPct.innerText = roundedPct;
+                if(mobilePct) mobilePct.innerText = roundedPct;
+            }, { passive: true });
+
+            // --- NEW: Scroll Reveal (Intersection Observer) ---
+            const revealElements = document.querySelectorAll('.reveal');
+            
+            const revealOptions = {
+                threshold: 0.15, // Trigger when 15% of the element is visible
+                rootMargin: "0px 0px -50px 0px" // Triggers slightly before the element fully enters viewport
+            };
+
+            const revealOnScroll = new IntersectionObserver(function(entries, observer) {
+                entries.forEach(entry => {
+                    if (!entry.isIntersecting) {
+                        return; // Keeps it hidden if not visible
+                    } else {
+                        entry.target.classList.add('visible');
+                        observer.unobserve(entry.target); // Stop observing once revealed
+                    }
+                });
+            }, revealOptions);
+
+            revealElements.forEach(el => {
+                revealOnScroll.observe(el);
+            });
+
+            // --- Hero Section Interactive Chart (Live Data) ---
+            const ctx = document.getElementById('heroChart');
+            if (ctx) {
+                // Simulated data points showing an upward "optimization" trend
+                const dataPoints = [45, 52, 48, 61, 59, 75, 71, 85, 82, 98, 95, 110];
+                const labels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+                // Automatically get the current month index (0 = Jan, 11 = Dec)
+                const currentMonthIndex = new Date().getMonth();
+
+                // Custom plugin to move the HTML marker based on the current month's chart coordinates
+                const monthTrackerPlugin = {
+                    id: 'monthTracker',
+                    afterDraw: (chart) => {
+                        const meta = chart.getDatasetMeta(0);
+                        const marker = document.getElementById('current-month-marker');
+                        
+                        // Check if the current month's data point exists
+                        if (meta.data[currentMonthIndex] && marker) {
+                            const point = meta.data[currentMonthIndex];
+                            
+                            // Unhide the marker once we have coordinates
+                            marker.classList.remove('hidden');
+                            marker.classList.add('flex');
+                            
+                            // Pin the marker precisely on the X and Y coordinates
+                            marker.style.left = point.x + 'px';
+                            marker.style.top = point.y + 'px';
+                        }
+                    }
+                };
+
+                new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: 'Optimization Metric',
+                            data: dataPoints,
+                            borderColor: '#000000', // Solid black line
+                            backgroundColor: 'rgba(0, 0, 0, 0.03)', // Very subtle gray fill under the line
+                            borderWidth: 2,
+                            pointBackgroundColor: '#ffffff',
+                            pointBorderColor: '#000000',
+                            pointBorderWidth: 2,
+                            pointRadius: 4,
+                            pointHoverRadius: 7,
+                            pointHoverBackgroundColor: '#000000',
+                            fill: true,
+                            tension: 0.2 // Slight curve for a mathematical feel
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        animation: {
+                            duration: 2500,
+                            easing: 'easeOutQuart'
+                        },
+                        interaction: {
+                            mode: 'index',
+                            intersect: false,
+                        },
+                        plugins: {
+                            legend: {
+                                display: false // Hidden for minimalist look
+                            },
+                            tooltip: {
+                                backgroundColor: '#000000',
+                                titleFont: { family: 'Inter', size: 11 },
+                                bodyFont: { family: 'Inter', size: 13, weight: 'bold' },
+                                padding: 10,
+                                cornerRadius: 0, // Brutalist sharp edges
+                                displayColors: false,
+                                callbacks: {
+                                    label: function(context) {
+                                        return 'Efficiency: ' + context.parsed.y + '%';
+                                    }
+                                }
+                            }
+                        },
+                        scales: {
+                            x: {
+                                grid: { display: false },
+                                ticks: { font: { family: 'Inter', size: 10, weight: 'bold' }, color: '#9ca3af' }
+                            },
+                            y: {
+                                grid: { color: '#f3f4f6', drawBorder: false },
+                                ticks: { display: false } // Hide Y axis numbers to keep it looking like an abstract graphic
+                            }
+                        }
+                    },
+                    plugins: [monthTrackerPlugin] // Register our custom tracking plugin
+                });
+            }
+
+            // --- Contact Form Logic (Formspree) ---
+            const contactForm = document.getElementById('contact-form');
+            const formStatus = document.getElementById('form-status');
+            const flipCard = document.getElementById('contact-flip-card');
+            const submitBtn = document.getElementById('submit-btn');
+            const resetBtn = document.getElementById('reset-form-btn');
+            let flipTimeout;
+
+            if (contactForm) {
+                contactForm.addEventListener('submit', async (e) => {
+                    e.preventDefault();
+                    const data = new FormData(contactForm);
+                    
+                    formStatus.classList.remove('hidden', 'text-green-600', 'border-green-600', 'text-red-600', 'border-red-600', 'bg-green-50', 'bg-red-50');
+                    formStatus.classList.add('block', 'text-gray-600', 'border-gray-200');
+                    formStatus.textContent = "Transmitting data...";
+                    submitBtn.disabled = true;
+
+                    try {
+                        const response = await fetch(contactForm.action, {
+                            method: 'POST',
+                            body: data,
+                            headers: { 'Accept': 'application/json' }
+                        });
+                        
+                        if (response.ok) {
+                            // Hide the status text on the front
+                            formStatus.classList.add('hidden');
+                            contactForm.reset();
+                            
+                            // Trigger the 3D Flip
+                            flipCard.classList.add('flipped');
+                            
+                            // Auto-flip back after 5 seconds
+                            flipTimeout = setTimeout(() => {
+                                flipCard.classList.remove('flipped');
+                            }, 5000);
+                            
+                        } else {
+                            throw new Error('Network response was not ok');
+                        }
+                    } catch (error) {
+                        formStatus.textContent = "Oops! Transmission failed. Please try again.";
+                        formStatus.classList.replace('text-gray-600', 'text-red-600');
+                        formStatus.classList.replace('border-gray-200', 'border-red-600');
+                        formStatus.classList.add('bg-red-50');
+                    } finally {
+                        submitBtn.disabled = false;
+                    }
+                });
+            }
+
+            // Manual Flip Reset Button Logic
+            if (resetBtn) {
+                resetBtn.addEventListener('click', () => {
+                    flipCard.classList.remove('flipped');
+                    clearTimeout(flipTimeout); // Stop the 5-second auto-timer
+                });
+            }
+
+            // --- NEW: Boot-Up Preloader Logic ---
+            const preloader = document.getElementById('preloader');
+            const terminalText = document.getElementById('terminal-text');
+            const progressBarElem = document.getElementById('progress-bar');
+            const progressPct = document.getElementById('progress-pct');
+            
+            // Lock scrolling temporarily
+            document.body.style.overflow = 'hidden'; 
+            
+            const bootSequence = [
+                "> Initializing architectural grid...",
+                "> Establishing database secure connections...",
+                "> Fetching live telemetry streams...",
+                "> Parsing spatial UI geometries...",
+                "> Compiling neural weights [SUCCESS]"
+            ];
+            
+            let bootIndex = 0;
+            let progress = 0;
+
+            const bootInterval = setInterval(() => {
+                // Add text lines
+                if (bootIndex < bootSequence.length) {
+                    terminalText.innerText += bootSequence[bootIndex] + "\n";
+                    bootIndex++;
+                }
+                
+                // Advance progress randomly
+                progress += Math.floor(Math.random() * 20) + 10;
+                if (progress > 100) progress = 100;
+                
+                progressPct.innerText = progress + "%";
+                const bars = Math.floor(progress / 10);
+                progressBarElem.innerText = "█".repeat(bars) + "_".repeat(10 - bars);
+                
+                // Finish boot
+                if (progress === 100) {
+                    clearInterval(bootInterval);
+                    setTimeout(() => {
+                        preloader.classList.add('flash-screen'); // Flash white
+                        setTimeout(() => {
+                            preloader.classList.add('preloader-hidden');
+                            document.body.style.overflow = 'auto'; // Unlock scrolling
+                        }, 150);
+                    }, 400); // Tiny pause at 100% for impact
+                }
+            }, 180);
+
+            // --- NEW: Custom Magnetic Cursor Logic ---
+            const cursor = document.getElementById('custom-cursor');
+            if (cursor && window.matchMedia("(pointer: fine)").matches) {
+                document.addEventListener('mousemove', (e) => {
+                    cursor.style.left = e.clientX + 'px';
+                    cursor.style.top = e.clientY + 'px';
+                });
+
+                // Add magnetic hover expansion to clickable elements
+                const hoverElements = document.querySelectorAll('a, button, input, textarea, .border-box, .project-card, .data-toggle-btn');
+                hoverElements.forEach(el => {
+                    el.addEventListener('mouseenter', () => cursor.classList.add('cursor-hover'));
+                    el.addEventListener('mouseleave', () => cursor.classList.remove('cursor-hover'));
+                });
+            }
+
+            // --- NEW: Raw Data Project Toggles Logic ---
+            const dataToggles = document.querySelectorAll('.data-toggle-btn');
+            dataToggles.forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.stopPropagation(); // Prevent grabbing/sliding when clicking button
+                    const overlay = btn.nextElementSibling;
+                    const isActive = overlay.classList.contains('active');
+                    
+                    if (isActive) {
+                        overlay.classList.remove('active');
+                        btn.innerText = '< / >';
+                        btn.classList.remove('active');
+                    } else {
+                        overlay.classList.add('active');
+                        btn.innerText = '[ X ]';
+                        btn.classList.add('active');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
