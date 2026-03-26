@@ -203,6 +203,51 @@
             opacity: 1;
             transform: translateY(0);
         }
+
+        /* --- NEW: Grab & Drag Classes --- */
+        .grab-scroll {
+            cursor: grab;
+            scroll-behavior: smooth; /* <-- THIS LINE MAKES ARROW CLICKS GLIDE SMOOTHLY */
+        }
+        .grab-scroll:active {
+            cursor: grabbing;
+        }
+        .no-snap {
+            /* Disable snap and smooth scroll during drag to make it instant and responsive */
+            scroll-snap-type: none !important;
+            scroll-behavior: auto !important;
+        }
+
+        /* --- NEW: 3D Flip Form Classes --- */
+        .flip-container {
+            perspective: 1000px;
+            width: 100%;
+        }
+        .flip-card {
+            width: 100%;
+            position: relative;
+            transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            transform-style: preserve-3d;
+        }
+        .flip-card.flipped {
+            transform: rotateY(180deg);
+        }
+        .flip-front, .flip-back {
+            width: 100%;
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
+        }
+        .flip-back {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            transform: rotateY(180deg);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
     </style>
 </head>
 <body class="bg-white text-black overflow-x-hidden">
@@ -470,13 +515,25 @@
 
     <!-- Projects Section -->
     <section id="projects" class="py-24 bg-gray-50 border-t border-gray-200">
-        <div class="max-w-7xl mx-auto px-6 mb-12 reveal">
-            <h2 class="text-4xl font-bold tracking-tight text-black uppercase">Projects</h2>
-            <p class="text-gray-600 mt-2 text-base">Selected work</p>
+        <div class="max-w-7xl mx-auto px-6 mb-12 reveal flex justify-between items-end">
+            <div>
+                <h2 class="text-4xl font-bold tracking-tight text-black uppercase">Projects</h2>
+                <p class="text-gray-600 mt-2 text-base">Selected work</p>
+            </div>
+            <!-- NEW: Arrow Navigation Buttons -->
+            <div class="hidden md:flex gap-2">
+                <button id="proj-prev" class="w-10 h-10 border-2 border-black flex items-center justify-center hover:bg-black hover:text-white custom-transition">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+                </button>
+                <button id="proj-next" class="w-10 h-10 border-2 border-black flex items-center justify-center hover:bg-black hover:text-white custom-transition">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                </button>
+            </div>
         </div>
 
         <div class="carousel-wrapper max-w-7xl mx-auto reveal" style="transition-delay: 100ms;">
-            <div id="projects-carousel" class="flex overflow-x-auto snap-x snap-mandatory gap-6 px-6 hide-scrollbar pb-8">
+            <!-- Added grab-scroll class -->
+            <div id="projects-carousel" class="flex overflow-x-auto snap-x snap-mandatory gap-6 px-6 hide-scrollbar pb-8 grab-scroll">
                 
                 <!-- Project 1 -->
                 <div class="project-card relative w-[85vw] md:w-[604px] shrink-0 snap-center border-2 border-black bg-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] flex flex-col custom-transition hover:-translate-y-1 overflow-hidden">
@@ -663,13 +720,25 @@
 
     <!-- Certifications Section -->
     <section id="certifications" class="py-24 bg-white border-t border-gray-200">
-        <div class="max-w-7xl mx-auto px-6 mb-12 reveal">
-            <h2 class="text-4xl font-bold tracking-tight text-black uppercase">Certifications</h2>
-            <p class="text-gray-600 mt-2 text-base">Verified credentials</p>
+        <div class="max-w-7xl mx-auto px-6 mb-12 reveal flex justify-between items-end">
+            <div>
+                <h2 class="text-4xl font-bold tracking-tight text-black uppercase">Certifications</h2>
+                <p class="text-gray-600 mt-2 text-base">Verified credentials</p>
+            </div>
+            <!-- NEW: Arrow Navigation Buttons -->
+            <div class="hidden md:flex gap-2">
+                <button id="cert-prev" class="w-10 h-10 border-2 border-black flex items-center justify-center hover:bg-black hover:text-white custom-transition">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+                </button>
+                <button id="cert-next" class="w-10 h-10 border-2 border-black flex items-center justify-center hover:bg-black hover:text-white custom-transition">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                </button>
+            </div>
         </div>
 
         <div class="carousel-wrapper max-w-7xl mx-auto reveal" style="transition-delay: 100ms;">
-            <div id="certs-carousel" class="flex overflow-x-auto snap-x snap-mandatory gap-6 px-6 hide-scrollbar pb-8">
+            <!-- Added grab-scroll class -->
+            <div id="certs-carousel" class="flex overflow-x-auto snap-x snap-mandatory gap-6 px-6 hide-scrollbar pb-8 grab-scroll">
                 
                 <!-- Cert 1 -->
                 <div class="cert-card relative w-[85vw] md:w-[604px] shrink-0 snap-center border-2 border-black bg-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] flex flex-col custom-transition hover:-translate-y-1 overflow-hidden">
@@ -857,13 +926,25 @@
 
     <!-- Articles Section -->
     <section id="articles" class="py-24 bg-gray-50 border-t border-gray-200">
-        <div class="max-w-7xl mx-auto px-6 mb-12 reveal">
-            <h2 class="text-4xl font-bold tracking-tight text-black uppercase">Articles</h2>
-            <p class="text-gray-600 mt-2 text-base">Thoughts, tutorials, and insights</p>
+        <div class="max-w-7xl mx-auto px-6 mb-12 reveal flex justify-between items-end">
+            <div>
+                <h2 class="text-4xl font-bold tracking-tight text-black uppercase">Articles</h2>
+                <p class="text-gray-600 mt-2 text-base">Thoughts, tutorials, and insights</p>
+            </div>
+            <!-- NEW: Arrow Navigation Buttons -->
+            <div class="hidden md:flex gap-2">
+                <button id="art-prev" class="w-10 h-10 border-2 border-black flex items-center justify-center hover:bg-black hover:text-white custom-transition">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+                </button>
+                <button id="art-next" class="w-10 h-10 border-2 border-black flex items-center justify-center hover:bg-black hover:text-white custom-transition">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                </button>
+            </div>
         </div>
 
         <div class="carousel-wrapper max-w-7xl mx-auto reveal" style="transition-delay: 100ms;">
-            <div id="articles-carousel" class="flex overflow-x-auto snap-x snap-mandatory gap-6 px-6 hide-scrollbar pb-8">
+            <!-- Added grab-scroll class -->
+            <div id="articles-carousel" class="flex overflow-x-auto snap-x snap-mandatory gap-6 px-6 hide-scrollbar pb-8 grab-scroll">
                 
                 <!-- Article 1 -->
                 <div class="article-card relative w-[85vw] md:w-[394px] shrink-0 snap-center border-2 border-black bg-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] flex flex-col custom-transition hover:-translate-y-1 overflow-hidden">
@@ -1067,25 +1148,47 @@
 
                 <!-- Right: Form -->
                 <div class="reveal" style="transition-delay: 200ms;">
-                    <form id="contact-form" action="https://formspree.io/f/xvzwoqok" method="POST" class="flex flex-col gap-6">
-                        <div>
-                            <label for="name" class="block text-sm font-bold uppercase tracking-widest text-black mb-2">Name</label>
-                            <input type="text" id="name" name="name" placeholder="e.g., Jane Doe" required class="border-2 border-gray-200 px-4 py-3 w-full focus:border-black outline-none custom-transition bg-transparent text-base">
+                    <!-- NEW: 3D Flip Container -->
+                    <div class="flip-container">
+                        <div id="contact-flip-card" class="flip-card">
+                            
+                            <!-- Front Face: The Form -->
+                            <div class="flip-front">
+                                <form id="contact-form" action="https://formspree.io/f/xvzwoqok" method="POST" class="flex flex-col gap-6">
+                                    <div>
+                                        <label for="name" class="block text-sm font-bold uppercase tracking-widest text-black mb-2">Name</label>
+                                        <input type="text" id="name" name="name" placeholder="e.g., Jane Doe" required class="border-2 border-gray-200 px-4 py-3 w-full focus:border-black outline-none custom-transition bg-transparent text-base">
+                                    </div>
+                                    <div>
+                                        <label for="email" class="block text-sm font-bold uppercase tracking-widest text-black mb-2">Email</label>
+                                        <input type="email" id="email" name="email" placeholder="jane@company.com" required class="border-2 border-gray-200 px-4 py-3 w-full focus:border-black outline-none custom-transition bg-transparent text-base">
+                                    </div>
+                                    <div>
+                                        <label for="message" class="block text-sm font-bold uppercase tracking-widest text-black mb-2">Message</label>
+                                        <textarea id="message" name="message" rows="4" placeholder="Hi Alex, I'd love to chat about..." required class="border-2 border-gray-200 px-4 py-3 w-full focus:border-black outline-none custom-transition bg-transparent resize-none text-base"></textarea>
+                                    </div>
+                                    <button type="submit" id="submit-btn" class="bg-black text-white px-6 py-3 font-medium shadow-[4px_4px_0px_black] custom-transition hover:-translate-y-1 hover:shadow-[4px_6px_0px_black] mt-2">
+                                        Send Message
+                                    </button>
+                                    <!-- Error/Loading Container (Kept on front for API errors) -->
+                                    <div id="form-status" class="hidden font-bold text-sm tracking-wide text-center p-3 border-2"></div>
+                                </form>
+                            </div>
+
+                            <!-- Back Face: The Success Message -->
+                            <div class="flip-back bg-black text-white p-8 border-4 border-black shadow-[4px_4px_0px_0px_rgba(200,200,200,1)] text-center">
+                                <svg class="w-16 h-16 mb-4 text-white mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                <h3 class="text-3xl font-black uppercase tracking-tight mb-2">Transmitted.</h3>
+                                <p class="text-gray-400 text-sm mb-8 leading-relaxed">Your data has been successfully routed. I will respond to your query shortly.</p>
+                                
+                                <button id="reset-form-btn" type="button" class="border-2 border-white px-6 py-3 font-medium text-xs uppercase tracking-widest hover:bg-white hover:text-black custom-transition flex items-center gap-2 mx-auto group">
+                                    <svg class="w-4 h-4 transform group-hover:-rotate-180 transition-transform duration-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+                                    Reset Form
+                                </button>
+                            </div>
+
                         </div>
-                        <div>
-                            <label for="email" class="block text-sm font-bold uppercase tracking-widest text-black mb-2">Email</label>
-                            <input type="email" id="email" name="email" placeholder="jane@company.com" required class="border-2 border-gray-200 px-4 py-3 w-full focus:border-black outline-none custom-transition bg-transparent text-base">
-                        </div>
-                        <div>
-                            <label for="message" class="block text-sm font-bold uppercase tracking-widest text-black mb-2">Message</label>
-                            <textarea id="message" name="message" rows="4" placeholder="Hi Alex, I'd love to chat about..." required class="border-2 border-gray-200 px-4 py-3 w-full focus:border-black outline-none custom-transition bg-transparent resize-none text-base"></textarea>
-                        </div>
-                        <button type="submit" class="bg-black text-white px-6 py-3 font-medium shadow-[4px_4px_0px_black] custom-transition hover:-translate-y-1 hover:shadow-[4px_6px_0px_black] mt-2">
-                            Send Message
-                        </button>
-                        <!-- Success/Error Message Container -->
-                        <div id="form-status" class="hidden font-bold text-sm tracking-wide text-center p-3 border-2"></div>
-                    </form>
+                    </div>
                 </div>
 
             </div>
@@ -1148,11 +1251,13 @@
                 });
             }
 
-            // --- Unified Carousel Tracking Logic ---
-            const setupCarousel = (carouselId, trackId, thumbId) => {
+            // --- Unified Carousel Tracking & Grab-Drag Logic ---
+            const setupCarousel = (carouselId, trackId, thumbId, prevBtnId, nextBtnId) => {
                 const carousel = document.getElementById(carouselId);
                 const thumb = document.getElementById(thumbId);
                 const track = document.getElementById(trackId);
+                const prevBtn = document.getElementById(prevBtnId);
+                const nextBtn = document.getElementById(nextBtnId);
 
                 if (!carousel || !thumb || !track) return;
 
@@ -1178,12 +1283,61 @@
                     carousel.scrollTo({ left: targetScroll, behavior: 'smooth' });
                 });
 
+                // --- NEW: Arrow Button Functionality ---
+                if (prevBtn) {
+                    prevBtn.addEventListener('click', () => {
+                        const cardWidth = carousel.querySelector('div').offsetWidth + 24; // Card width + gap
+                        carousel.scrollBy({ left: -cardWidth, behavior: 'smooth' });
+                    });
+                }
+                
+                if (nextBtn) {
+                    nextBtn.addEventListener('click', () => {
+                        const cardWidth = carousel.querySelector('div').offsetWidth + 24; // Card width + gap
+                        carousel.scrollBy({ left: cardWidth, behavior: 'smooth' });
+                    });
+                }
+
                 updateThumb(); // Init
+
+                // --- Grab and Drag functionality ---
+                let isDown = false;
+                let startX;
+                let scrollLeft;
+
+                // Prevent native image dragging which disrupts our custom grab-scroll
+                const images = carousel.querySelectorAll('img');
+                images.forEach(img => img.addEventListener('dragstart', (e) => e.preventDefault()));
+
+                carousel.addEventListener('mousedown', (e) => {
+                    isDown = true;
+                    carousel.classList.add('no-snap'); // Disables snap constraints for fluid dragging
+                    startX = e.pageX - carousel.offsetLeft;
+                    scrollLeft = carousel.scrollLeft;
+                });
+
+                carousel.addEventListener('mouseleave', () => {
+                    isDown = false;
+                    carousel.classList.remove('no-snap'); // Restores snapping
+                });
+
+                carousel.addEventListener('mouseup', () => {
+                    isDown = false;
+                    carousel.classList.remove('no-snap'); // Restores snapping
+                });
+
+                carousel.addEventListener('mousemove', (e) => {
+                    if (!isDown) return;
+                    e.preventDefault();
+                    const x = e.pageX - carousel.offsetLeft;
+                    const walk = (x - startX) * 2; // The *2 multiplies scroll speed for a faster swipe feel
+                    carousel.scrollLeft = scrollLeft - walk;
+                });
             };
 
-            setupCarousel('projects-carousel', 'scroll-track', 'scroll-thumb');
-            setupCarousel('certs-carousel', 'certs-scroll-track', 'certs-scroll-thumb');
-            setupCarousel('articles-carousel', 'articles-scroll-track', 'articles-scroll-thumb');
+            setupCarousel('projects-carousel', 'scroll-track', 'scroll-thumb', 'proj-prev', 'proj-next');
+            setupCarousel('certs-carousel', 'certs-scroll-track', 'certs-scroll-thumb', 'cert-prev', 'cert-next');
+            setupCarousel('articles-carousel', 'articles-scroll-track', 'articles-scroll-thumb', 'art-prev', 'art-next');
 
             // --- Smart Scroll Header Logic ---
             const mainNav = document.getElementById('main-nav');
@@ -1430,6 +1584,10 @@
             // --- Contact Form Logic (Formspree) ---
             const contactForm = document.getElementById('contact-form');
             const formStatus = document.getElementById('form-status');
+            const flipCard = document.getElementById('contact-flip-card');
+            const submitBtn = document.getElementById('submit-btn');
+            const resetBtn = document.getElementById('reset-form-btn');
+            let flipTimeout;
 
             if (contactForm) {
                 contactForm.addEventListener('submit', async (e) => {
@@ -1438,7 +1596,8 @@
                     
                     formStatus.classList.remove('hidden', 'text-green-600', 'border-green-600', 'text-red-600', 'border-red-600', 'bg-green-50', 'bg-red-50');
                     formStatus.classList.add('block', 'text-gray-600', 'border-gray-200');
-                    formStatus.textContent = "Sending...";
+                    formStatus.textContent = "Transmitting data...";
+                    submitBtn.disabled = true;
 
                     try {
                         const response = await fetch(contactForm.action, {
@@ -1448,20 +1607,37 @@
                         });
                         
                         if (response.ok) {
-                            formStatus.textContent = "Message sent successfully! I'll get back to you soon.";
-                            formStatus.classList.replace('text-gray-600', 'text-green-600');
-                            formStatus.classList.replace('border-gray-200', 'border-green-600');
-                            formStatus.classList.add('bg-green-50');
+                            // Hide the status text on the front
+                            formStatus.classList.add('hidden');
                             contactForm.reset();
+                            
+                            // Trigger the 3D Flip
+                            flipCard.classList.add('flipped');
+                            
+                            // Auto-flip back after 5 seconds
+                            flipTimeout = setTimeout(() => {
+                                flipCard.classList.remove('flipped');
+                            }, 5000);
+                            
                         } else {
                             throw new Error('Network response was not ok');
                         }
                     } catch (error) {
-                        formStatus.textContent = "Oops! There was a problem submitting your form.";
+                        formStatus.textContent = "Oops! Transmission failed. Please try again.";
                         formStatus.classList.replace('text-gray-600', 'text-red-600');
                         formStatus.classList.replace('border-gray-200', 'border-red-600');
                         formStatus.classList.add('bg-red-50');
+                    } finally {
+                        submitBtn.disabled = false;
                     }
+                });
+            }
+
+            // Manual Flip Reset Button Logic
+            if (resetBtn) {
+                resetBtn.addEventListener('click', () => {
+                    flipCard.classList.remove('flipped');
+                    clearTimeout(flipTimeout); // Stop the 5-second auto-timer
                 });
             }
         });
