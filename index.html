@@ -249,34 +249,6 @@
             justify-content: center;
         }
 
-        /* --- NEW: Custom Magnetic Cursor --- */
-        #custom-cursor { display: none; }
-        @media (pointer: fine) {
-            body { cursor: none !important; }
-            #custom-cursor {
-                display: block;
-                position: fixed;
-                top: 0;
-                left: 0;
-                width: 16px;
-                height: 16px;
-                border: 2px solid white;
-                background-color: transparent;
-                pointer-events: none;
-                z-index: 10000;
-                mix-blend-mode: difference;
-                transform: translate(-50%, -50%);
-                transition: width 0.2s, height 0.2s, background-color 0.2s;
-            }
-            #custom-cursor.cursor-hover {
-                width: 48px;
-                height: 48px;
-                background-color: rgba(255, 255, 255, 0.1);
-            }
-            /* Hide cursor over iframes or explicitly normal elements */
-            .grab-scroll { cursor: none !important; }
-        }
-
         /* --- NEW: Boot-Up Preloader --- */
         #preloader {
             position: fixed;
@@ -351,18 +323,14 @@
 </head>
 <body class="bg-white text-black overflow-x-hidden">
 
-    <!-- NEW: Custom Cursor -->
-    <div id="custom-cursor"></div>
-
     <!-- NEW: Boot-Up Preloader -->
     <div id="preloader">
-        <div class="max-w-xl w-full px-6 flex flex-col gap-4">
-            <div id="terminal-text" class="text-xs md:text-sm leading-relaxed min-h-[100px] whitespace-pre-wrap"></div>
-            <div class="flex items-center gap-4 text-sm font-bold">
+        <div class="max-w-xl w-full px-6 flex justify-center items-center">
+            <div class="flex items-center gap-4 text-lg md:text-xl font-bold">
                 <span>[</span>
-                <span id="progress-bar" class="tracking-[0.2em] w-48 text-left"></span>
+                <span id="progress-bar" class="tracking-[0.2em] w-48 md:w-64 text-left"></span>
                 <span>]</span>
-                <span id="progress-pct" class="w-12 text-right">0%</span>
+                <span id="progress-pct" class="w-16 text-right">0%</span>
             </div>
         </div>
     </div>
@@ -1885,33 +1853,17 @@ print(f"95% Value at Risk: ${initial_portfolio - var_95:,.2f}")</code></pre>
 
             // --- NEW: Boot-Up Preloader Logic ---
             const preloader = document.getElementById('preloader');
-            const terminalText = document.getElementById('terminal-text');
             const progressBarElem = document.getElementById('progress-bar');
             const progressPct = document.getElementById('progress-pct');
             
             // Lock scrolling temporarily
             document.body.style.overflow = 'hidden'; 
             
-            const bootSequence = [
-                "> Initializing architectural grid...",
-                "> Establishing database secure connections...",
-                "> Fetching live telemetry streams...",
-                "> Parsing spatial UI geometries...",
-                "> Compiling neural weights [SUCCESS]"
-            ];
-            
-            let bootIndex = 0;
             let progress = 0;
 
             const bootInterval = setInterval(() => {
-                // Add text lines
-                if (bootIndex < bootSequence.length) {
-                    terminalText.innerText += bootSequence[bootIndex] + "\n";
-                    bootIndex++;
-                }
-                
                 // Advance progress randomly
-                progress += Math.floor(Math.random() * 20) + 10;
+                progress += Math.floor(Math.random() * 25) + 15;
                 if (progress > 100) progress = 100;
                 
                 progressPct.innerText = progress + "%";
@@ -1929,23 +1881,7 @@ print(f"95% Value at Risk: ${initial_portfolio - var_95:,.2f}")</code></pre>
                         }, 150);
                     }, 400); // Tiny pause at 100% for impact
                 }
-            }, 180);
-
-            // --- NEW: Custom Magnetic Cursor Logic ---
-            const cursor = document.getElementById('custom-cursor');
-            if (cursor && window.matchMedia("(pointer: fine)").matches) {
-                document.addEventListener('mousemove', (e) => {
-                    cursor.style.left = e.clientX + 'px';
-                    cursor.style.top = e.clientY + 'px';
-                });
-
-                // Add magnetic hover expansion to clickable elements
-                const hoverElements = document.querySelectorAll('a, button, input, textarea, .border-box, .project-card, .data-toggle-btn');
-                hoverElements.forEach(el => {
-                    el.addEventListener('mouseenter', () => cursor.classList.add('cursor-hover'));
-                    el.addEventListener('mouseleave', () => cursor.classList.remove('cursor-hover'));
-                });
-            }
+            }, 120); // Sped up slightly for a cleaner bar-only feel
 
             // --- NEW: Raw Data Project Toggles Logic ---
             const dataToggles = document.querySelectorAll('.data-toggle-btn');
