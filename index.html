@@ -182,9 +182,33 @@
             filter: invert(1) hue-rotate(180deg);
             opacity: 0.85; /* Slight dimming of images for better eye comfort in dark mode */
         }
+
+        /* --- NEW: Marquee Animation --- */
+        .marquee-content {
+            display: inline-block;
+            animation: marquee 25s linear infinite;
+        }
+        @keyframes marquee {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); } /* Shifts exactly half its width to loop */
+        }
+
+        /* --- NEW: Scroll Reveal Classes --- */
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
     </style>
 </head>
 <body class="bg-white text-black overflow-x-hidden">
+
+    <!-- NEW: Top Scroll Progress Bar -->
+    <div id="scroll-progress-bar" class="fixed top-0 left-0 h-1 bg-black z-[100] w-0 custom-transition"></div>
 
     <!-- Navigation Bar -->
     <nav id="main-nav" class="fixed top-0 z-50 bg-white border-b border-gray-200 w-full md:w-fit md:top-6 md:left-0 md:right-0 md:mx-auto md:border-2 md:border-black md:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] md:hover:-translate-y-1 md:hover:shadow-[4px_6px_0px_0px_rgba(0,0,0,1)] custom-transition">
@@ -192,7 +216,9 @@
             <div class="flex justify-between md:justify-center items-center h-16 md:h-14">
                 
                 <!-- Mobile Logo / Initials (Visible only on mobile for balance) -->
-                <div class="md:hidden font-bold text-lg tracking-widest uppercase">EA.</div>
+                <div class="md:hidden font-bold text-lg tracking-widest uppercase flex items-center gap-3">
+                    EA. <span class="font-mono text-[10px] border border-black px-1">L: <span id="mobile-scroll-pct">0</span>%</span>
+                </div>
 
                 <!-- Desktop Menu -->
                 <div class="hidden md:flex items-center space-x-8 text-sm font-medium">
@@ -204,6 +230,11 @@
                     <a href="#articles" class="nav-link custom-transition text-gray-600 hover:text-black">Articles</a>
                     <a href="#contact" class="nav-link custom-transition text-gray-600 hover:text-black">Contact</a>
                     
+                    <!-- NEW: Desktop Scroll Progress Badge -->
+                    <div class="font-mono text-[10px] font-bold tracking-widest border border-black px-2 py-1 bg-gray-50 flex items-center w-24 justify-center">
+                        LOAD: <span id="desktop-scroll-pct" class="ml-1 w-6 text-right">0</span>%
+                    </div>
+
                     <!-- Desktop Theme Toggle -->
                     <button class="theme-toggle custom-transition flex items-center justify-center w-8 h-8 border-2 border-black hover:bg-black hover:text-white group">
                         <!-- Moon Icon (Default/Light Mode) -->
@@ -295,6 +326,15 @@
         <div class="absolute bottom-0 left-0 w-full h-24 bg-gradient-to-t from-gray-50 to-transparent z-0 pointer-events-none"></div>
     </section>
 
+    <!-- NEW: Tech Stack Marquee Divider -->
+    <div class="border-y-2 border-black bg-white overflow-hidden py-3 flex relative z-20">
+        <!-- We repeat the content twice to create the seamless infinite scroll -->
+        <div class="marquee-content whitespace-nowrap flex gap-4 text-xs font-mono font-bold uppercase tracking-widest text-black">
+            <span>PYTHON +++ TABLEAU +++ SQL +++ AWS REDSHIFT +++ POWER BI +++ PYSPARK +++ STATISTICS +++ MACHINE LEARNING +++ EXPERIMENTATION +++ BIG DATA +++ </span>
+            <span>PYTHON +++ TABLEAU +++ SQL +++ AWS REDSHIFT +++ POWER BI +++ PYSPARK +++ STATISTICS +++ MACHINE LEARNING +++ EXPERIMENTATION +++ BIG DATA +++ </span>
+        </div>
+    </div>
+
   <!-- About Me Section -->
     <section id="about" class="py-24 bg-gray-50 border-t border-gray-200">
         <div class="max-w-7xl mx-auto px-6">
@@ -302,13 +342,13 @@
             <div class="flex flex-col md:flex-row gap-12 lg:gap-20 md:items-center">
                 
                 <!-- Left: Editorial Image -->
-                <div class="w-full md:w-[40%]">
+                <div class="w-full md:w-[40%] reveal">
                     <!-- Standard image holder, no forced height or cropping -->
                     <img src="assets/home/about_image.png" alt="About Me" class="w-full h-auto grayscale">
                 </div>
 
                 <!-- Right: Structured Editorial Content -->
-                <div class="w-full md:w-[60%] flex flex-col justify-center py-4 md:py-8">
+                <div class="w-full md:w-[60%] flex flex-col justify-center py-4 md:py-8 reveal" style="transition-delay: 150ms;">
                     
                     <!-- Meta Header & Title -->
                     <div class="flex justify-between items-start mb-12">
@@ -366,14 +406,14 @@
     <!-- Work Experience Section -->
     <section id="work" class="py-24 bg-white border-t border-gray-200">
         <div class="max-w-7xl mx-auto px-6">
-            <div class="mb-12">
+            <div class="mb-12 reveal">
                 <h2 class="text-4xl font-bold tracking-tight text-black uppercase">Work Experience</h2>
                 <p class="text-gray-600 mt-2 text-base">A chronicle of my professional growth</p>
             </div>
             
             <div class="flex flex-col">
                 <!-- Job 1 -->
-                <div class="timeline-item relative timeline-container border-t border-gray-200 pt-10">
+                <div class="timeline-item relative timeline-container border-t border-gray-200 pt-10 reveal">
                     <div class="timeline-line-left"></div>
                     <div class="timeline-marker"></div>
                     <div class="grid md:grid-cols-[150px_1fr] gap-6">
@@ -391,7 +431,7 @@
                 </div>
 
                 <!-- Job 2 -->
-                <div class="timeline-item relative timeline-container border-t border-gray-200 pt-10">
+                <div class="timeline-item relative timeline-container border-t border-gray-200 pt-10 reveal">
                     <div class="timeline-line-left"></div>
                     <div class="timeline-marker"></div>
                     <div class="grid md:grid-cols-[150px_1fr] gap-6">
@@ -409,7 +449,7 @@
                 </div>
 
                 <!-- Job 3 -->
-                <div class="timeline-item relative timeline-container border-t border-gray-200 pt-10">
+                <div class="timeline-item relative timeline-container border-t border-gray-200 pt-10 reveal">
                     <div class="timeline-marker"></div>
                     <div class="grid md:grid-cols-[150px_1fr] gap-6">
                         <span class="text-sm font-bold text-gray-400 uppercase tracking-widest mt-1">2018 - 2020</span>
@@ -430,12 +470,12 @@
 
     <!-- Projects Section -->
     <section id="projects" class="py-24 bg-gray-50 border-t border-gray-200">
-        <div class="max-w-7xl mx-auto px-6 mb-12">
+        <div class="max-w-7xl mx-auto px-6 mb-12 reveal">
             <h2 class="text-4xl font-bold tracking-tight text-black uppercase">Projects</h2>
             <p class="text-gray-600 mt-2 text-base">Selected work</p>
         </div>
 
-        <div class="carousel-wrapper max-w-7xl mx-auto">
+        <div class="carousel-wrapper max-w-7xl mx-auto reveal" style="transition-delay: 100ms;">
             <div id="projects-carousel" class="flex overflow-x-auto snap-x snap-mandatory gap-6 px-6 hide-scrollbar pb-8">
                 
                 <!-- Project 1 -->
@@ -623,12 +663,12 @@
 
     <!-- Certifications Section -->
     <section id="certifications" class="py-24 bg-white border-t border-gray-200">
-        <div class="max-w-7xl mx-auto px-6 mb-12">
+        <div class="max-w-7xl mx-auto px-6 mb-12 reveal">
             <h2 class="text-4xl font-bold tracking-tight text-black uppercase">Certifications</h2>
             <p class="text-gray-600 mt-2 text-base">Verified credentials</p>
         </div>
 
-        <div class="carousel-wrapper max-w-7xl mx-auto">
+        <div class="carousel-wrapper max-w-7xl mx-auto reveal" style="transition-delay: 100ms;">
             <div id="certs-carousel" class="flex overflow-x-auto snap-x snap-mandatory gap-6 px-6 hide-scrollbar pb-8">
                 
                 <!-- Cert 1 -->
@@ -817,12 +857,12 @@
 
     <!-- Articles Section -->
     <section id="articles" class="py-24 bg-gray-50 border-t border-gray-200">
-        <div class="max-w-7xl mx-auto px-6 mb-12">
+        <div class="max-w-7xl mx-auto px-6 mb-12 reveal">
             <h2 class="text-4xl font-bold tracking-tight text-black uppercase">Articles</h2>
             <p class="text-gray-600 mt-2 text-base">Thoughts, tutorials, and insights</p>
         </div>
 
-        <div class="carousel-wrapper max-w-7xl mx-auto">
+        <div class="carousel-wrapper max-w-7xl mx-auto reveal" style="transition-delay: 100ms;">
             <div id="articles-carousel" class="flex overflow-x-auto snap-x snap-mandatory gap-6 px-6 hide-scrollbar pb-8">
                 
                 <!-- Article 1 -->
@@ -991,7 +1031,7 @@
             <div class="grid md:grid-cols-2 gap-16">
                 
                 <!-- Left: Info -->
-                <div class="flex flex-col gap-6">
+                <div class="flex flex-col gap-6 reveal">
                     <div class="mb-4">
                         <h2 class="text-4xl font-bold tracking-tight text-black uppercase">Contact</h2>
                         <p class="text-gray-600 mt-2 text-base">Let's build something data-driven.</p>
@@ -1026,7 +1066,7 @@
                 </div>
 
                 <!-- Right: Form -->
-                <div>
+                <div class="reveal" style="transition-delay: 200ms;">
                     <form id="contact-form" action="https://formspree.io/f/xvzwoqok" method="POST" class="flex flex-col gap-6">
                         <div>
                             <label for="name" class="block text-sm font-bold uppercase tracking-widest text-black mb-2">Name</label>
@@ -1247,6 +1287,49 @@
                     suns.forEach(sun => { sun.classList.remove('block'); sun.classList.add('hidden'); });
                 }
             }
+
+            // --- NEW: Scroll Progress Logic ---
+            const progressBar = document.getElementById('scroll-progress-bar');
+            const desktopPct = document.getElementById('desktop-scroll-pct');
+            const mobilePct = document.getElementById('mobile-scroll-pct');
+
+            window.addEventListener('scroll', () => {
+                // Calculate scroll percentage
+                const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+                const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+                const scrolled = (winScroll / height) * 100;
+                
+                // Update Progress Bar
+                if(progressBar) progressBar.style.width = scrolled + '%';
+                
+                // Update text counters
+                const roundedPct = Math.round(scrolled);
+                if(desktopPct) desktopPct.innerText = roundedPct;
+                if(mobilePct) mobilePct.innerText = roundedPct;
+            }, { passive: true });
+
+            // --- NEW: Scroll Reveal (Intersection Observer) ---
+            const revealElements = document.querySelectorAll('.reveal');
+            
+            const revealOptions = {
+                threshold: 0.15, // Trigger when 15% of the element is visible
+                rootMargin: "0px 0px -50px 0px" // Triggers slightly before the element fully enters viewport
+            };
+
+            const revealOnScroll = new IntersectionObserver(function(entries, observer) {
+                entries.forEach(entry => {
+                    if (!entry.isIntersecting) {
+                        return; // Keeps it hidden if not visible
+                    } else {
+                        entry.target.classList.add('visible');
+                        observer.unobserve(entry.target); // Stop observing once revealed
+                    }
+                });
+            }, revealOptions);
+
+            revealElements.forEach(el => {
+                revealOnScroll.observe(el);
+            });
 
             // --- Hero Section Interactive Chart (Live Data) ---
             const ctx = document.getElementById('heroChart');
