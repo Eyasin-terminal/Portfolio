@@ -6,6 +6,22 @@
     <title>Portfolio - Data Analyst</title>
     <script src="https://cdn.tailwindcss.com"></script>
     
+    <!-- Configure Tailwind with New Consultancy Theme -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        black: '#262626',      // Deep Charcoal Slate (Primary)
+                        white: '#FEFEFA',      // Ivory Bone (Secondary)
+                        'gray-50': '#F2EFE9',  // Pale Stone (Surface)
+                        'gray-100': '#EAE6DF', // Slightly darker stone
+                    }
+                }
+            }
+        }
+    </script>
+    
     <!-- Add Chart.js for the Live Data visualization -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     
@@ -24,8 +40,8 @@
 
         /* Aesthetic Polish: Brutalist Text Highlight */
         ::selection {
-            background-color: #000;
-            color: #fff;
+            background-color: #262626;
+            color: #FEFEFA;
         }
 
         /* Aesthetic Polish: Custom Sharp Scrollbar */
@@ -33,12 +49,12 @@
             width: 14px;
         }
         ::-webkit-scrollbar-track {
-            background: #f9fafb; /* matches gray-50 */
+            background: #F2EFE9; /* matches new gray-50 */
             border-left: 1px solid #e5e7eb; /* matches border-gray-200 */
         }
         ::-webkit-scrollbar-thumb {
-            background-color: #000;
-            border: 3px solid #f9fafb;
+            background-color: #262626;
+            border: 3px solid #F2EFE9;
             border-radius: 0; /* Keeps it sharp and architectural */
         }
 
@@ -47,14 +63,14 @@
         }
 
         .border-box {
-            border: 2px solid #000;
+            border: 2px solid #262626;
             position: relative;
             overflow: hidden;
         }
 
         .border-box:hover {
             transform: translate(-4px, -4px);
-            box-shadow: 8px 8px 0px 0px rgba(0,0,0,1);
+            box-shadow: 8px 8px 0px 0px #262626;
         }
 
         .nav-link {
@@ -68,7 +84,7 @@
             height: 2px;
             bottom: -4px;
             left: 0;
-            background-color: #000;
+            background-color: #262626;
             transition: width 0.25s ease;
         }
 
@@ -78,7 +94,7 @@
 
         /* Active Nav State for Scroll Spy */
         .nav-link.active-nav, .mobile-link.active-nav {
-            color: #000 !important;
+            color: #262626 !important;
         }
         .nav-link.active-nav::after {
             width: 100%;
@@ -105,7 +121,7 @@
             top: 2.5rem; /* Aligned with pt-10 */
             width: 12px;
             height: 12px;
-            background-color: #000;
+            background-color: #262626;
             border-radius: 50%;
             z-index: 10;
         }
@@ -138,7 +154,7 @@
             top: 0;
             width: 80px;
             height: 100%;
-            background: linear-gradient(to right, transparent, white);
+            background: linear-gradient(to right, transparent, #FEFEFA);
             pointer-events: none;
             z-index: 20;
         }
@@ -161,15 +177,15 @@
         /* Architectural Grid Pattern */
         .bg-grid-pattern {
             background-image: 
-                linear-gradient(to right, rgba(0,0,0,0.04) 1px, transparent 1px),
-                linear-gradient(to bottom, rgba(0,0,0,0.04) 1px, transparent 1px);
+                linear-gradient(to right, rgba(38,38,38,0.04) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(38,38,38,0.04) 1px, transparent 1px);
             background-size: 32px 32px;
             background-position: center top;
         }
 
         /* Night Mode Filter Trick */
         html {
-            background-color: #ffffff;
+            background-color: #FEFEFA;
             transition: filter 0.5s ease-in-out, background-color 0.5s ease-in-out;
         }
 
@@ -251,8 +267,8 @@
         #preloader {
             position: fixed;
             inset: 0;
-            background-color: #000;
-            color: #0f0; /* Hacker Terminal Green */
+            background-color: #262626;
+            color: #6B705C; /* Muted Sage */
             font-family: monospace;
             z-index: 9999;
             display: flex;
@@ -269,16 +285,16 @@
             animation: flash 0.15s ease-out;
         }
         @keyframes flash {
-            0% { background-color: #fff; }
-            100% { background-color: #000; }
+            0% { background-color: #FEFEFA; }
+            100% { background-color: #262626; }
         }
 
         /* Raw Data Project Toggles */
         .raw-data-overlay {
             position: absolute;
             inset: 0;
-            background-color: #000;
-            color: #0f0;
+            background-color: #262626;
+            color: #6B705C; /* Muted Sage */
             padding: 1.25rem;
             font-family: monospace;
             font-size: 0.7rem;
@@ -288,7 +304,7 @@
             pointer-events: none;
             transition: opacity 0.3s ease;
             text-align: left;
-            box-shadow: inset 0 0 20px rgba(0,255,0,0.1);
+            box-shadow: inset 0 0 20px rgba(107,112,92,0.1);
         }
         .raw-data-overlay.active {
             opacity: 1;
@@ -299,9 +315,9 @@
             top: 0.5rem;
             right: 0.5rem;
             z-index: 20;
-            background: #000;
-            color: #fff;
-            border: 1px solid #333;
+            background: #262626;
+            color: #FEFEFA;
+            border: 1px solid #444;
             padding: 0.25rem 0.5rem;
             font-family: monospace;
             font-size: 0.75rem;
@@ -311,11 +327,11 @@
             opacity: 1;
         }
         .data-toggle-btn:hover {
-            background: #fff;
-            color: #000;
+            background: #FEFEFA;
+            color: #262626;
         }
         .raw-data-overlay::-webkit-scrollbar { width: 6px; }
-        .raw-data-overlay::-webkit-scrollbar-thumb { background: #0f0; }
+        .raw-data-overlay::-webkit-scrollbar-thumb { background: #6B705C; }
     </style>
 </head>
 <body class="bg-white text-black overflow-x-hidden">
@@ -336,7 +352,7 @@
     <div id="scroll-progress-bar" class="fixed top-0 left-0 h-1 bg-black z-[100] w-0 custom-transition"></div>
 
     <!-- Navigation Bar -->
-    <nav id="main-nav" class="fixed top-0 z-50 bg-white border-b border-gray-200 w-full md:w-fit md:top-6 md:left-0 md:right-0 md:mx-auto md:border-2 md:border-black md:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] md:hover:-translate-y-1 md:hover:shadow-[4px_6px_0px_0px_rgba(0,0,0,1)] custom-transition">
+    <nav id="main-nav" class="fixed top-0 z-50 bg-white border-b border-gray-200 w-full md:w-fit md:top-6 md:left-0 md:right-0 md:mx-auto md:border-2 md:border-black md:shadow-[4px_4px_0px_0px_#262626] md:hover:-translate-y-1 md:hover:shadow-[4px_6px_0px_0px_#262626] custom-transition">
         <div class="w-full md:w-auto px-6 md:px-10">
             <div class="flex justify-between md:justify-center items-center h-16 md:h-14">
                 
@@ -362,7 +378,7 @@
 
                     <!-- NEW: Live Telemetry Indicator (Desktop Only) -->
                     <div class="hidden lg:flex items-center gap-2 border border-black px-2 py-1 bg-white cursor-help" title="Local session telemetry active">
-                        <div class="w-2 h-2 bg-red-500 rounded-full animate-pulse"></div>
+                        <div class="w-2 h-2 bg-[#457B9D] rounded-full animate-pulse"></div>
                         <span class="text-[10px] font-mono font-bold uppercase tracking-widest text-black">Telemetry: Live</span>
                     </div>
 
@@ -411,24 +427,24 @@
                         Economics graduate combining quantitative training with practical skills in data analysis, CRM systems, and performance tracking. Passionate about identifying anomalies and helping businesses reduce lead loss through evidence-based decision-making.
                     </p>
                     <div class="flex flex-wrap gap-4 mt-2">
-                        <a href="#projects" class="bg-black text-white px-6 py-3 font-medium shadow-[4px_4px_0px_black] custom-transition hover:-translate-y-1 hover:shadow-[4px_6px_0px_black]">View Case Studies</a>
+                        <a href="#projects" class="bg-black text-white px-6 py-3 font-medium shadow-[4px_4px_0px_#262626] custom-transition hover:-translate-y-1 hover:shadow-[4px_6px_0px_#262626]">View Case Studies</a>
                         <a href="docs/CV_of_Eyasin_Arafath.pdf" download="CV_of_Eyasin_Arafath.pdf" target="_blank" class="border-2 border-black px-6 py-3 font-medium custom-transition hover:bg-gray-50 flex items-center justify-center text-center">Download CV</a>
                     </div>
                 </div>
                 <div class="flex justify-center md:justify-end">
                     <div class="border-box w-full max-w-md aspect-[4/3] bg-gray-100 custom-transition p-4 flex flex-col items-start justify-center cursor-crosshair relative group">
-                        <div class="absolute top-4 left-4 border border-black px-2 py-1 text-[10px] font-bold uppercase tracking-widest bg-white z-10 shadow-[2px_2px_0px_black]">
+                        <div class="absolute top-4 left-4 border border-black px-2 py-1 text-[10px] font-bold uppercase tracking-widest bg-white z-10 shadow-[2px_2px_0px_#262626]">
                             Live Interaction
                         </div>
                         <div class="w-full h-full relative z-0 pt-8 flex-grow">
                             <div class="relative w-full h-full">
                                 <canvas id="heroChart"></canvas>
                                 <div id="current-month-marker" class="absolute hidden flex-col items-center justify-center pointer-events-none z-10 transform -translate-x-1/2 -translate-y-1/2">
-                                    <div class="bg-black text-white text-[10px] font-bold px-3 py-1 mb-1 shadow-[2px_2px_0px_rgba(0,0,0,0.3)] whitespace-nowrap relative transform -translate-y-1">
+                                    <div class="bg-black text-white text-[10px] font-bold px-3 py-1 mb-1 shadow-[2px_2px_0px_rgba(38,38,38,0.3)] whitespace-nowrap relative transform -translate-y-1">
                                         I am here
                                         <div class="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-[4px] border-r-[4px] border-t-[4px] border-l-transparent border-r-transparent border-t-black"></div>
                                     </div>
-                                    <div class="w-8 h-8 rounded-full border-2 border-black overflow-hidden bg-white shadow-[2px_2px_0px_rgba(0,0,0,1)]">
+                                    <div class="w-8 h-8 rounded-full border-2 border-black overflow-hidden bg-white shadow-[2px_2px_0px_#262626]">
                                         <img src="assets/home/hero_image.png" alt="Me" class="w-full h-full object-cover">
                                     </div>
                                 </div>
@@ -582,7 +598,7 @@
             <div id="projects-carousel" class="flex overflow-x-auto snap-x snap-mandatory gap-6 px-6 hide-scrollbar pb-8 grab-scroll">
                 
                 <!-- Project 1 -->
-                <div class="project-card relative w-[85vw] md:w-[604px] shrink-0 snap-center border-2 border-black bg-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] flex flex-col custom-transition hover:-translate-y-1 overflow-hidden">
+                <div class="project-card relative w-[85vw] md:w-[604px] shrink-0 snap-center border-2 border-black bg-white shadow-[4px_4px_0px_0px_#262626] flex flex-col custom-transition hover:-translate-y-1 overflow-hidden">
                     <div class="aspect-video relative object-cover w-full border-b-2 border-black bg-gray-100 overflow-hidden group">
                         <img src="assets/projects/project_gamezone.png" alt="Project Banner" class="w-full h-full object-cover custom-transition hover:scale-105">
                         <button class="data-toggle-btn custom-transition">&lt; / &gt;</button>
@@ -628,7 +644,7 @@ Geographical Growth: Which regions are generating the most sales, and where is m
                 </div>
 
                 <!-- Project 2 -->
-                <div class="project-card relative w-[85vw] md:w-[604px] shrink-0 snap-center border-2 border-black bg-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] flex flex-col custom-transition hover:-translate-y-1 overflow-hidden">
+                <div class="project-card relative w-[85vw] md:w-[604px] shrink-0 snap-center border-2 border-black bg-white shadow-[4px_4px_0px_0px_#262626] flex flex-col custom-transition hover:-translate-y-1 overflow-hidden">
                     <div class="aspect-video relative object-cover w-full border-b-2 border-black bg-gray-100 overflow-hidden group">
                         <img src="assets/projects/upcoming.png" alt="Project Banner" class="w-full h-full object-cover custom-transition hover:scale-105">
                         <button class="data-toggle-btn custom-transition">&lt; / &gt;</button>
@@ -673,7 +689,7 @@ print(f"Target Cohort Size: {len(high_value)}")
                 </div>
 
                 <!-- Project 3 -->
-                <div class="project-card relative w-[85vw] md:w-[604px] shrink-0 snap-center border-2 border-black bg-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] flex flex-col custom-transition hover:-translate-y-1 overflow-hidden">
+                <div class="project-card relative w-[85vw] md:w-[604px] shrink-0 snap-center border-2 border-black bg-white shadow-[4px_4px_0px_0px_#262626] flex flex-col custom-transition hover:-translate-y-1 overflow-hidden">
                     <div class="aspect-video relative object-cover w-full border-b-2 border-black bg-gray-100 overflow-hidden group">
                         <img src="assets/projects/upcoming.png" alt="Project Banner" class="w-full h-full object-cover custom-transition hover:scale-105">
                         <button class="data-toggle-btn custom-transition">&lt; / &gt;</button>
@@ -714,7 +730,7 @@ DIVIDE([Total Ad Spend], [New Customers Acquired])</code></pre>
                 </div>
 
                 <!-- Project 4 -->
-                <div class="project-card relative w-[85vw] md:w-[604px] shrink-0 snap-center border-2 border-black bg-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] flex flex-col custom-transition hover:-translate-y-1 overflow-hidden">
+                <div class="project-card relative w-[85vw] md:w-[604px] shrink-0 snap-center border-2 border-black bg-white shadow-[4px_4px_0px_0px_#262626] flex flex-col custom-transition hover:-translate-y-1 overflow-hidden">
                     <div class="aspect-video relative object-cover w-full border-b-2 border-black bg-gray-100 overflow-hidden group">
                         <img src="assets/projects/upcoming.png" alt="Project Banner" class="w-full h-full object-cover custom-transition hover:scale-105">
                         <button class="data-toggle-btn custom-transition">&lt; / &gt;</button>
@@ -755,7 +771,7 @@ print(f"Calculated SKU Price: ৳{optimized_price}")</code></pre>
                 </div>
 
                 <!-- Project 5 -->
-                <div class="project-card relative w-[85vw] md:w-[604px] shrink-0 snap-center border-2 border-black bg-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] flex flex-col custom-transition hover:-translate-y-1 overflow-hidden">
+                <div class="project-card relative w-[85vw] md:w-[604px] shrink-0 snap-center border-2 border-black bg-white shadow-[4px_4px_0px_0px_#262626] flex flex-col custom-transition hover:-translate-y-1 overflow-hidden">
                     <div class="aspect-video relative object-cover w-full border-b-2 border-black bg-gray-100 overflow-hidden group">
                         <img src="assets/projects/upcoming.png" alt="Project Banner" class="w-full h-full object-cover custom-transition hover:scale-105">
                         <button class="data-toggle-btn custom-transition">&lt; / &gt;</button>
@@ -796,7 +812,7 @@ differentiating factor: Quality Assurance vs Price.</code></pre>
                 </div>
 
                 <!-- Project 6 -->
-                <div class="project-card relative w-[85vw] md:w-[604px] shrink-0 snap-center border-2 border-black bg-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] flex flex-col custom-transition hover:-translate-y-1 overflow-hidden">
+                <div class="project-card relative w-[85vw] md:w-[604px] shrink-0 snap-center border-2 border-black bg-white shadow-[4px_4px_0px_0px_#262626] flex flex-col custom-transition hover:-translate-y-1 overflow-hidden">
                     <div class="aspect-video relative object-cover w-full border-b-2 border-black bg-gray-100 overflow-hidden group">
                         <img src="assets/certificates/projects/upcoming.png" alt="Project Banner" class="w-full h-full object-cover custom-transition hover:scale-105">
                         <button class="data-toggle-btn custom-transition">&lt; / &gt;</button>
@@ -866,7 +882,7 @@ rate across batch deliveries.</code></pre>
             <div id="certs-carousel" class="flex overflow-x-auto snap-x snap-mandatory gap-6 px-6 hide-scrollbar pb-8 grab-scroll">
                 
                 <!-- Cert 1 -->
-                <div class="cert-card relative w-[85vw] md:w-[604px] shrink-0 snap-center border-2 border-black bg-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] flex flex-col custom-transition hover:-translate-y-1 overflow-hidden">
+                <div class="cert-card relative w-[85vw] md:w-[604px] shrink-0 snap-center border-2 border-black bg-white shadow-[4px_4px_0px_0px_#262626] flex flex-col custom-transition hover:-translate-y-1 overflow-hidden">
                     <div class="aspect-[1.414/1] object-cover w-full border-b-2 border-black bg-gray-100 overflow-hidden">
                         <img src="assets/certificates/certificate_ibm.jpg" alt="Certificate" class="w-full h-full object-cover custom-transition hover:scale-105">
                     </div>
@@ -895,7 +911,7 @@ rate across batch deliveries.</code></pre>
                 </div>
 
                 <!-- Cert 2 -->
-                <div class="cert-card relative w-[85vw] md:w-[604px] shrink-0 snap-center border-2 border-black bg-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] flex flex-col custom-transition hover:-translate-y-1 overflow-hidden">
+                <div class="cert-card relative w-[85vw] md:w-[604px] shrink-0 snap-center border-2 border-black bg-white shadow-[4px_4px_0px_0px_#262626] flex flex-col custom-transition hover:-translate-y-1 overflow-hidden">
                     <div class="aspect-[1.414/1] object-cover w-full border-b-2 border-black bg-gray-100 overflow-hidden">
                         <img src="assets/certificates/certificate_google.jpg" alt="Certificate" class="w-full h-full object-cover custom-transition hover:scale-105">
                     </div>
@@ -924,7 +940,7 @@ rate across batch deliveries.</code></pre>
                 </div>
 
                 <!-- Cert 3 -->
-                <div class="cert-card relative w-[85vw] md:w-[604px] shrink-0 snap-center border-2 border-black bg-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] flex flex-col custom-transition hover:-translate-y-1 overflow-hidden">
+                <div class="cert-card relative w-[85vw] md:w-[604px] shrink-0 snap-center border-2 border-black bg-white shadow-[4px_4px_0px_0px_#262626] flex flex-col custom-transition hover:-translate-y-1 overflow-hidden">
                     <div class="aspect-[1.414/1] object-cover w-full border-b-2 border-black bg-gray-100 overflow-hidden">
                         <img src="assets/certificates/unwomen.png" alt="Certificate" class="w-full h-full object-cover custom-transition hover:scale-105">
                     </div>
@@ -953,7 +969,7 @@ rate across batch deliveries.</code></pre>
                 </div>
 
                 <!-- Cert 4 -->
-                <div class="cert-card relative w-[85vw] md:w-[604px] shrink-0 snap-center border-2 border-black bg-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] flex flex-col custom-transition hover:-translate-y-1 overflow-hidden">
+                <div class="cert-card relative w-[85vw] md:w-[604px] shrink-0 snap-center border-2 border-black bg-white shadow-[4px_4px_0px_0px_#262626] flex flex-col custom-transition hover:-translate-y-1 overflow-hidden">
                     <div class="aspect-[1.414/1] object-cover w-full border-b-2 border-black bg-gray-100 overflow-hidden">
                         <img src="assets/certificates/ENROLLED.png" alt="Certificate" class="w-full h-full object-cover custom-transition hover:scale-105">
                     </div>
@@ -982,7 +998,7 @@ rate across batch deliveries.</code></pre>
                 </div>
 
                 <!-- Cert 5 -->
-                <div class="cert-card relative w-[85vw] md:w-[604px] shrink-0 snap-center border-2 border-black bg-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] flex flex-col custom-transition hover:-translate-y-1 overflow-hidden">
+                <div class="cert-card relative w-[85vw] md:w-[604px] shrink-0 snap-center border-2 border-black bg-white shadow-[4px_4px_0px_0px_#262626] flex flex-col custom-transition hover:-translate-y-1 overflow-hidden">
                     <div class="aspect-[1.414/1] object-cover w-full border-b-2 border-black bg-gray-100 overflow-hidden">
                         <img src="assets/certificates/HULT PRIZE PU.jpeg" alt="Certificate" class="w-full h-full object-cover custom-transition hover:scale-105">
                     </div>
@@ -1040,7 +1056,7 @@ rate across batch deliveries.</code></pre>
         <div class="carousel-wrapper max-w-7xl mx-auto reveal" style="transition-delay: 100ms;">
             <div id="articles-carousel" class="flex overflow-x-auto snap-x snap-mandatory gap-6 px-6 hide-scrollbar pb-8 grab-scroll">
                 
-                <div class="article-card relative w-[85vw] md:w-[604px] shrink-0 snap-center border-2 border-black bg-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] flex flex-col custom-transition hover:-translate-y-1 overflow-hidden">
+                <div class="article-card relative w-[85vw] md:w-[604px] shrink-0 snap-center border-2 border-black bg-white shadow-[4px_4px_0px_0px_#262626] flex flex-col custom-transition hover:-translate-y-1 overflow-hidden">
                     <div class="aspect-video object-cover w-full border-b-2 border-black bg-gray-100 overflow-hidden">
                         <img src="assets/articles/article_1.jpg" alt="Article Cover" class="w-full h-full object-cover custom-transition hover:scale-105">
                     </div>
@@ -1064,7 +1080,7 @@ rate across batch deliveries.</code></pre>
                     </div>
                 </div>
 
-                <div class="article-card relative w-[85vw] md:w-[604px] shrink-0 snap-center border-2 border-black bg-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] flex flex-col custom-transition hover:-translate-y-1 overflow-hidden">
+                <div class="article-card relative w-[85vw] md:w-[604px] shrink-0 snap-center border-2 border-black bg-white shadow-[4px_4px_0px_0px_#262626] flex flex-col custom-transition hover:-translate-y-1 overflow-hidden">
                     <div class="aspect-video object-cover w-full border-b-2 border-black bg-gray-100 overflow-hidden">
                         <img src="assets/articles/article_3.jpg" alt="Article Cover" class="w-full h-full object-cover custom-transition hover:scale-105">
                     </div>
@@ -1088,7 +1104,7 @@ rate across batch deliveries.</code></pre>
                     </div>
                 </div>
 
-                <div class="article-card relative w-[85vw] md:w-[604px] shrink-0 snap-center border-2 border-black bg-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] flex flex-col custom-transition hover:-translate-y-1 overflow-hidden">
+                <div class="article-card relative w-[85vw] md:w-[604px] shrink-0 snap-center border-2 border-black bg-white shadow-[4px_4px_0px_0px_#262626] flex flex-col custom-transition hover:-translate-y-1 overflow-hidden">
                     <div class="aspect-video object-cover w-full border-b-2 border-black bg-gray-100 overflow-hidden">
                         <img src="assets/articles/article_2.jpg" alt="Article Cover" class="w-full h-full object-cover custom-transition hover:scale-105">
                     </div>
@@ -1112,7 +1128,7 @@ rate across batch deliveries.</code></pre>
                     </div>
                 </div>
 
-                <div class="article-card relative w-[85vw] md:w-[604px] shrink-0 snap-center border-2 border-black bg-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] flex flex-col custom-transition hover:-translate-y-1 overflow-hidden">
+                <div class="article-card relative w-[85vw] md:w-[604px] shrink-0 snap-center border-2 border-black bg-white shadow-[4px_4px_0px_0px_#262626] flex flex-col custom-transition hover:-translate-y-1 overflow-hidden">
                     <div class="aspect-video object-cover w-full border-b-2 border-black bg-gray-100 overflow-hidden">
                         <img src="assets/articles/upcoming.png" alt="Article Cover" class="w-full h-full object-cover custom-transition hover:scale-105">
                     </div>
@@ -1136,7 +1152,7 @@ rate across batch deliveries.</code></pre>
                     </div>
                 </div>
 
-                <div class="article-card relative w-[85vw] md:w-[604px] shrink-0 snap-center border-2 border-black bg-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] flex flex-col custom-transition hover:-translate-y-1 overflow-hidden">
+                <div class="article-card relative w-[85vw] md:w-[604px] shrink-0 snap-center border-2 border-black bg-white shadow-[4px_4px_0px_0px_#262626] flex flex-col custom-transition hover:-translate-y-1 overflow-hidden">
                     <div class="aspect-video object-cover w-full border-b-2 border-black bg-gray-100 overflow-hidden">
                         <img src="assets/articles/upcoming.png" alt="Article Cover" class="w-full h-full object-cover custom-transition hover:scale-105">
                     </div>
@@ -1160,7 +1176,7 @@ rate across batch deliveries.</code></pre>
                     </div>
                 </div>
 
-                <div class="article-card relative w-[85vw] md:w-[604px] shrink-0 snap-center border-2 border-black bg-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] flex flex-col custom-transition hover:-translate-y-1 overflow-hidden">
+                <div class="article-card relative w-[85vw] md:w-[604px] shrink-0 snap-center border-2 border-black bg-white shadow-[4px_4px_0px_0px_#262626] flex flex-col custom-transition hover:-translate-y-1 overflow-hidden">
                     <div class="aspect-video object-cover w-full border-b-2 border-black bg-gray-100 overflow-hidden">
                         <img src="assets/articles/upcoming.png" alt="Article Cover" class="w-full h-full object-cover custom-transition hover:scale-105">
                     </div>
@@ -1252,14 +1268,14 @@ rate across batch deliveries.</code></pre>
                                         <label for="message" class="block text-sm font-bold uppercase tracking-widest text-black mb-2">Message</label>
                                         <textarea id="message" name="message" rows="4" placeholder="Hi Alex, I'd love to chat about..." required class="border-2 border-gray-200 px-4 py-3 w-full focus:border-black outline-none custom-transition bg-transparent resize-none text-base"></textarea>
                                     </div>
-                                    <button type="submit" id="submit-btn" class="bg-black text-white px-6 py-3 font-medium shadow-[4px_4px_0px_black] custom-transition hover:-translate-y-1 hover:shadow-[4px_6px_0px_black] mt-2">
+                                    <button type="submit" id="submit-btn" class="bg-black text-white px-6 py-3 font-medium shadow-[4px_4px_0px_#262626] custom-transition hover:-translate-y-1 hover:shadow-[4px_6px_0px_#262626] mt-2">
                                         Send Message
                                     </button>
                                     <div id="form-status" class="hidden font-bold text-sm tracking-wide text-center p-3 border-2"></div>
                                 </form>
                             </div>
 
-                            <div class="flip-back bg-black text-white p-8 border-4 border-black shadow-[4px_4px_0px_0px_rgba(200,200,200,1)] text-center">
+                            <div class="flip-back bg-black text-white p-8 border-4 border-black shadow-[4px_4px_0px_0px_#EAE6DF] text-center">
                                 <svg class="w-16 h-16 mb-4 text-white mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                                 <h3 class="text-3xl font-black uppercase tracking-tight mb-2">Transmitted.</h3>
                                 <p class="text-gray-400 text-sm mb-8 leading-relaxed">Your data has been successfully routed. I will respond to your query shortly.</p>
@@ -1299,7 +1315,7 @@ rate across batch deliveries.</code></pre>
             <div class="grid grid-cols-12 gap-6">
                 
                 <!-- Card 1: Time Invested (Col span 3) -->
-                <div class="col-span-3 border-2 border-black bg-white p-6 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] flex flex-col justify-between custom-transition hover:-translate-y-1 hover:shadow-[4px_8px_0px_0px_rgba(0,0,0,1)]">
+                <div class="col-span-3 border-2 border-black bg-white p-6 shadow-[4px_4px_0px_0px_#262626] flex flex-col justify-between custom-transition hover:-translate-y-1 hover:shadow-[4px_8px_0px_0px_#262626]">
                     <div class="flex justify-between items-start mb-6">
                         <h3 class="text-xs font-bold uppercase tracking-widest text-gray-500">Time Invested</h3>
                         <svg class="w-4 h-4 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
@@ -1311,7 +1327,7 @@ rate across batch deliveries.</code></pre>
                 </div>
 
                 <!-- Card 2: Exploration Rate (Col span 3) -->
-                <div class="col-span-3 border-2 border-black bg-white p-6 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] flex flex-col justify-between custom-transition hover:-translate-y-1 hover:shadow-[4px_8px_0px_0px_rgba(0,0,0,1)]">
+                <div class="col-span-3 border-2 border-black bg-white p-6 shadow-[4px_4px_0px_0px_#262626] flex flex-col justify-between custom-transition hover:-translate-y-1 hover:shadow-[4px_8px_0px_0px_#262626]">
                     <div class="flex justify-between items-start mb-6">
                         <h3 class="text-xs font-bold uppercase tracking-widest text-gray-500">Exploration Rate</h3>
                         <svg class="w-4 h-4 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path></svg>
@@ -1328,7 +1344,7 @@ rate across batch deliveries.</code></pre>
                 </div>
 
                 <!-- Card 3: Analytical Review (Col span 3) -->
-                <div class="col-span-3 border-2 border-black bg-white p-6 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] flex flex-col justify-between custom-transition hover:-translate-y-1 hover:shadow-[4px_8px_0px_0px_rgba(0,0,0,1)]">
+                <div class="col-span-3 border-2 border-black bg-white p-6 shadow-[4px_4px_0px_0px_#262626] flex flex-col justify-between custom-transition hover:-translate-y-1 hover:shadow-[4px_8px_0px_0px_#262626]">
                     <div class="flex justify-between items-start mb-6">
                         <h3 class="text-xs font-bold uppercase tracking-widest text-gray-500">Analytical Review</h3>
                         <svg class="w-4 h-4 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
@@ -1343,7 +1359,7 @@ rate across batch deliveries.</code></pre>
                 </div>
 
                 <!-- Card 4: Focus Score (Col span 3) -->
-                <div class="col-span-3 border-2 border-black bg-white p-6 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] flex flex-col justify-between custom-transition hover:-translate-y-1 hover:shadow-[4px_8px_0px_0px_rgba(0,0,0,1)]">
+                <div class="col-span-3 border-2 border-black bg-white p-6 shadow-[4px_4px_0px_0px_#262626] flex flex-col justify-between custom-transition hover:-translate-y-1 hover:shadow-[4px_8px_0px_0px_#262626]">
                     <div class="flex justify-between items-start mb-6">
                         <h3 class="text-xs font-bold uppercase tracking-widest text-gray-500">Focus Score</h3>
                         <svg class="w-4 h-4 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
@@ -1358,7 +1374,7 @@ rate across batch deliveries.</code></pre>
                 </div>
 
                 <!-- Card 5: Primary Interest Chart (Col span 12) -->
-                <div class="col-span-12 border-2 border-black bg-white p-6 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] custom-transition hover:-translate-y-1 hover:shadow-[4px_8px_0px_0px_rgba(0,0,0,1)]">
+                <div class="col-span-12 border-2 border-black bg-white p-6 shadow-[4px_4px_0px_0px_#262626] custom-transition hover:-translate-y-1 hover:shadow-[4px_8px_0px_0px_#262626]">
                     <div class="flex justify-between items-start mb-6">
                         <h3 class="text-xs font-bold uppercase tracking-widest text-gray-500">Primary Interest (Hover Duration)</h3>
                         <div class="text-[10px] font-mono font-bold bg-gray-100 border border-gray-300 px-2 py-1 uppercase" id="tel-top-interest">Analyzing...</div>
@@ -1378,7 +1394,7 @@ rate across batch deliveries.</code></pre>
             <div class="flex flex-col md:flex-row justify-between items-start md:items-end gap-8 border-b border-gray-800 pb-8 mb-8">
                 <div class="flex flex-col gap-4">
                     <div class="inline-flex items-center gap-3 border border-gray-800 px-4 py-2 bg-gray-900/50">
-                        <span class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
+                        <span class="w-2 h-2 bg-[#6B705C] rounded-full animate-pulse"></span>
                         <span class="font-mono text-[10px] font-bold uppercase tracking-widest text-gray-300">Available for new projects</span>
                     </div>
                     <p class="font-mono text-[10px] font-bold uppercase tracking-widest text-gray-600">© 2026. Engineered with grid precision.</p>
@@ -1664,15 +1680,15 @@ rate across batch deliveries.</code></pre>
                         datasets: [{
                             label: 'Optimization Metric',
                             data: dataPoints,
-                            borderColor: '#000000',
-                            backgroundColor: 'rgba(0, 0, 0, 0.03)',
+                            borderColor: '#262626',
+                            backgroundColor: 'rgba(38, 38, 38, 0.03)',
                             borderWidth: 2,
-                            pointBackgroundColor: '#ffffff',
-                            pointBorderColor: '#000000',
+                            pointBackgroundColor: '#FEFEFA',
+                            pointBorderColor: '#262626',
                             pointBorderWidth: 2,
                             pointRadius: 4,
                             pointHoverRadius: 7,
-                            pointHoverBackgroundColor: '#000000',
+                            pointHoverBackgroundColor: '#262626',
                             fill: true,
                             tension: 0.2
                         }]
@@ -1685,7 +1701,7 @@ rate across batch deliveries.</code></pre>
                         plugins: {
                             legend: { display: false },
                             tooltip: {
-                                backgroundColor: '#000000',
+                                backgroundColor: '#262626',
                                 titleFont: { family: 'Inter', size: 11 },
                                 bodyFont: { family: 'Inter', size: 13, weight: 'bold' },
                                 padding: 10,
@@ -1886,7 +1902,7 @@ rate across batch deliveries.</code></pre>
                                     telemetry.sectionHover.certifications, 
                                     telemetry.sectionHover.articles
                                 ],
-                                backgroundColor: '#000000',
+                                backgroundColor: '#262626',
                                 borderWidth: 0,
                                 barPercentage: 0.6,
                             }]
@@ -1898,7 +1914,7 @@ rate across batch deliveries.</code></pre>
                             plugins: {
                                 legend: { display: false },
                                 tooltip: {
-                                    backgroundColor: '#000000',
+                                    backgroundColor: '#262626',
                                     titleFont: { family: 'Inter', size: 10 },
                                     bodyFont: { family: 'Inter', size: 12, weight: 'bold' },
                                     cornerRadius: 0,
