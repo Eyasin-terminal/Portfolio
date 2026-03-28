@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', () => {
         return sid;
     };
 
-    // --- NEW: Device Type Detection ---
+    // --- 2. Device Type Detection ---
     const getDeviceType = () => {
         const ua = navigator.userAgent;
         if (/(tablet|ipad|playbook|silk)|(android(?!.*mobi))/i.test(ua)) return "Tablet";
@@ -25,19 +25,27 @@ document.addEventListener('DOMContentLoaded', () => {
         return "Desktop";
     };
 
-    // --- NEW: IP Address Fetching & Caching ---
+    // --- 3. NEW: IP Address & Country Fetching & Caching ---
     let cachedIp = sessionStorage.getItem('tel_ip_address') || 'Fetching...';
-    if (cachedIp === 'Fetching...') {
-        fetch('https://api.ipify.org?format=json')
+    let cachedCountry = sessionStorage.getItem('tel_country') || 'Fetching...';
+
+    if (cachedIp === 'Fetching...' || cachedCountry === 'Fetching...') {
+        // GeoJS returns both IP and Country in one quick call!
+        fetch('https://get.geojs.io/v1/ip/geo.json')
             .then(res => res.json())
             .then(data => {
-                cachedIp = data.ip;
+                cachedIp = data.ip || 'Unknown';
+                cachedCountry = data.country || 'Unknown';
                 sessionStorage.setItem('tel_ip_address', cachedIp);
+                sessionStorage.setItem('tel_country', cachedCountry);
             })
-            .catch(() => cachedIp = 'Unavailable');
+            .catch(() => {
+                cachedIp = 'Unavailable';
+                cachedCountry = 'Unavailable';
+            });
     }
 
-    // Core dispatcher function
+    // --- 4. Core Dispatcher Function ---
     const sendTelemetry = (category, name, action, itemId = '', value = '') => {
         const payload = {
             "Timestamp": new Date().toISOString(),
@@ -48,7 +56,8 @@ document.addEventListener('DOMContentLoaded', () => {
             "Event_Name": name,
             "Action": action,
             "Item_ID": itemId,
-            "Value": value
+            "Value": value,
+            "Country": cachedCountry // <-- NEW: Geolocation added here!
         };
 
         // Uses mode 'no-cors' & text/plain to strictly prevent Google Apps Script preflight (CORS) errors
@@ -61,7 +70,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }).catch(err => console.error("Telemetry suppressed:", err));
     };
 
-    // --- 2. Metric 1: Theme Toggle Tracking ---
+    // --- 5. Metric 1: Theme Toggle Tracking ---
     document.querySelectorAll('.theme-toggle').forEach(toggle => {
         toggle.addEventListener('click', () => {
             // Slight delay to allow the HTML class to update first
@@ -72,7 +81,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // --- 3. Metric 2: Homepage CTA Tracking ---
+    // --- 6. Metric 2: Homepage CTA Tracking ---
     const homeCta = document.querySelector('#home a[href="#projects"]');
     if (homeCta) {
         homeCta.addEventListener('click', () => {
@@ -80,7 +89,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // --- 4. Metric 3: CV Download Tracking ---
+    // --- 7. Metric 3: CV Download Tracking ---
     const cvBtn = document.querySelector('a[download]');
     if (cvBtn) {
         cvBtn.addEventListener('click', () => {
@@ -88,7 +97,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // --- 5. Metric 4: Section Time Tracking ---
+    // --- 8. Metric 4: Section Time Tracking ---
     let activeSection = null;
     let sectionEnterTime = Date.now();
 
@@ -121,7 +130,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // --- 6. Metric 5: Project Card Interactions ---
+    // --- 9. Metric 5: Project Card Interactions ---
     document.querySelectorAll('.project-card').forEach(card => {
         const title = card.querySelector('h3')?.innerText || 'Unknown Project';
         const seeMoreBtn = card.querySelector('.see-more-btn');
@@ -131,7 +140,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (viewFullBtn) viewFullBtn.addEventListener('click', () => sendTelemetry('Projects', 'View Full Project', 'Click', title));
     });
 
-    // --- 7. Metric 6: Certificate Card Interactions ---
+    // --- 10. Metric 6: Certificate Card Interactions ---
     document.querySelectorAll('.cert-card').forEach(card => {
         const title = card.querySelector('h3')?.innerText || 'Unknown Certificate';
         const seeMoreBtn = card.querySelector('.see-cert-btn');
@@ -141,7 +150,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (viewFullBtn) viewFullBtn.addEventListener('click', () => sendTelemetry('Certifications', 'Verify Credential', 'Click', title));
     });
 
-    // --- 8. Metric 7: Article Interactions ---
+    // --- 11. Metric 7: Article Interactions ---
     document.querySelectorAll('.article-card').forEach(card => {
         const title = card.querySelector('h3')?.innerText || 'Unknown Article';
         const seeMoreBtn = card.querySelector('.see-gist-btn');
@@ -151,7 +160,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (viewFullBtn) viewFullBtn.addEventListener('click', () => sendTelemetry('Articles', 'Read Full Story', 'Click', title));
     });
 
-    // --- 9. Metric 8: Social Link Tracking ---
+    // --- 12. Metric 8: Social Link Tracking ---
     document.querySelectorAll('#contact a[href*="linkedin.com"], #contact a[href*="facebook.com"]').forEach(link => {
         link.addEventListener('click', (e) => {
             let platform = link.href.includes('linkedin') ? 'LinkedIn' : 'Facebook';
@@ -159,7 +168,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // --- 10. Metric 9: Contact Form Submission ---
+    // --- 13. Metric 9: Contact Form Submission ---
     const contactForm = document.getElementById('contact-form');
     if (contactForm) {
         contactForm.addEventListener('submit', () => {
@@ -168,7 +177,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // --- 11. Metric 10: Footer Back-to-Top Interaction ---
+    // --- 14. Metric 10: Footer Back-to-Top Interaction ---
     const backToTopBtn = document.querySelector('footer button');
     if (backToTopBtn) {
         backToTopBtn.addEventListener('click', () => {
