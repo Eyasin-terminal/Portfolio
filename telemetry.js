@@ -6,7 +6,7 @@
 document.addEventListener('DOMContentLoaded', () => {
     
     // --- 1. System Config & Session Management ---
-    const WEBHOOK_URL = 'https://script.google.com/macros/s/AKfycbwG7_vXmzv_s17SzJM1KGW7dlFKLQmTfT-xVzRfOBd9kgvQiIB8PMVW9sfJS5DbvpyO/exec';
+    const WEBHOOK_URL = 'https://script.google.com/macros/s/AKfycbziPznNAcxBrT7M_1fXofVaeCnI6ovgxpCCSlyvWO_7n-0-tqJrS7Ht0V9rTWTeieLJ/exec';
     
     const getSessionId = () => {
         let sid = sessionStorage.getItem('tel_session_id');
@@ -17,11 +17,33 @@ document.addEventListener('DOMContentLoaded', () => {
         return sid;
     };
 
+    // --- NEW: Device Type Detection ---
+    const getDeviceType = () => {
+        const ua = navigator.userAgent;
+        if (/(tablet|ipad|playbook|silk)|(android(?!.*mobi))/i.test(ua)) return "Tablet";
+        if (/Mobile|Android|iP(hone|od)|IEMobile|BlackBerry|Kindle|Silk-Accelerated|(hpw|web)OS|Opera M(obi|ini)/.test(ua)) return "Mobile";
+        return "Desktop";
+    };
+
+    // --- NEW: IP Address Fetching & Caching ---
+    let cachedIp = sessionStorage.getItem('tel_ip_address') || 'Fetching...';
+    if (cachedIp === 'Fetching...') {
+        fetch('https://api.ipify.org?format=json')
+            .then(res => res.json())
+            .then(data => {
+                cachedIp = data.ip;
+                sessionStorage.setItem('tel_ip_address', cachedIp);
+            })
+            .catch(() => cachedIp = 'Unavailable');
+    }
+
     // Core dispatcher function
     const sendTelemetry = (category, name, action, itemId = '', value = '') => {
         const payload = {
             "Timestamp": new Date().toISOString(),
             "Session_ID": getSessionId(),
+            "IP_Address": cachedIp,
+            "Device_Type": getDeviceType(),
             "Event_Category": category,
             "Event_Name": name,
             "Action": action,
