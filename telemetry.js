@@ -6,7 +6,7 @@
 document.addEventListener('DOMContentLoaded', () => {
     
     // --- 1. System Config & Session Management ---
-    const WEBHOOK_URL = 'https://script.google.com/macros/s/AKfycbzJj9rJXwIGHSKnxCiDzEYBZJeakxzfQgOiNoUVA4KMfEbRwtj4rDAqfhsmzy6U-qn_/exec';
+    const WEBHOOK_URL = 'https://script.google.com/macros/s/AKfycbw0CAhbPsAGFdMkjA0I0hE44-J3KT-SbAv_L4A5tBeVXBmqIjHmqwiVIC4oDO95X2zb/exec';
     
     const getSessionId = () => {
         let sid = sessionStorage.getItem('tel_session_id');
