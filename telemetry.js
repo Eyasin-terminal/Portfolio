@@ -140,14 +140,14 @@ document.addEventListener('DOMContentLoaded', () => {
         if (viewFullBtn) viewFullBtn.addEventListener('click', () => sendTelemetry('Projects', 'View Full Project', 'Click', label));
     });
 
-    // --- 10. Metric 6: Certificate Card Interactions ---
-    document.querySelectorAll('.cert-card').forEach((card) => {
-        const title = card.querySelector('h3')?.innerText || 'Unknown Certificate';
+// --- 10. Metric 6: Certificate Card Interactions ---
+    document.querySelectorAll('.cert-card').forEach((card, index) => {
+        const label = `Card ${index + 1}`; // <--- This now strictly generates "Card 1", "Card 2", etc.
         const seeMoreBtn = card.querySelector('.see-cert-btn');
         const viewFullBtn = card.querySelector('.cert-details a');
 
-        if (seeMoreBtn) seeMoreBtn.addEventListener('click', () => sendTelemetry('Certifications', 'Expand Card', 'Click', title));
-        if (viewFullBtn) viewFullBtn.addEventListener('click', () => sendTelemetry('Certifications', 'Verify Credential', 'Click', title));
+        if (seeMoreBtn) seeMoreBtn.addEventListener('click', () => sendTelemetry('Certifications', 'Expand Card', 'Click', label));
+        if (viewFullBtn) viewFullBtn.addEventListener('click', () => sendTelemetry('Certifications', 'Verify Credential', 'Click', label));
     });
 
     // --- 11. Metric 7: Article Interactions ---
